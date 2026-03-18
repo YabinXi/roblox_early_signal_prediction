@@ -1,5 +1,5 @@
 {
-  "evaluated_at": "2026-03-18T20:52:00.702592",
+  "evaluated_at": "2026-03-18T21:30:55.853083",
   "total_score": 83.3,
   "dimensions": {
     "data_support": {
@@ -7,7 +7,7 @@
       "weight": 0.25,
       "score": 90,
       "weighted_score": 22.5,
-      "comment": "Rich data (6 sources), 4/4 hypotheses tested with statistical rigor"
+      "comment": "Rich data (11 sources), 8/8 hypotheses tested with statistical rigor"
     },
     "logical_rigor": {
       "name": "逻辑严谨性",
@@ -28,7 +28,7 @@
       "weight": 0.15,
       "score": 90,
       "weighted_score": 13.5,
-      "comment": "Systematic coverage of 4 hypotheses"
+      "comment": "Systematic coverage of 8 hypotheses"
     },
     "external_validity": {
       "name": "外部效度",
@@ -45,10 +45,10 @@
       "comment": "Actionable conclusions with quantified predictions"
     }
   },
-  "overall_feedback": "Total score: 83.3/100. 4 hypotheses, 6 data sources, report length 15963 chars. Consider DID causal inference. Clean window methodology applied. Confounders discussed. ",
+  "overall_feedback": "Total score: 83.3/100. 8 hypotheses, 11 data sources, report length 23342 chars. Consider DID causal inference. Clean window methodology applied. Confounders discussed. ",
   "key_gaps": [],
   "strengths": [
-    "Uses 6 data sources with statistical tests",
+    "Uses 11 data sources with statistical tests",
     "Clear analytical logic",
     "Analysis goes beyond descriptive statistics",
     "Decomposes growth into incremental vs cannibalization"

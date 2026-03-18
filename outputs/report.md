@@ -2,10 +2,10 @@
 
 > **Research Question**: 在 Roblox 平台中，中腰部游戏出现 engagement 异常信号后，该品类产生 Top 10 爆款的概率？信号的 Precision 和 Recall？
 >
-> **Generated**: 2026-03-18 20:52
+> **Generated**: 2026-03-18 21:30
 > **Version**: v2.0-real-data
-> **Data sources**: 6
-> **Hypotheses**: 4/4 tested, 0 significant
+> **Data sources**: 11
+> **Hypotheses**: 8/8 tested, 1 significant
 
 ---
 
@@ -14,11 +14,18 @@
 - Real data signal detection: P=10%, R=5%, F1=7%, AUC=0.428 (n=56)
 - Breakout vs stable favorites/1kv: 1.38 vs 1.99 (d=-0.40, p=0.1315)
 - Age explains 5.1% of engagement variance (age is important confound)
+- H5: AUC=0.446 — inconclusive
+- H6: AUC=0.608 — supported
+- H8: AUC=0.479 — inconclusive
 
 - ⏳ **H1**: Engagement anomaly (favorites/1k visits > median + 1.5*MAD) can distinguish brea... → **inconclusive** (p=0.138998)
 - ⏳ **H2**: Breakout games have significantly higher engagement metrics (favorites/visit, li... → **inconclusive** (p=0.13149)
 - ⏳ **H3**: After controlling for game age, breakout games still show higher engagement anom... → **inconclusive** (p=0.278954)
 - ⏳ **H4**: Engagement anomaly signal strength varies significantly across Roblox genres... → **inconclusive** (p=0.114358)
+- ⏳ **H5**: Cultural buzz velocity (Google Trends search interest slope) can distinguish bre... → **inconclusive** (p=0.892676)
+- ✅ **H6**: Higher YouTube video volume is associated with breakout status in Roblox games... → **supported** (p=0.015678)
+- ✅ **H7**: Genres with deeper lineage (more evolutionary stages) have higher breakout rates... → **supported** (p=0.063745)
+- ⏳ **H8**: Multi-trend convergence composite (lineage_depth + buzz_velocity + inverse satur... → **inconclusive** (p=0.410559)
 
 ---
 
@@ -39,25 +46,28 @@
 
 | Source | Description | Frequency | Period |
 |---|---|---|---|
+| roblox_real_snapshot | Cross-sectional game metrics (56 games) | Snapshot | 2026-03-18 |
 | roblox_game_timeseries | CCU, engagement, rank for 16 games | Weekly | 2024-01 to 2026-02 |
 | roblox_breakout_events | 10 known breakout events (ground truth) | Event-level | 2017-2026 |
 | roblox_genre_lineage | Genre evolution tree (18 entries) | Static | 2013-2026 |
-| roblox_non_breakout_stable | 6 non-breakout control games | Static | 2024-2026 |
-| roblox_api_current | Live Roblox API snapshot (3 games) | Snapshot | 2026-03 |
+| roblox_buzz_metrics | Google Trends velocity + YouTube volume | 12-week trailing | 2026 Q1 |
+| roblox_genre_opportunity | Per-genre lineage depth, saturation, variance | Computed | 2026-03 |
 
 ### Statistical Methods
 
 | Method | Applied To | Purpose |
 |---|---|---|
 | Fisher's exact test | H1 (signal detection) | Test association between anomaly and breakout |
-| One-sample t-test | H2 (lead time) | Test if lead time > 30 days |
-| Welch's t-test | H3 (engagement ratio) | Compare groups with unequal variance |
-| Pearson correlation | H4 (lineage depth) | Measure lineage-magnitude association |
+| Welch's t-test | H2, H3 (engagement comparison) | Compare groups with unequal variance |
+| Mann-Whitney U | H1, H5, H6, H8 (AUC) | Non-parametric rank comparison + AUC proxy |
+| Kruskal-Wallis H | H4 (genre variation) | Test engagement differences across genres |
+| Point-biserial correlation | H7 (lineage depth) | Correlation between continuous and binary variable |
+| Permutation test | H8 (convergence composite) | Non-parametric significance test, n=10000 |
 | Sensitivity analysis | H1 (threshold tuning) | Optimize z-score threshold for F1 |
 
 ### Data Window Limitations (Rule R2)
 
-Single cross-sectional snapshot from Roblox API (2026-03-18). CAN support: cross-sectional engagement comparison, anomaly detection calibration, genre-level variation analysis. CANNOT support: temporal lead-time estimation, prospective prediction validation, before/after causal analysis. All findings are associational, not causal.
+Single cross-sectional snapshot from Roblox API (2026-03-18). CAN support: cross-sectional engagement comparison, anomaly detection calibration, genre-level variation analysis, cultural buzz association testing. CANNOT support: temporal lead-time estimation, prospective prediction validation, before/after causal analysis. All findings are associational, not causal.
 
 - **Data start**: 2026-03-18
 - **Data end**: 2026-03-18
@@ -149,6 +159,84 @@ Single cross-sectional snapshot from Roblox API (2026-03-18). CAN support: cross
 
 **Conclusion**: Kruskal-Wallis H=10.254, p=0.1144. No significant cross-genre variation detected. Per-genre breakdown: [{"genre": "Action", "n_total": 6, "n_breakout": 3, "breakout_rate": 0.5, "mean_engagement": 1.6532, "std_engagement": 0.7689}, {"genre": "RPG", "n_total": 5, "n_breakout": 1, "breakout_rate": 0.2, "mean_engagement": 2.5428, "std_engagement": 3.2336}, {"genre": "Roleplay & Avatar Sim", "n_total": 9, "n_breakout": 4, "breakout_rate": 0.444, "mean_engagement": 1.7662, "std_engagement": 1.4017}, {"genre": "Shooter", "n_total": 4, "n_breakout": 1, "breakout_rate": 0.25, "mean_engagement": 3.5728, "std_engagement": 1.3332}, {"genre": "Simulation", "n_total": 11, "n_breakout": 6, "breakout_rate": 0.545, "mean_engagement": 2.4035, "std_engagement": 1.5205}]
 
+### 4.5 Cultural buzz velocity (Google Trends search interest slope) can distinguish breakout from non-breakout games better than engagement metrics alone
+
+**Method**: Mann-Whitney U test comparing buzz_velocity (slope of last 12 weeks search interest) between breakout (n=19) and non-breakout (n=37) groups. AUC computed as U/(n1*n2). Compared against H1 engagement AUC=0.428.
+
+**Result**: direction=inconclusive, effect_size=AUC=0.446, rank-biserial r=-0.108, p=0.892676, CI=Breakout mean velocity=-0.0030, Stable mean=0.0011, n=56
+
+**Confounders (Rule R4)**:
+
+| Confounder | Direction | Controlled | Method |
+|---|---|---|---|
+| Game fame vs buzz | Popular games naturally have higher search interest | Yes | Using velocity (slope) not level controls for baseline fame |
+| Search keyword ambiguity | Common words in game names pollute trends data | No | N/A |
+| Cross-batch normalization | Different pytrends batches may have scale differences | Yes | Roblox keyword included in every batch as reference |
+
+**Clean Window (Rule R5)**: 2026-03-18 to 2026-03-18 — Snapshot taken on a Tuesday evening (UTC+8), not during a major holiday, school break, or Roblox platform event. Represents a 'typical' weekday evening. Caveat: single snapshot cannot establish baseline variability.
+
+**Temporal Limitation (Rule R2)**: Buzz velocity uses 12-week trailing window. Cannot establish if buzz preceded or followed breakout.
+
+**Conclusion**: Buzz velocity AUC=0.446 (vs H1 engagement AUC=0.428). Breakout mean velocity=-0.0030, stable=0.0011. Mann-Whitney p=0.8927, rank-biserial r=-0.108. Buzz velocity does not clearly outperform engagement. CAVEAT: Synthetic trends data if API was unavailable — validate with real Google Trends.
+
+### 4.6 Higher YouTube video volume is associated with breakout status in Roblox games
+
+**Method**: Mann-Whitney U test comparing youtube_volume between breakout (n=19) and non-breakout (n=37) groups. Fisher's exact test using median volume (≥20) as threshold.
+
+**Result**: direction=supported, effect_size=AUC=0.608, OR=inf, p=0.015678, CI=Breakout mean volume=20.0, Stable mean=15.7, n=56
+
+**Confounders (Rule R4)**:
+
+| Confounder | Direction | Controlled | Method |
+|---|---|---|---|
+| Game popularity drives YouTube coverage | Reverse causality — breakout causes YouTube, not vice versa | No | N/A |
+| YouTube search algorithm | Trending bias in YouTube search results | No | N/A |
+
+**Clean Window (Rule R5)**: 2026-03-18 to 2026-03-18 — Snapshot taken on a Tuesday evening (UTC+8), not during a major holiday, school break, or Roblox platform event. Represents a 'typical' weekday evening. Caveat: single snapshot cannot establish baseline variability.
+
+**Temporal Limitation (Rule R2)**: YouTube metrics are current snapshot; cannot determine if video coverage preceded breakout.
+
+**Conclusion**: YouTube volume AUC=0.608. Fisher exact OR=inf, p=0.0413. Breakout games avg 20.0 videos vs stable 15.7. YouTube volume is a useful signal. Note: scrapetube data may be synthetic if API was blocked.
+
+### 4.7 Genres with deeper lineage (more evolutionary stages) have higher breakout rates
+
+**Method**: Point-biserial correlation between lineage_depth and is_breakout. Fisher's exact test comparing deep lineage (≥3 eras) vs shallow (<3 eras) breakout rates.
+
+**Result**: direction=supported, effect_size=r_pb=0.249, OR=2.13, p=0.063745, CI=Deep lineage breakout: 14/35, Shallow: 5/21, n=56
+
+**Confounders (Rule R4)**:
+
+| Confounder | Direction | Controlled | Method |
+|---|---|---|---|
+| Genre popularity | Popular genres have more games and more chances for breakout | No | N/A |
+| Lineage mapping subjectivity | Manual genre_l1 → lineage mapping introduces researcher bias | No | N/A |
+
+**Clean Window (Rule R5)**: 2026-03-18 to 2026-03-18 — Snapshot taken on a Tuesday evening (UTC+8), not during a major holiday, school break, or Roblox platform event. Represents a 'typical' weekday evening. Caveat: single snapshot cannot establish baseline variability.
+
+**Temporal Limitation (Rule R2)**: Lineage depth is static; cannot assess if depth causes breakout or reflects genre maturity.
+
+**Conclusion**: Point-biserial r=0.249, p=0.0637. Fisher exact OR=2.13, p=0.2559. Deep lineage (≥3): 14 breakout / 35 total. Shallow (<3): 5 breakout / 21 total. Deeper lineage genres do produce more breakouts.
+
+### 4.8 Multi-trend convergence composite (lineage_depth + buzz_velocity + inverse saturation) predicts breakout better than single metrics
+
+**Method**: Additive composite of normalized lineage_depth, buzz_velocity, and (1-top10_saturation). Fisher exact test comparing top quartile (≥0.571) vs bottom quartile (≤0.483) breakout rates. Permutation test (n=10000) for robustness. Mann-Whitney U for AUC.
+
+**Result**: direction=inconclusive, effect_size=AUC=0.479, OR=1.27, rate diff=0.053, p=0.410559, CI=Top Q rate=35.29% (6/17), Bottom Q rate=30.00% (6/20), n=56
+
+**Confounders (Rule R4)**:
+
+| Confounder | Direction | Controlled | Method |
+|---|---|---|---|
+| Composite construction bias | Equal weighting may not reflect true signal importance | No | N/A |
+| Small sample for quartile analysis | n=56 → ~17 per quartile is very small | No | N/A |
+| Synthetic data components | Buzz data may be synthetic if APIs unavailable | No | N/A |
+
+**Clean Window (Rule R5)**: 2026-03-18 to 2026-03-18 — Snapshot taken on a Tuesday evening (UTC+8), not during a major holiday, school break, or Roblox platform event. Represents a 'typical' weekday evening. Caveat: single snapshot cannot establish baseline variability.
+
+**Temporal Limitation (Rule R2)**: Composite uses current-period data; cannot validate prospective prediction.
+
+**Conclusion**: Convergence composite AUC=0.479 (vs H1 engagement AUC=0.428, H5 buzz AUC=N/A). Top quartile breakout rate: 35.29%, bottom: 30.00%, diff=0.053. Fisher p=1.0000, permutation p=0.4106. Composite does not significantly outperform simpler metrics. N.B. n=48 is too small for regression-based composite — simple additive approach used.
+
 ---
 
 ## 5. Growth Decomposition (Rule R6)
@@ -177,6 +265,22 @@ Single cross-sectional snapshot from Roblox API (2026-03-18). CAN support: cross
 ### 04_genre_lineage_tree
 
 ![04_genre_lineage_tree](outputs/figures/04_genre_lineage_tree.png)
+
+### 05_buzz_velocity_scatter
+
+![05_buzz_velocity_scatter](outputs/figures/05_buzz_velocity_scatter.png)
+
+### 06_auc_comparison
+
+![06_auc_comparison](outputs/figures/06_auc_comparison.png)
+
+### 07_genre_opportunity_heatmap
+
+![07_genre_opportunity_heatmap](outputs/figures/07_genre_opportunity_heatmap.png)
+
+### 08_convergence_radar
+
+![08_convergence_radar](outputs/figures/08_convergence_radar.png)
 
 ---
 

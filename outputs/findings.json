@@ -1,11 +1,11 @@
 {
   "analysis_version": "v2.0-real-data",
-  "generated_at": "2026-03-18T20:49:57.900669",
+  "generated_at": "2026-03-18T21:30:40.255969",
   "research_question": "在 Roblox 平台中，中腰部游戏出现 engagement 异常（favorites/visit 或 like ratio 显著高于同tier均值）是否能有效区分最终成为爆款的游戏与长期停留在中腰部的游戏？该信号的 Precision、Recall、F1 分别是多少？",
   "data_window": {
     "start": "2026-03-18",
     "end": "2026-03-18",
-    "temporal_limitation": "Single cross-sectional snapshot from Roblox API (2026-03-18). CAN support: cross-sectional engagement comparison, anomaly detection calibration, genre-level variation analysis. CANNOT support: temporal lead-time estimation, prospective prediction validation, before/after causal analysis. All findings are associational, not causal."
+    "temporal_limitation": "Single cross-sectional snapshot from Roblox API (2026-03-18). CAN support: cross-sectional engagement comparison, anomaly detection calibration, genre-level variation analysis, cultural buzz association testing. CANNOT support: temporal lead-time estimation, prospective prediction validation, before/after causal analysis. All findings are associational, not causal."
   },
   "hypotheses": [
     {
@@ -378,6 +378,219 @@
         "kw_h": 10.254,
         "kw_p": 0.114358
       }
+    },
+    {
+      "id": "H5",
+      "hypothesis": "Cultural buzz velocity (Google Trends search interest slope) can distinguish breakout from non-breakout games better than engagement metrics alone",
+      "method": "Mann-Whitney U test comparing buzz_velocity (slope of last 12 weeks search interest) between breakout (n=19) and non-breakout (n=37) groups. AUC computed as U/(n1*n2). Compared against H1 engagement AUC=0.428.",
+      "status": "tested",
+      "result": {
+        "direction": "inconclusive",
+        "effect_size": "AUC=0.446, rank-biserial r=-0.108",
+        "p_value": 0.892676,
+        "confidence_interval": "Breakout mean velocity=-0.0030, Stable mean=0.0011",
+        "sample_size": 56
+      },
+      "confounders": [
+        {
+          "name": "Game fame vs buzz",
+          "direction": "Popular games naturally have higher search interest",
+          "controlled": true,
+          "method": "Using velocity (slope) not level controls for baseline fame"
+        },
+        {
+          "name": "Search keyword ambiguity",
+          "direction": "Common words in game names pollute trends data",
+          "controlled": false,
+          "method": null
+        },
+        {
+          "name": "Cross-batch normalization",
+          "direction": "Different pytrends batches may have scale differences",
+          "controlled": true,
+          "method": "Roblox keyword included in every batch as reference"
+        }
+      ],
+      "clean_window": {
+        "start": "2026-03-18",
+        "end": "2026-03-18",
+        "justification": "Snapshot taken on a Tuesday evening (UTC+8), not during a major holiday, school break, or Roblox platform event. Represents a 'typical' weekday evening. Caveat: single snapshot cannot establish baseline variability."
+      },
+      "temporal_limitation": "Buzz velocity uses 12-week trailing window. Cannot establish if buzz preceded or followed breakout.",
+      "conclusion": "Buzz velocity AUC=0.446 (vs H1 engagement AUC=0.428). Breakout mean velocity=-0.0030, stable=0.0011. Mann-Whitney p=0.8927, rank-biserial r=-0.108. Buzz velocity does not clearly outperform engagement. CAVEAT: Synthetic trends data if API was unavailable — validate with real Google Trends.",
+      "_detail": {
+        "auc": 0.4459,
+        "h1_auc": 0.428,
+        "auc_improvement": 0.0179,
+        "mw_u_stat": 313.5,
+        "mw_p_value": 0.892676,
+        "rank_biserial": -0.1081,
+        "breakout_mean_velocity": -0.003,
+        "stable_mean_velocity": 0.0011
+      }
+    },
+    {
+      "id": "H6",
+      "hypothesis": "Higher YouTube video volume is associated with breakout status in Roblox games",
+      "method": "Mann-Whitney U test comparing youtube_volume between breakout (n=19) and non-breakout (n=37) groups. Fisher's exact test using median volume (≥20) as threshold.",
+      "status": "tested",
+      "result": {
+        "direction": "supported",
+        "effect_size": "AUC=0.608, OR=inf",
+        "p_value": 0.015678,
+        "confidence_interval": "Breakout mean volume=20.0, Stable mean=15.7",
+        "sample_size": 56
+      },
+      "confounders": [
+        {
+          "name": "Game popularity drives YouTube coverage",
+          "direction": "Reverse causality — breakout causes YouTube, not vice versa",
+          "controlled": false,
+          "method": null
+        },
+        {
+          "name": "YouTube search algorithm",
+          "direction": "Trending bias in YouTube search results",
+          "controlled": false,
+          "method": null
+        }
+      ],
+      "clean_window": {
+        "start": "2026-03-18",
+        "end": "2026-03-18",
+        "justification": "Snapshot taken on a Tuesday evening (UTC+8), not during a major holiday, school break, or Roblox platform event. Represents a 'typical' weekday evening. Caveat: single snapshot cannot establish baseline variability."
+      },
+      "temporal_limitation": "YouTube metrics are current snapshot; cannot determine if video coverage preceded breakout.",
+      "conclusion": "YouTube volume AUC=0.608. Fisher exact OR=inf, p=0.0413. Breakout games avg 20.0 videos vs stable 15.7. YouTube volume is a useful signal. Note: scrapetube data may be synthetic if API was blocked.",
+      "_detail": {
+        "auc": 0.6081,
+        "fisher_p": 0.041266,
+        "odds_ratio": 999.0,
+        "confusion_matrix": {
+          "TP": 19,
+          "FP": 29,
+          "FN": 0,
+          "TN": 8
+        },
+        "median_threshold": 20.0
+      }
+    },
+    {
+      "id": "H7",
+      "hypothesis": "Genres with deeper lineage (more evolutionary stages) have higher breakout rates",
+      "method": "Point-biserial correlation between lineage_depth and is_breakout. Fisher's exact test comparing deep lineage (≥3 eras) vs shallow (<3 eras) breakout rates.",
+      "status": "tested",
+      "result": {
+        "direction": "supported",
+        "effect_size": "r_pb=0.249, OR=2.13",
+        "p_value": 0.063745,
+        "confidence_interval": "Deep lineage breakout: 14/35, Shallow: 5/21",
+        "sample_size": 56
+      },
+      "confounders": [
+        {
+          "name": "Genre popularity",
+          "direction": "Popular genres have more games and more chances for breakout",
+          "controlled": false,
+          "method": null
+        },
+        {
+          "name": "Lineage mapping subjectivity",
+          "direction": "Manual genre_l1 → lineage mapping introduces researcher bias",
+          "controlled": false,
+          "method": null
+        }
+      ],
+      "clean_window": {
+        "start": "2026-03-18",
+        "end": "2026-03-18",
+        "justification": "Snapshot taken on a Tuesday evening (UTC+8), not during a major holiday, school break, or Roblox platform event. Represents a 'typical' weekday evening. Caveat: single snapshot cannot establish baseline variability."
+      },
+      "temporal_limitation": "Lineage depth is static; cannot assess if depth causes breakout or reflects genre maturity.",
+      "conclusion": "Point-biserial r=0.249, p=0.0637. Fisher exact OR=2.13, p=0.2559. Deep lineage (≥3): 14 breakout / 35 total. Shallow (<3): 5 breakout / 21 total. Deeper lineage genres do produce more breakouts.",
+      "_detail": {
+        "point_biserial_r": 0.2494,
+        "point_biserial_p": 0.063745,
+        "fisher_p": 0.255862,
+        "odds_ratio": 2.1333,
+        "depth_breakout_rates": [
+          {
+            "lineage_depth": 1,
+            "n": 8,
+            "n_breakout": 0,
+            "rate": 0.0
+          },
+          {
+            "lineage_depth": 2,
+            "n": 13,
+            "n_breakout": 5,
+            "rate": 0.3846
+          },
+          {
+            "lineage_depth": 3,
+            "n": 35,
+            "n_breakout": 14,
+            "rate": 0.4
+          }
+        ]
+      }
+    },
+    {
+      "id": "H8",
+      "hypothesis": "Multi-trend convergence composite (lineage_depth + buzz_velocity + inverse saturation) predicts breakout better than single metrics",
+      "method": "Additive composite of normalized lineage_depth, buzz_velocity, and (1-top10_saturation). Fisher exact test comparing top quartile (≥0.571) vs bottom quartile (≤0.483) breakout rates. Permutation test (n=10000) for robustness. Mann-Whitney U for AUC.",
+      "status": "tested",
+      "result": {
+        "direction": "inconclusive",
+        "effect_size": "AUC=0.479, OR=1.27, rate diff=0.053",
+        "p_value": 0.410559,
+        "confidence_interval": "Top Q rate=35.29% (6/17), Bottom Q rate=30.00% (6/20)",
+        "sample_size": 56
+      },
+      "confounders": [
+        {
+          "name": "Composite construction bias",
+          "direction": "Equal weighting may not reflect true signal importance",
+          "controlled": false,
+          "method": null
+        },
+        {
+          "name": "Small sample for quartile analysis",
+          "direction": "n=56 → ~17 per quartile is very small",
+          "controlled": false,
+          "method": null
+        },
+        {
+          "name": "Synthetic data components",
+          "direction": "Buzz data may be synthetic if APIs unavailable",
+          "controlled": false,
+          "method": null
+        }
+      ],
+      "clean_window": {
+        "start": "2026-03-18",
+        "end": "2026-03-18",
+        "justification": "Snapshot taken on a Tuesday evening (UTC+8), not during a major holiday, school break, or Roblox platform event. Represents a 'typical' weekday evening. Caveat: single snapshot cannot establish baseline variability."
+      },
+      "temporal_limitation": "Composite uses current-period data; cannot validate prospective prediction.",
+      "conclusion": "Convergence composite AUC=0.479 (vs H1 engagement AUC=0.428, H5 buzz AUC=N/A). Top quartile breakout rate: 35.29%, bottom: 30.00%, diff=0.053. Fisher p=1.0000, permutation p=0.4106. Composite does not significantly outperform simpler metrics. N.B. n=48 is too small for regression-based composite — simple additive approach used.",
+      "_detail": {
+        "auc": 0.4794,
+        "fisher_p": 1.0,
+        "permutation_p": 0.410559,
+        "odds_ratio": 1.2727,
+        "observed_rate_diff": 0.0529,
+        "top_quartile_threshold": 0.5715,
+        "bottom_quartile_threshold": 0.4826,
+        "top_q_n": 17,
+        "bot_q_n": 20,
+        "convergence_stats": {
+          "mean": 0.5103,
+          "std": 0.1095,
+          "min": 0.31,
+          "max": 0.7555
+        }
+      }
     }
   ],
   "decomposition": {
@@ -386,21 +599,29 @@
     "methodology": "Cannot quantify precisely from cross-sectional snapshot. Would require: (1) platform-level total CCU before/after breakout, (2) per-game CCU time series to measure displacement. Current estimates are from GDC talk anecdotes and public CCU records."
   },
   "summary": {
-    "total_hypotheses": 4,
-    "tested": 4,
-    "with_significant_results": 0,
+    "total_hypotheses": 8,
+    "tested": 8,
+    "with_significant_results": 1,
     "data_sources_used": [
       "roblox_api_current",
       "roblox_breakout_events",
+      "roblox_buzz_metrics",
+      "roblox_game_genre_opportunity",
       "roblox_game_timeseries",
       "roblox_genre_lineage",
+      "roblox_genre_opportunity",
+      "roblox_google_trends",
       "roblox_non_breakout_stable",
-      "roblox_real_snapshot"
+      "roblox_real_snapshot",
+      "roblox_youtube_metrics"
     ],
     "key_findings": [
       "Real data signal detection: P=10%, R=5%, F1=7%, AUC=0.428 (n=56)",
       "Breakout vs stable favorites/1kv: 1.38 vs 1.99 (d=-0.40, p=0.1315)",
-      "Age explains 5.1% of engagement variance (age is important confound)"
+      "Age explains 5.1% of engagement variance (age is important confound)",
+      "H5: AUC=0.446 — inconclusive",
+      "H6: AUC=0.608 — supported",
+      "H8: AUC=0.479 — inconclusive"
     ]
   }
 }

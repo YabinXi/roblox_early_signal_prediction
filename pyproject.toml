@@ -12,6 +12,8 @@ dependencies = [
     "matplotlib>=3.8",
     "seaborn>=0.13",
     "anthropic>=0.40",
+    "pytrends>=4.9",
+    "scrapetube>=2.5",
 ]
 
 [tool.hatch.build.targets.wheel]

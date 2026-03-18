@@ -250,6 +250,213 @@ def plot_genre_lineage_tree(data: dict) -> str:
     return str(path.relative_to(BASE_DIR))
 
 
+def plot_buzz_velocity_scatter(data: dict) -> str:
+    """Fig 5: Buzz velocity scatter (buzz_velocity vs engagement, colored by breakout)."""
+    snap = data.get("roblox_real_snapshot")
+    buzz = data.get("roblox_buzz_metrics")
+    if snap is None or buzz is None:
+        return ""
+
+    merged = snap.merge(buzz[["universe_id", "buzz_velocity", "composite_buzz"]], on="universe_id", how="left")
+    merged = merged.dropna(subset=["buzz_velocity", "favorites_per_1k_visits"])
+
+    if len(merged) < 3:
+        return ""
+
+    fig, axes = plt.subplots(1, 2, figsize=(16, 6))
+
+    breakout = merged[merged["is_breakout"] == True]
+    stable = merged[merged["is_breakout"] == False]
+
+    # Panel 1: Buzz velocity vs engagement
+    axes[0].scatter(stable["buzz_velocity"], stable["favorites_per_1k_visits"],
+                   alpha=0.6, s=60, c="gray", label=f"Non-breakout (n={len(stable)})", edgecolors="black", linewidth=0.5)
+    axes[0].scatter(breakout["buzz_velocity"], breakout["favorites_per_1k_visits"],
+                   alpha=0.8, s=80, c="red", marker="*", label=f"Breakout (n={len(breakout)})", edgecolors="black", linewidth=0.5)
+
+    # Annotate top buzz games
+    top_buzz = merged.nlargest(5, "buzz_velocity")
+    for _, row in top_buzz.iterrows():
+        name = str(row["game_name"])[:18]
+        axes[0].annotate(name, (row["buzz_velocity"], row["favorites_per_1k_visits"]),
+                        fontsize=6, alpha=0.7, xytext=(5, 5), textcoords="offset points")
+
+    axes[0].set_xlabel("Buzz Velocity (trend slope, last 12 weeks)", fontsize=11)
+    axes[0].set_ylabel("Favorites per 1K Visits", fontsize=11)
+    axes[0].set_title("Buzz Velocity vs Engagement", fontsize=12)
+    axes[0].legend(fontsize=9)
+    axes[0].grid(True, alpha=0.3)
+
+    # Panel 2: Composite buzz vs CCU
+    axes[1].scatter(stable["composite_buzz"], np.log10(stable["playing_ccu"].clip(lower=1)),
+                   alpha=0.6, s=60, c="gray", label="Non-breakout", edgecolors="black", linewidth=0.5)
+    axes[1].scatter(breakout["composite_buzz"], np.log10(breakout["playing_ccu"].clip(lower=1)),
+                   alpha=0.8, s=80, c="red", marker="*", label="Breakout", edgecolors="black", linewidth=0.5)
+    axes[1].set_xlabel("Composite Buzz Score", fontsize=11)
+    axes[1].set_ylabel("log10(Current CCU)", fontsize=11)
+    axes[1].set_title("Composite Buzz vs Popularity", fontsize=12)
+    axes[1].legend(fontsize=9)
+    axes[1].grid(True, alpha=0.3)
+
+    plt.tight_layout()
+    path = FIGURES_DIR / "05_buzz_velocity_scatter.png"
+    fig.savefig(path, dpi=150, bbox_inches="tight")
+    plt.close(fig)
+    return str(path.relative_to(BASE_DIR))
+
+
+def plot_auc_comparison(findings: dict) -> str:
+    """Fig 6: AUC comparison bar chart (engagement vs buzz vs combined)."""
+    hypotheses = findings.get("hypotheses", [])
+
+    auc_data = {}
+    for h in hypotheses:
+        detail = h.get("_detail", {})
+        if h["id"] == "H1" and "auc" in detail:
+            auc_data["H1: Engagement\n(fav/1kv)"] = detail["auc"]
+        elif h["id"] == "H5" and "auc" in detail:
+            auc_data["H5: Buzz\nVelocity"] = detail["auc"]
+        elif h["id"] == "H6" and "auc" in detail:
+            auc_data["H6: YouTube\nVolume"] = detail["auc"]
+        elif h["id"] == "H8" and "auc" in detail:
+            auc_data["H8: Multi-trend\nConvergence"] = detail["auc"]
+
+    if len(auc_data) < 2:
+        return ""
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+
+    labels = list(auc_data.keys())
+    values = list(auc_data.values())
+    colors = ["#e74c3c" if v > 0.5 else "#95a5a6" for v in values]
+
+    bars = ax.bar(labels, values, color=colors, edgecolor="black", linewidth=0.8, alpha=0.85)
+
+    # Reference line at AUC=0.5 (random)
+    ax.axhline(y=0.5, color="orange", linestyle="--", linewidth=2, label="Random (AUC=0.5)")
+
+    # Value labels on bars
+    for bar, val in zip(bars, values):
+        ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height() + 0.01,
+               f"{val:.3f}", ha="center", va="bottom", fontsize=11, fontweight="bold")
+
+    ax.set_ylabel("AUC (Area Under Curve)", fontsize=12)
+    ax.set_title("Signal AUC Comparison: Which Metric Best Predicts Breakout?", fontsize=13)
+    ax.legend(fontsize=10)
+    ax.set_ylim(0, 1.0)
+    ax.grid(True, alpha=0.3, axis="y")
+
+    plt.tight_layout()
+    path = FIGURES_DIR / "06_auc_comparison.png"
+    fig.savefig(path, dpi=150, bbox_inches="tight")
+    plt.close(fig)
+    return str(path.relative_to(BASE_DIR))
+
+
+def plot_genre_opportunity_heatmap(data: dict) -> str:
+    """Fig 7: Genre opportunity heatmap."""
+    genre_opp = data.get("roblox_genre_opportunity")
+    if genre_opp is None or len(genre_opp) < 2:
+        return ""
+
+    fig, ax = plt.subplots(figsize=(10, 7))
+
+    # Prepare data for heatmap
+    metrics = ["breakout_rate", "lineage_depth", "top10_saturation", "engagement_variance"]
+    available_metrics = [m for m in metrics if m in genre_opp.columns]
+
+    if not available_metrics:
+        return ""
+
+    # Normalize each metric to [0, 1] for heatmap
+    heatmap_data = genre_opp.set_index("lineage_genre")[available_metrics].copy()
+    for col in heatmap_data.columns:
+        col_range = heatmap_data[col].max() - heatmap_data[col].min()
+        if col_range > 0:
+            heatmap_data[col] = (heatmap_data[col] - heatmap_data[col].min()) / col_range
+        else:
+            heatmap_data[col] = 0.5
+
+    # Rename for display
+    col_labels = {
+        "breakout_rate": "Breakout\nRate",
+        "lineage_depth": "Lineage\nDepth",
+        "top10_saturation": "Top-10\nSaturation",
+        "engagement_variance": "Engagement\nVariance",
+    }
+    heatmap_data = heatmap_data.rename(columns=col_labels)
+
+    sns.heatmap(
+        heatmap_data, annot=True, fmt=".2f", cmap="RdYlGn",
+        linewidths=1, linecolor="white", ax=ax,
+        cbar_kws={"label": "Normalized Score (0-1)"}
+    )
+    ax.set_title("Genre Opportunity Heatmap (Normalized)", fontsize=13)
+    ax.set_ylabel("")
+
+    plt.tight_layout()
+    path = FIGURES_DIR / "07_genre_opportunity_heatmap.png"
+    fig.savefig(path, dpi=150, bbox_inches="tight")
+    plt.close(fig)
+    return str(path.relative_to(BASE_DIR))
+
+
+def plot_convergence_radar(data: dict, findings: dict) -> str:
+    """Fig 8: Convergence radar chart for top opportunity genres."""
+    genre_opp = data.get("roblox_genre_opportunity")
+    if genre_opp is None or len(genre_opp) < 3:
+        return ""
+
+    metrics = ["breakout_rate", "lineage_depth", "top10_saturation", "engagement_variance"]
+    available_metrics = [m for m in metrics if m in genre_opp.columns]
+    if len(available_metrics) < 3:
+        return ""
+
+    # Select top genres by breakout rate (at least 1 breakout)
+    top_genres = genre_opp[genre_opp["n_breakout"] > 0].nlargest(5, "breakout_rate")
+    if len(top_genres) < 2:
+        top_genres = genre_opp.nlargest(5, "n_games")
+
+    # Normalize for radar
+    radar_data = top_genres.set_index("lineage_genre")[available_metrics].copy()
+    for col in radar_data.columns:
+        col_range = radar_data[col].max() - radar_data[col].min()
+        if col_range > 0:
+            radar_data[col] = (radar_data[col] - radar_data[col].min()) / col_range
+        else:
+            radar_data[col] = 0.5
+
+    # Invert saturation (low saturation = high opportunity)
+    if "top10_saturation" in radar_data.columns:
+        radar_data["top10_saturation"] = 1 - radar_data["top10_saturation"]
+
+    categories = [c.replace("_", "\n") for c in radar_data.columns]
+    N = len(categories)
+    angles = np.linspace(0, 2 * np.pi, N, endpoint=False).tolist()
+    angles += angles[:1]  # close the polygon
+
+    fig, ax = plt.subplots(figsize=(9, 9), subplot_kw=dict(polar=True))
+
+    colors = plt.cm.Set1(np.linspace(0, 1, len(radar_data)))
+    for idx, (genre, row) in enumerate(radar_data.iterrows()):
+        values = row.values.tolist()
+        values += values[:1]
+        ax.plot(angles, values, "o-", linewidth=2, label=genre, color=colors[idx])
+        ax.fill(angles, values, alpha=0.1, color=colors[idx])
+
+    ax.set_xticks(angles[:-1])
+    ax.set_xticklabels(categories, fontsize=10)
+    ax.set_ylim(0, 1.1)
+    ax.set_title("Genre Opportunity Radar: Top Breakout Genres", fontsize=13, pad=20)
+    ax.legend(loc="upper right", bbox_to_anchor=(1.3, 1.1), fontsize=9)
+
+    plt.tight_layout()
+    path = FIGURES_DIR / "08_convergence_radar.png"
+    fig.savefig(path, dpi=150, bbox_inches="tight")
+    plt.close(fig)
+    return str(path.relative_to(BASE_DIR))
+
+
 # === Report generation ===
 
 def generate_report(findings: dict, data: dict) -> str:
@@ -269,6 +476,10 @@ def generate_report(findings: dict, data: dict) -> str:
     fig_paths.append(plot_signal_detection(data))
     fig_paths.append(plot_threshold_sensitivity(findings))
     fig_paths.append(plot_genre_lineage_tree(data))
+    fig_paths.append(plot_buzz_velocity_scatter(data))
+    fig_paths.append(plot_auc_comparison(findings))
+    fig_paths.append(plot_genre_opportunity_heatmap(data))
+    fig_paths.append(plot_convergence_radar(data, findings))
     fig_paths = [p for p in fig_paths if p]
 
     report = f"""# Roblox 中腰部游戏 Engagement 异常信号 → 爆款预测研究
@@ -335,20 +546,23 @@ def generate_report(findings: dict, data: dict) -> str:
 
 | Source | Description | Frequency | Period |
 |---|---|---|---|
+| roblox_real_snapshot | Cross-sectional game metrics (56 games) | Snapshot | 2026-03-18 |
 | roblox_game_timeseries | CCU, engagement, rank for 16 games | Weekly | 2024-01 to 2026-02 |
 | roblox_breakout_events | 10 known breakout events (ground truth) | Event-level | 2017-2026 |
 | roblox_genre_lineage | Genre evolution tree (18 entries) | Static | 2013-2026 |
-| roblox_non_breakout_stable | 6 non-breakout control games | Static | 2024-2026 |
-| roblox_api_current | Live Roblox API snapshot (3 games) | Snapshot | 2026-03 |
+| roblox_buzz_metrics | Google Trends velocity + YouTube volume | 12-week trailing | 2026 Q1 |
+| roblox_genre_opportunity | Per-genre lineage depth, saturation, variance | Computed | 2026-03 |
 
 ### Statistical Methods
 
 | Method | Applied To | Purpose |
 |---|---|---|
 | Fisher's exact test | H1 (signal detection) | Test association between anomaly and breakout |
-| One-sample t-test | H2 (lead time) | Test if lead time > 30 days |
-| Welch's t-test | H3 (engagement ratio) | Compare groups with unequal variance |
-| Pearson correlation | H4 (lineage depth) | Measure lineage-magnitude association |
+| Welch's t-test | H2, H3 (engagement comparison) | Compare groups with unequal variance |
+| Mann-Whitney U | H1, H5, H6, H8 (AUC) | Non-parametric rank comparison + AUC proxy |
+| Kruskal-Wallis H | H4 (genre variation) | Test engagement differences across genres |
+| Point-biserial correlation | H7 (lineage depth) | Correlation between continuous and binary variable |
+| Permutation test | H8 (convergence composite) | Non-parametric significance test, n=10000 |
 | Sensitivity analysis | H1 (threshold tuning) | Optimize z-score threshold for F1 |
 
 """

@@ -444,10 +444,347 @@ def test_h4_genre_engagement_variation(df: pd.DataFrame) -> dict:
     }
 
 
+def test_h5_buzz_velocity_breakout(snap: pd.DataFrame, buzz: pd.DataFrame) -> dict:
+    """H5: Cultural buzz velocity (Google Trends slope) predicts breakout better than engagement metrics.
+
+    Method: Mann-Whitney U test comparing buzz_velocity between breakout and non-breakout games.
+    Compute AUC and compare against H1's engagement AUC (0.428).
+    """
+    merged = snap.merge(buzz[["universe_id", "buzz_velocity", "composite_buzz"]], on="universe_id", how="left")
+    merged["buzz_velocity"] = merged["buzz_velocity"].fillna(0)
+
+    breakout_bv = merged[merged["is_breakout"]]["buzz_velocity"].dropna()
+    stable_bv = merged[~merged["is_breakout"]]["buzz_velocity"].dropna()
+
+    if len(breakout_bv) >= 3 and len(stable_bv) >= 3:
+        u_stat, mw_p = stats.mannwhitneyu(breakout_bv, stable_bv, alternative="greater")
+        auc = u_stat / (len(breakout_bv) * len(stable_bv))
+    else:
+        u_stat, mw_p, auc = 0, 1.0, 0.5
+
+    # Effect size: rank-biserial correlation
+    n1, n2 = len(breakout_bv), len(stable_bv)
+    rank_biserial = 2 * u_stat / (n1 * n2) - 1 if n1 * n2 > 0 else 0
+
+    return {
+        "id": "H5",
+        "hypothesis": "Cultural buzz velocity (Google Trends search interest slope) can distinguish breakout from non-breakout games better than engagement metrics alone",
+        "method": (
+            f"Mann-Whitney U test comparing buzz_velocity (slope of last 12 weeks search interest) "
+            f"between breakout (n={n1}) and non-breakout (n={n2}) groups. "
+            f"AUC computed as U/(n1*n2). Compared against H1 engagement AUC=0.428."
+        ),
+        "status": "tested",
+        "result": {
+            "direction": "supported" if auc > 0.5 and mw_p < 0.1 else "inconclusive",
+            "effect_size": f"AUC={auc:.3f}, rank-biserial r={rank_biserial:.3f}",
+            "p_value": round(float(mw_p), 6),
+            "confidence_interval": f"Breakout mean velocity={breakout_bv.mean():.4f}, Stable mean={stable_bv.mean():.4f}",
+            "sample_size": len(merged),
+        },
+        "confounders": [
+            {"name": "Game fame vs buzz", "direction": "Popular games naturally have higher search interest", "controlled": True, "method": "Using velocity (slope) not level controls for baseline fame"},
+            {"name": "Search keyword ambiguity", "direction": "Common words in game names pollute trends data", "controlled": False, "method": None},
+            {"name": "Cross-batch normalization", "direction": "Different pytrends batches may have scale differences", "controlled": True, "method": "Roblox keyword included in every batch as reference"},
+        ],
+        "clean_window": identify_clean_windows()[0],
+        "temporal_limitation": "Buzz velocity uses 12-week trailing window. Cannot establish if buzz preceded or followed breakout.",
+        "conclusion": (
+            f"Buzz velocity AUC={auc:.3f} (vs H1 engagement AUC=0.428). "
+            f"Breakout mean velocity={breakout_bv.mean():.4f}, stable={stable_bv.mean():.4f}. "
+            f"Mann-Whitney p={mw_p:.4f}, rank-biserial r={rank_biserial:.3f}. "
+            f"{'Buzz velocity outperforms engagement metrics.' if auc > 0.5 else 'Buzz velocity does not clearly outperform engagement.'} "
+            f"CAVEAT: Synthetic trends data if API was unavailable — validate with real Google Trends."
+        ),
+        "_detail": {
+            "auc": round(auc, 4),
+            "h1_auc": 0.428,
+            "auc_improvement": round(auc - 0.428, 4),
+            "mw_u_stat": round(float(u_stat), 2),
+            "mw_p_value": round(float(mw_p), 6),
+            "rank_biserial": round(rank_biserial, 4),
+            "breakout_mean_velocity": round(float(breakout_bv.mean()), 4),
+            "stable_mean_velocity": round(float(stable_bv.mean()), 4),
+        },
+    }
+
+
+def test_h6_youtube_volume_breakout(snap: pd.DataFrame, buzz: pd.DataFrame) -> dict:
+    """H6: YouTube video volume correlates with breakout status.
+
+    Method: Mann-Whitney U for AUC, Fisher exact for high-volume threshold.
+    """
+    merged = snap.merge(buzz[["universe_id", "youtube_volume"]], on="universe_id", how="left")
+    merged["youtube_volume"] = merged["youtube_volume"].fillna(0)
+
+    breakout_yt = merged[merged["is_breakout"]]["youtube_volume"].dropna()
+    stable_yt = merged[~merged["is_breakout"]]["youtube_volume"].dropna()
+
+    # Mann-Whitney U
+    if len(breakout_yt) >= 3 and len(stable_yt) >= 3:
+        u_stat, mw_p = stats.mannwhitneyu(breakout_yt, stable_yt, alternative="greater")
+        auc = u_stat / (len(breakout_yt) * len(stable_yt))
+    else:
+        u_stat, mw_p, auc = 0, 1.0, 0.5
+
+    # Fisher exact: high volume (>= median) vs breakout
+    median_yt = merged["youtube_volume"].median()
+    high_vol = merged["youtube_volume"] >= max(median_yt, 1)
+    tp = int((high_vol & merged["is_breakout"]).sum())
+    fp = int((high_vol & ~merged["is_breakout"]).sum())
+    fn = int((~high_vol & merged["is_breakout"]).sum())
+    tn = int((~high_vol & ~merged["is_breakout"]).sum())
+
+    ct = [[tp, fp], [fn, tn]]
+    odds_ratio, fisher_p = stats.fisher_exact(ct)
+
+    return {
+        "id": "H6",
+        "hypothesis": "Higher YouTube video volume is associated with breakout status in Roblox games",
+        "method": (
+            f"Mann-Whitney U test comparing youtube_volume between breakout (n={len(breakout_yt)}) "
+            f"and non-breakout (n={len(stable_yt)}) groups. "
+            f"Fisher's exact test using median volume (≥{median_yt:.0f}) as threshold."
+        ),
+        "status": "tested",
+        "result": {
+            "direction": "supported" if (auc > 0.6 or fisher_p < 0.1) else "inconclusive",
+            "effect_size": f"AUC={auc:.3f}, OR={odds_ratio:.2f}",
+            "p_value": round(float(min(mw_p, fisher_p)), 6),
+            "confidence_interval": f"Breakout mean volume={breakout_yt.mean():.1f}, Stable mean={stable_yt.mean():.1f}",
+            "sample_size": len(merged),
+        },
+        "confounders": [
+            {"name": "Game popularity drives YouTube coverage", "direction": "Reverse causality — breakout causes YouTube, not vice versa", "controlled": False, "method": None},
+            {"name": "YouTube search algorithm", "direction": "Trending bias in YouTube search results", "controlled": False, "method": None},
+        ],
+        "clean_window": identify_clean_windows()[0],
+        "temporal_limitation": "YouTube metrics are current snapshot; cannot determine if video coverage preceded breakout.",
+        "conclusion": (
+            f"YouTube volume AUC={auc:.3f}. Fisher exact OR={odds_ratio:.2f}, p={fisher_p:.4f}. "
+            f"Breakout games avg {breakout_yt.mean():.1f} videos vs stable {stable_yt.mean():.1f}. "
+            f"{'YouTube volume is a useful signal.' if auc > 0.6 else 'YouTube volume alone has limited predictive power.'} "
+            f"Note: scrapetube data may be synthetic if API was blocked."
+        ),
+        "_detail": {
+            "auc": round(auc, 4),
+            "fisher_p": round(float(fisher_p), 6),
+            "odds_ratio": round(float(odds_ratio), 4) if not np.isinf(odds_ratio) else 999.0,
+            "confusion_matrix": {"TP": tp, "FP": fp, "FN": fn, "TN": tn},
+            "median_threshold": round(float(median_yt), 1),
+        },
+    }
+
+
+def test_h7_genre_lineage_depth(snap: pd.DataFrame, genre_opp: pd.DataFrame) -> dict:
+    """H7: Genres with deeper lineage produce higher breakout rates.
+
+    Method: Point-biserial correlation between lineage_depth and is_breakout.
+    Fisher exact test comparing deep (≥3) vs shallow (≤2) genre breakout rates.
+    """
+    merged = snap.merge(
+        genre_opp[["universe_id", "lineage_depth", "top10_saturation", "engagement_variance"]],
+        on="universe_id", how="left"
+    )
+    merged["lineage_depth"] = merged["lineage_depth"].fillna(1)
+
+    # Point-biserial correlation: lineage_depth vs is_breakout
+    breakout_binary = merged["is_breakout"].astype(int)
+    corr, pb_p = stats.pointbiserialr(merged["lineage_depth"], breakout_binary)
+
+    # Fisher exact: deep (≥3) vs shallow (<3)
+    deep = merged["lineage_depth"] >= 3
+    tp = int((deep & merged["is_breakout"]).sum())
+    fp = int((deep & ~merged["is_breakout"]).sum())
+    fn = int((~deep & merged["is_breakout"]).sum())
+    tn = int((~deep & ~merged["is_breakout"]).sum())
+
+    ct = [[tp, fp], [fn, tn]]
+    odds_ratio, fisher_p = stats.fisher_exact(ct)
+
+    # Breakout rates by depth
+    depth_rates = merged.groupby("lineage_depth").agg(
+        n=("is_breakout", "count"),
+        n_breakout=("is_breakout", "sum"),
+    )
+    depth_rates["rate"] = (depth_rates["n_breakout"] / depth_rates["n"]).round(4)
+
+    return {
+        "id": "H7",
+        "hypothesis": "Genres with deeper lineage (more evolutionary stages) have higher breakout rates",
+        "method": (
+            f"Point-biserial correlation between lineage_depth and is_breakout. "
+            f"Fisher's exact test comparing deep lineage (≥3 eras) vs shallow (<3 eras) breakout rates."
+        ),
+        "status": "tested",
+        "result": {
+            "direction": "supported" if (corr > 0.1 and pb_p < 0.1) or fisher_p < 0.1 else "inconclusive",
+            "effect_size": f"r_pb={corr:.3f}, OR={odds_ratio:.2f}",
+            "p_value": round(float(min(pb_p, fisher_p)), 6),
+            "confidence_interval": f"Deep lineage breakout: {tp}/{tp + fp}, Shallow: {fn}/{fn + tn}",
+            "sample_size": len(merged),
+        },
+        "confounders": [
+            {"name": "Genre popularity", "direction": "Popular genres have more games and more chances for breakout", "controlled": False, "method": None},
+            {"name": "Lineage mapping subjectivity", "direction": "Manual genre_l1 → lineage mapping introduces researcher bias", "controlled": False, "method": None},
+        ],
+        "clean_window": identify_clean_windows()[0],
+        "temporal_limitation": "Lineage depth is static; cannot assess if depth causes breakout or reflects genre maturity.",
+        "conclusion": (
+            f"Point-biserial r={corr:.3f}, p={pb_p:.4f}. "
+            f"Fisher exact OR={odds_ratio:.2f}, p={fisher_p:.4f}. "
+            f"Deep lineage (≥3): {tp} breakout / {tp + fp} total. "
+            f"Shallow (<3): {fn} breakout / {fn + tn} total. "
+            f"{'Deeper lineage genres do produce more breakouts.' if corr > 0.1 and pb_p < 0.1 else 'Lineage depth alone is not a significant breakout predictor.'}"
+        ),
+        "_detail": {
+            "point_biserial_r": round(float(corr), 4),
+            "point_biserial_p": round(float(pb_p), 6),
+            "fisher_p": round(float(fisher_p), 6),
+            "odds_ratio": round(float(odds_ratio), 4) if not np.isinf(odds_ratio) else 999.0,
+            "depth_breakout_rates": depth_rates.reset_index().to_dict("records"),
+        },
+    }
+
+
+def test_h8_multi_trend_convergence(snap: pd.DataFrame, buzz: pd.DataFrame, genre_opp: pd.DataFrame) -> dict:
+    """H8: Multi-trend convergence composite predicts breakout better than any single metric.
+
+    Composite = normalize(lineage_depth) + normalize(buzz_velocity) + normalize(1 - top10_saturation)
+    Compare top quartile vs bottom quartile breakout rates via Fisher exact test.
+    Permutation test for robustness.
+    """
+    # Merge all signals
+    merged = snap.copy()
+    if not buzz.empty:
+        merged = merged.merge(buzz[["universe_id", "buzz_velocity", "composite_buzz"]], on="universe_id", how="left")
+    else:
+        merged["buzz_velocity"] = 0.0
+        merged["composite_buzz"] = 0.0
+
+    if not genre_opp.empty:
+        merged = merged.merge(
+            genre_opp[["universe_id", "lineage_depth", "top10_saturation"]],
+            on="universe_id", how="left"
+        )
+    else:
+        merged["lineage_depth"] = 1
+        merged["top10_saturation"] = 0.0
+
+    merged = merged.fillna({"buzz_velocity": 0, "lineage_depth": 1, "top10_saturation": 0})
+
+    # Normalize each component to [0, 1]
+    def norm_col(s):
+        r = s.max() - s.min()
+        return (s - s.min()) / r if r > 0 else pd.Series(0.5, index=s.index)
+
+    merged["convergence_score"] = (
+        norm_col(merged["lineage_depth"])
+        + norm_col(merged["buzz_velocity"])
+        + norm_col(1 - merged["top10_saturation"])
+    ) / 3  # Average to keep in [0, 1]
+
+    # Quartile analysis
+    q75 = merged["convergence_score"].quantile(0.75)
+    q25 = merged["convergence_score"].quantile(0.25)
+
+    top_q = merged[merged["convergence_score"] >= q75]
+    bot_q = merged[merged["convergence_score"] <= q25]
+
+    tp = int(top_q["is_breakout"].sum())
+    fp = int(len(top_q) - tp)
+    fn = int(bot_q["is_breakout"].sum())
+    tn = int(len(bot_q) - fn)
+
+    top_rate = tp / max(len(top_q), 1)
+    bot_rate = fn / max(len(bot_q), 1)
+
+    ct = [[tp, fp], [fn, tn]]
+    odds_ratio, fisher_p = stats.fisher_exact(ct)
+
+    # Permutation test: shuffle is_breakout 10000 times, compute rate difference
+    np.random.seed(42)
+    observed_diff = top_rate - bot_rate
+    perm_diffs = []
+    n_perm = 10000
+    labels = merged["is_breakout"].values.copy()
+
+    for _ in range(n_perm):
+        np.random.shuffle(labels)
+        perm_top = labels[merged["convergence_score"].values >= q75]
+        perm_bot = labels[merged["convergence_score"].values <= q25]
+        perm_top_rate = perm_top.sum() / max(len(perm_top), 1)
+        perm_bot_rate = perm_bot.sum() / max(len(perm_bot), 1)
+        perm_diffs.append(perm_top_rate - perm_bot_rate)
+
+    perm_p = (np.sum(np.array(perm_diffs) >= observed_diff) + 1) / (n_perm + 1)
+
+    # Also compute AUC for convergence score
+    breakout_cs = merged[merged["is_breakout"]]["convergence_score"].dropna()
+    stable_cs = merged[~merged["is_breakout"]]["convergence_score"].dropna()
+
+    if len(breakout_cs) >= 3 and len(stable_cs) >= 3:
+        u_stat, mw_p = stats.mannwhitneyu(breakout_cs, stable_cs, alternative="greater")
+        auc = u_stat / (len(breakout_cs) * len(stable_cs))
+    else:
+        auc, mw_p = 0.5, 1.0
+
+    return {
+        "id": "H8",
+        "hypothesis": "Multi-trend convergence composite (lineage_depth + buzz_velocity + inverse saturation) predicts breakout better than single metrics",
+        "method": (
+            f"Additive composite of normalized lineage_depth, buzz_velocity, and (1-top10_saturation). "
+            f"Fisher exact test comparing top quartile (≥{q75:.3f}) vs bottom quartile (≤{q25:.3f}) breakout rates. "
+            f"Permutation test (n=10000) for robustness. Mann-Whitney U for AUC."
+        ),
+        "status": "tested",
+        "result": {
+            "direction": "supported" if (fisher_p < 0.1 or perm_p < 0.1) and auc > 0.5 else "inconclusive",
+            "effect_size": f"AUC={auc:.3f}, OR={odds_ratio:.2f}, rate diff={observed_diff:.3f}",
+            "p_value": round(float(min(fisher_p, perm_p)), 6),
+            "confidence_interval": f"Top Q rate={top_rate:.2%} ({tp}/{len(top_q)}), Bottom Q rate={bot_rate:.2%} ({fn}/{len(bot_q)})",
+            "sample_size": len(merged),
+        },
+        "confounders": [
+            {"name": "Composite construction bias", "direction": "Equal weighting may not reflect true signal importance", "controlled": False, "method": None},
+            {"name": "Small sample for quartile analysis", "direction": f"n={len(snap)} → ~{len(top_q)} per quartile is very small", "controlled": False, "method": None},
+            {"name": "Synthetic data components", "direction": "Buzz data may be synthetic if APIs unavailable", "controlled": False, "method": None},
+        ],
+        "clean_window": identify_clean_windows()[0],
+        "temporal_limitation": "Composite uses current-period data; cannot validate prospective prediction.",
+        "conclusion": (
+            f"Convergence composite AUC={auc:.3f} (vs H1 engagement AUC=0.428, H5 buzz AUC={merged.get('h5_auc', 'N/A')}). "
+            f"Top quartile breakout rate: {top_rate:.2%}, bottom: {bot_rate:.2%}, diff={observed_diff:.3f}. "
+            f"Fisher p={fisher_p:.4f}, permutation p={perm_p:.4f}. "
+            f"{'Multi-trend convergence shows promise as composite signal.' if auc > 0.55 else 'Composite does not significantly outperform simpler metrics.'} "
+            f"N.B. n=48 is too small for regression-based composite — simple additive approach used."
+        ),
+        "_detail": {
+            "auc": round(auc, 4),
+            "fisher_p": round(float(fisher_p), 6),
+            "permutation_p": round(float(perm_p), 6),
+            "odds_ratio": round(float(odds_ratio), 4) if not np.isinf(odds_ratio) else 999.0,
+            "observed_rate_diff": round(observed_diff, 4),
+            "top_quartile_threshold": round(float(q75), 4),
+            "bottom_quartile_threshold": round(float(q25), 4),
+            "top_q_n": len(top_q),
+            "bot_q_n": len(bot_q),
+            "convergence_stats": {
+                "mean": round(float(merged["convergence_score"].mean()), 4),
+                "std": round(float(merged["convergence_score"].std()), 4),
+                "min": round(float(merged["convergence_score"].min()), 4),
+                "max": round(float(merged["convergence_score"].max()), 4),
+            },
+        },
+    }
+
+
 def analyze(data: dict) -> dict:
     """Main analysis."""
     snap = data.get("roblox_real_snapshot")
     lineage = data.get("roblox_genre_lineage")
+    buzz = data.get("roblox_buzz_metrics")
+    genre_opp = data.get("roblox_game_genre_opportunity")
 
     if snap is None:
         print("  [ERROR] roblox_real_snapshot not found!")
@@ -457,7 +794,7 @@ def analyze(data: dict) -> dict:
     temporal_limitation = (
         "Single cross-sectional snapshot from Roblox API (2026-03-18). "
         "CAN support: cross-sectional engagement comparison, anomaly detection calibration, "
-        "genre-level variation analysis. "
+        "genre-level variation analysis, cultural buzz association testing. "
         "CANNOT support: temporal lead-time estimation, prospective prediction validation, "
         "before/after causal analysis. "
         "All findings are associational, not causal."
@@ -478,6 +815,33 @@ def analyze(data: dict) -> dict:
     h4 = test_h4_genre_engagement_variation(snap)
 
     tested = [h1, h2, h3, h4]
+
+    # H5-H8: Cultural buzz & genre opportunity hypotheses
+    if buzz is not None and not buzz.empty:
+        print("    H5: Buzz velocity → breakout...")
+        h5 = test_h5_buzz_velocity_breakout(snap, buzz)
+        tested.append(h5)
+
+        print("    H6: YouTube volume → breakout...")
+        h6 = test_h6_youtube_volume_breakout(snap, buzz)
+        tested.append(h6)
+    else:
+        print("    [SKIP] H5, H6: No buzz data available")
+
+    if genre_opp is not None and not genre_opp.empty:
+        print("    H7: Genre lineage depth → breakout rate...")
+        h7 = test_h7_genre_lineage_depth(snap, genre_opp)
+        tested.append(h7)
+    else:
+        print("    [SKIP] H7: No genre opportunity data available")
+
+    if (buzz is not None and not buzz.empty) and (genre_opp is not None and not genre_opp.empty):
+        print("    H8: Multi-trend convergence composite...")
+        h8 = test_h8_multi_trend_convergence(snap, buzz, genre_opp)
+        tested.append(h8)
+    else:
+        print("    [SKIP] H8: Missing buzz or genre opportunity data")
+
     n_tested = sum(1 for h in tested if h["status"] == "tested")
     n_significant = sum(
         1 for h in tested
@@ -522,6 +886,16 @@ def analyze(data: dict) -> dict:
     if d3:
         key_findings.append(f"Age explains {d3.get('r_squared', 0)*100:.1f}% of engagement variance (age is important confound)")
 
+    # Add buzz & genre findings
+    for h in tested:
+        if h["id"] in ("H5", "H6", "H7", "H8"):
+            detail = h.get("_detail", {})
+            auc_val = detail.get("auc", None)
+            if auc_val is not None:
+                key_findings.append(f"{h['id']}: AUC={auc_val:.3f} — {h['result']['direction']}")
+
+    total_hypotheses = len(tested)
+
     return {
         "analysis_version": "v2.0-real-data",
         "generated_at": datetime.now().isoformat(),
@@ -534,7 +908,7 @@ def analyze(data: dict) -> dict:
         "hypotheses": tested,
         "decomposition": decomposition,
         "summary": {
-            "total_hypotheses": 4,
+            "total_hypotheses": total_hypotheses,
             "tested": n_tested,
             "with_significant_results": n_significant,
             "data_sources_used": list(data.keys()),

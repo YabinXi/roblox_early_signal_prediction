@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-18T20:49:57.888347",
+  "generated_at": "2026-03-18T21:30:40.054935",
   "data_type": "REAL — fetched from Roblox Games API v1 + Votes API",
   "snapshot_time": "2026-03-18 20:47",
   "datasets": {
@@ -29,6 +29,39 @@
         "notes"
       ]
     },
+    "roblox_buzz_metrics": {
+      "rows": 55,
+      "columns": [
+        "universe_id",
+        "game_name",
+        "game_name_clean",
+        "is_breakout",
+        "genre_l1",
+        "buzz_velocity",
+        "buzz_trend_r2",
+        "buzz_peak",
+        "buzz_recency",
+        "youtube_volume",
+        "youtube_total_views",
+        "youtube_avg_views",
+        "composite_buzz"
+      ]
+    },
+    "roblox_game_genre_opportunity": {
+      "rows": 56,
+      "columns": [
+        "universe_id",
+        "game_name",
+        "genre_l1",
+        "lineage_genre",
+        "lineage_depth",
+        "top10_saturation",
+        "engagement_variance",
+        "genre_breakout_rate",
+        "genre_n_breakout",
+        "is_breakout"
+      ]
+    },
     "roblox_game_timeseries": {
       "rows": 1356,
       "columns": [
@@ -49,6 +82,31 @@
         "ancestor",
         "exemplar",
         "year"
+      ]
+    },
+    "roblox_genre_opportunity": {
+      "rows": 6,
+      "columns": [
+        "lineage_genre",
+        "n_games",
+        "n_breakout",
+        "breakout_rate",
+        "lineage_depth",
+        "top10_saturation",
+        "engagement_variance",
+        "mean_engagement",
+        "mean_ccu",
+        "median_ccu",
+        "api_genres_mapped"
+      ]
+    },
+    "roblox_google_trends": {
+      "rows": 1820,
+      "columns": [
+        "date",
+        "keyword",
+        "interest",
+        "batch"
       ]
     },
     "roblox_non_breakout_stable": {
@@ -89,6 +147,15 @@
         "is_breakout",
         "breakout_year",
         "ccu_rank"
+      ]
+    },
+    "roblox_youtube_metrics": {
+      "rows": 55,
+      "columns": [
+        "game_name_clean",
+        "youtube_video_count",
+        "youtube_total_views",
+        "youtube_avg_views"
       ]
     }
   },

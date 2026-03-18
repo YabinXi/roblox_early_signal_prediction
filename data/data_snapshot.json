@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-18T20:49:55.837919",
+  "generated_at": "2026-03-18T21:30:33.266549",
   "datasets": {
     "roblox_api_current": {
       "rows": 3,
@@ -93,6 +93,160 @@
         }
       }
     },
+    "roblox_buzz_metrics": {
+      "rows": 55,
+      "columns": [
+        "universe_id",
+        "game_name",
+        "game_name_clean",
+        "is_breakout",
+        "genre_l1",
+        "buzz_velocity",
+        "buzz_trend_r2",
+        "buzz_peak",
+        "buzz_recency",
+        "youtube_volume",
+        "youtube_total_views",
+        "youtube_avg_views",
+        "composite_buzz"
+      ],
+      "dtypes": {
+        "universe_id": "int64",
+        "game_name": "str",
+        "game_name_clean": "str",
+        "is_breakout": "bool",
+        "genre_l1": "str",
+        "buzz_velocity": "float64",
+        "buzz_trend_r2": "float64",
+        "buzz_peak": "int64",
+        "buzz_recency": "int64",
+        "youtube_volume": "int64",
+        "youtube_total_views": "int64",
+        "youtube_avg_views": "float64",
+        "composite_buzz": "float64"
+      },
+      "numeric_summary": {
+        "universe_id": {
+          "mean": 1528453406.38,
+          "std": 1692353106.91,
+          "min": 47545.0,
+          "max": 6035872082.0
+        },
+        "buzz_velocity": {
+          "mean": -0.0,
+          "std": 0.01,
+          "min": -0.04,
+          "max": 0.04
+        },
+        "buzz_trend_r2": {
+          "mean": 0.02,
+          "std": 0.09,
+          "min": 0.0,
+          "max": 0.46
+        },
+        "buzz_peak": {
+          "mean": 2.31,
+          "std": 13.54,
+          "min": 0.0,
+          "max": 100.0
+        },
+        "buzz_recency": {
+          "mean": 31.45,
+          "std": 32.98,
+          "min": 4.0,
+          "max": 90.0
+        },
+        "youtube_volume": {
+          "mean": 17.47,
+          "std": 6.68,
+          "min": 0.0,
+          "max": 20.0
+        },
+        "youtube_total_views": {
+          "mean": 24720113.78,
+          "std": 35672636.25,
+          "min": 0.0,
+          "max": 221147603.0
+        },
+        "youtube_avg_views": {
+          "mean": 1240483.56,
+          "std": 1780811.38,
+          "min": 0.0,
+          "max": 11057380.15
+        },
+        "composite_buzz": {
+          "mean": 0.47,
+          "std": 0.13,
+          "min": 0.16,
+          "max": 0.89
+        }
+      }
+    },
+    "roblox_game_genre_opportunity": {
+      "rows": 56,
+      "columns": [
+        "universe_id",
+        "game_name",
+        "genre_l1",
+        "lineage_genre",
+        "lineage_depth",
+        "top10_saturation",
+        "engagement_variance",
+        "genre_breakout_rate",
+        "genre_n_breakout",
+        "is_breakout"
+      ],
+      "dtypes": {
+        "universe_id": "int64",
+        "game_name": "str",
+        "genre_l1": "str",
+        "lineage_genre": "str",
+        "lineage_depth": "int64",
+        "top10_saturation": "float64",
+        "engagement_variance": "float64",
+        "genre_breakout_rate": "float64",
+        "genre_n_breakout": "int64",
+        "is_breakout": "bool"
+      },
+      "numeric_summary": {
+        "universe_id": {
+          "mean": 1558006078.86,
+          "std": 1691417577.95,
+          "min": 47545.0,
+          "max": 6035872082.0
+        },
+        "lineage_depth": {
+          "mean": 2.48,
+          "std": 0.74,
+          "min": 1.0,
+          "max": 3.0
+        },
+        "top10_saturation": {
+          "mean": 0.18,
+          "std": 0.09,
+          "min": 0.0,
+          "max": 0.27
+        },
+        "engagement_variance": {
+          "mean": 2.22,
+          "std": 1.54,
+          "min": 0.0,
+          "max": 4.13
+        },
+        "genre_breakout_rate": {
+          "mean": 0.34,
+          "std": 0.17,
+          "min": 0.0,
+          "max": 0.5
+        },
+        "genre_n_breakout": {
+          "mean": 4.39,
+          "std": 2.48,
+          "min": 0.0,
+          "max": 7.0
+        }
+      }
+    },
     "roblox_game_timeseries": {
       "rows": 1356,
       "columns": [
@@ -160,6 +314,124 @@
           "std": 4.17,
           "min": 2013.0,
           "max": 2026.0
+        }
+      }
+    },
+    "roblox_genre_opportunity": {
+      "rows": 6,
+      "columns": [
+        "lineage_genre",
+        "n_games",
+        "n_breakout",
+        "breakout_rate",
+        "lineage_depth",
+        "top10_saturation",
+        "engagement_variance",
+        "mean_engagement",
+        "mean_ccu",
+        "median_ccu",
+        "api_genres_mapped"
+      ],
+      "dtypes": {
+        "lineage_genre": "str",
+        "n_games": "int64",
+        "n_breakout": "int64",
+        "breakout_rate": "float64",
+        "lineage_depth": "int64",
+        "top10_saturation": "float64",
+        "engagement_variance": "float64",
+        "mean_engagement": "float64",
+        "mean_ccu": "float64",
+        "median_ccu": "float64",
+        "api_genres_mapped": "str"
+      },
+      "numeric_summary": {
+        "n_games": {
+          "mean": 9.33,
+          "std": 5.72,
+          "min": 2.0,
+          "max": 19.0
+        },
+        "n_breakout": {
+          "mean": 3.17,
+          "std": 2.79,
+          "min": 0.0,
+          "max": 7.0
+        },
+        "breakout_rate": {
+          "mean": 0.29,
+          "std": 0.23,
+          "min": 0.0,
+          "max": 0.5
+        },
+        "lineage_depth": {
+          "mean": 2.33,
+          "std": 0.82,
+          "min": 1.0,
+          "max": 3.0
+        },
+        "top10_saturation": {
+          "mean": 0.14,
+          "std": 0.11,
+          "min": 0.0,
+          "max": 0.27
+        },
+        "engagement_variance": {
+          "mean": 1.56,
+          "std": 1.48,
+          "min": 0.0,
+          "max": 4.13
+        },
+        "mean_engagement": {
+          "mean": 1.84,
+          "std": 1.1,
+          "min": 0.0,
+          "max": 3.25
+        },
+        "mean_ccu": {
+          "mean": 29457.2,
+          "std": 28536.11,
+          "min": 0.0,
+          "max": 76650.7
+        },
+        "median_ccu": {
+          "mean": 4141.33,
+          "std": 3650.49,
+          "min": 0.0,
+          "max": 9237.5
+        }
+      }
+    },
+    "roblox_google_trends": {
+      "rows": 1820,
+      "columns": [
+        "date",
+        "keyword",
+        "interest",
+        "batch"
+      ],
+      "dtypes": {
+        "date": "datetime64[us]",
+        "keyword": "str",
+        "interest": "int64",
+        "batch": "int64"
+      },
+      "date_range": {
+        "min": "2025-12-18",
+        "max": "2026-03-18"
+      },
+      "numeric_summary": {
+        "interest": {
+          "mean": 12.66,
+          "std": 23.18,
+          "min": 0.0,
+          "max": 100.0
+        },
+        "batch": {
+          "mean": 5.0,
+          "std": 4.85,
+          "min": 0.0,
+          "max": 12.0
         }
       }
     },
@@ -328,6 +600,41 @@
           "std": 16.31,
           "min": 1.0,
           "max": 56.0
+        }
+      }
+    },
+    "roblox_youtube_metrics": {
+      "rows": 55,
+      "columns": [
+        "game_name_clean",
+        "youtube_video_count",
+        "youtube_total_views",
+        "youtube_avg_views"
+      ],
+      "dtypes": {
+        "game_name_clean": "str",
+        "youtube_video_count": "int64",
+        "youtube_total_views": "int64",
+        "youtube_avg_views": "float64"
+      },
+      "numeric_summary": {
+        "youtube_video_count": {
+          "mean": 17.47,
+          "std": 6.68,
+          "min": 0.0,
+          "max": 20.0
+        },
+        "youtube_total_views": {
+          "mean": 24720113.78,
+          "std": 35672636.25,
+          "min": 0.0,
+          "max": 221147603.0
+        },
+        "youtube_avg_views": {
+          "mean": 1240483.56,
+          "std": 1780811.38,
+          "min": 0.0,
+          "max": 11057380.15
         }
       }
     }
