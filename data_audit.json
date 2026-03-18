@@ -1,0 +1,98 @@
+{
+  "generated_at": "2026-03-18T20:15:41.982306",
+  "datasets": {
+    "roblox_api_current": {
+      "rows": 3,
+      "columns": [
+        "universe_id",
+        "name",
+        "playing",
+        "visits",
+        "favoritedCount",
+        "updated",
+        "created",
+        "genre"
+      ]
+    },
+    "roblox_breakout_events": {
+      "rows": 10,
+      "columns": [
+        "game_name",
+        "universe_id",
+        "genre",
+        "breakout_date",
+        "peak_ccu",
+        "prior_avg_rank",
+        "prior_engagement_signal",
+        "notes"
+      ]
+    },
+    "roblox_game_timeseries": {
+      "rows": 1356,
+      "columns": [
+        "date",
+        "game_name",
+        "genre",
+        "ccu_avg",
+        "engagement_score",
+        "rank_position",
+        "is_breakout_game"
+      ],
+      "date_range": {
+        "min": "2024-01-01",
+        "max": "2026-02-23"
+      }
+    },
+    "roblox_genre_lineage": {
+      "rows": 18,
+      "columns": [
+        "genre",
+        "era",
+        "ancestor",
+        "exemplar",
+        "year"
+      ]
+    },
+    "roblox_non_breakout_stable": {
+      "rows": 6,
+      "columns": [
+        "game_name",
+        "genre",
+        "avg_rank",
+        "engagement_signal",
+        "notes"
+      ]
+    }
+  },
+  "key_dates": {
+    "grow_a_garden_breakout": {
+      "date": "2025-06-15",
+      "status": "verified"
+    },
+    "dead_rails_breakout": {
+      "date": "2025-04-01",
+      "status": "verified"
+    },
+    "99_nights_breakout": {
+      "date": "2026-01-20",
+      "status": "verified"
+    },
+    "rivals_breakout": {
+      "date": "2025-08-10",
+      "status": "verified"
+    },
+    "fisch_breakout": {
+      "date": "2025-03-01",
+      "status": "verified"
+    },
+    "dress_to_impress_breakout": {
+      "date": "2024-12-01",
+      "status": "verified"
+    }
+  },
+  "warnings": [
+    "⚠️ Time series data is synthetic (generated from known breakout patterns). Real RoMonitor data would strengthen findings.",
+    "⚠️ Engagement score is a composite proxy, not direct D7 retention (not publicly available).",
+    "⚠️ Non-breakout sample is small (6 games). Larger control group needed for robust inference."
+  ]
+}

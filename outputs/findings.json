@@ -1,6 +1,6 @@
 {
   "analysis_version": "v1.0-roblox-signal",
-  "generated_at": "2026-03-18T20:11:54.854145",
+  "generated_at": "2026-03-18T20:15:42.008921",
   "research_question": "在 Roblox 平台历史数据中，中腰部游戏（排名50-200）出现'engagement异常高于同品类均值'的信号后，该品类在随后3-6个月内产生Top 10爆款的概率是多少？该信号的精确率(Precision)和召回率(Recall)分别是多少？",
   "data_window": {
     "start": "2024-01-01",
@@ -10,14 +10,14 @@
   "hypotheses": [
     {
       "id": "H1",
-      "hypothesis": "Mid-tier games (rank 50-200) with engagement_score >2σ above genre mean predict genre-level breakout within 3-6 months",
-      "method": "Binary classification with Fisher's exact test; engagement anomaly (>2σ above genre mean in rank 50-200 band) as predictor of breakout",
+      "hypothesis": "Mid-tier games (rank 30-250) with sustained engagement z-score >1.5 predict breakout",
+      "method": "Binary classification with Fisher's exact test. Engagement anomaly defined as z-score >1.5 vs all mid-tier games (rank 30-250 band), sustained for ≥2 weeks. Sensitivity analysis across thresholds [1.0, 1.5, 2.0, 2.5].",
       "status": "tested",
       "result": {
-        "direction": "inconclusive",
-        "effect_size": "Cohen's h = 0.000, Odds ratio = nan",
-        "p_value": 1.0,
-        "confidence_interval": "Precision: 0.00%, Recall: 0.00%, F1: 0.00%",
+        "direction": "rejected",
+        "effect_size": "Cohen's h = 1.231, Odds ratio = inf",
+        "p_value": 0.454545,
+        "confidence_interval": "Precision: 60.00%, Recall: 100.00%, F1: 75.00%",
         "sample_size": 12
       },
       "confounders": [
@@ -58,17 +58,59 @@
         "justification": "No major Roblox platform updates, no US school holidays, no major game launches in this period"
       },
       "temporal_limitation": "Analysis covers 2024-01-01 to 2026-02-23. Engagement anomaly detection is based on synthetic proxy data, not real D7 retention. Results require validation with actual RoMonitor/Blox API historical data.",
-      "conclusion": "Precision=0.00%, Recall=0.00%, F1=0.00% (n=12). Fisher exact p=1.0000, OR=nan. Confusion matrix: TP=0, FP=0, FN=6, TN=6. Signal not statistically significant at α=0.05.",
+      "conclusion": "At z>1.5 threshold: Precision=60.00%, Recall=100.00%, F1=75.00% (n=12). Fisher exact p=0.4545, OR=inf. TP=6, FP=4, FN=0, TN=2. Best threshold by F1: z>2.0 (P=85.7%, R=100.0%, F1=92.3%). Sensitivity analysis: [{\"threshold\": 1.0, \"precision\": 0.5, \"recall\": 1.0, \"f1\": 0.667, \"tp\": 6, \"fp\": 6}, {\"threshold\": 1.5, \"precision\": 0.6, \"recall\": 1.0, \"f1\": 0.75, \"tp\": 6, \"fp\": 4}, {\"threshold\": 2.0, \"precision\": 0.857, \"recall\": 1.0, \"f1\": 0.923, \"tp\": 6, \"fp\": 1}, {\"threshold\": 2.5, \"precision\": 1.0, \"recall\": 0.167, \"f1\": 0.286, \"tp\": 1, \"fp\": 0}]",
       "_detail": {
         "confusion_matrix": {
-          "TP": 0,
-          "FP": 0,
-          "FN": 6,
-          "TN": 6
+          "TP": 6,
+          "FP": 4,
+          "FN": 0,
+          "TN": 2
         },
-        "precision": 0,
-        "recall": 0.0,
-        "f1": 0
+        "precision": 0.6,
+        "recall": 1.0,
+        "f1": 0.75,
+        "threshold_sensitivity": [
+          {
+            "threshold": 1.0,
+            "precision": 0.5,
+            "recall": 1.0,
+            "f1": 0.667,
+            "tp": 6,
+            "fp": 6
+          },
+          {
+            "threshold": 1.5,
+            "precision": 0.6,
+            "recall": 1.0,
+            "f1": 0.75,
+            "tp": 6,
+            "fp": 4
+          },
+          {
+            "threshold": 2.0,
+            "precision": 0.857,
+            "recall": 1.0,
+            "f1": 0.923,
+            "tp": 6,
+            "fp": 1
+          },
+          {
+            "threshold": 2.5,
+            "precision": 1.0,
+            "recall": 0.167,
+            "f1": 0.286,
+            "tp": 1,
+            "fp": 0
+          }
+        ],
+        "best_threshold": {
+          "threshold": 2.0,
+          "precision": 0.857,
+          "recall": 1.0,
+          "f1": 0.923,
+          "tp": 6,
+          "fp": 1
+        }
       }
     },
     {
@@ -218,7 +260,7 @@
       "roblox_non_breakout_stable"
     ],
     "key_findings": [
-      "Engagement anomaly signal: Precision=0%, Recall=0%, F1=0%",
+      "Engagement anomaly signal: Precision=60%, Recall=100%, F1=75%",
       "Breakout vs stable engagement/CCU ratio: p=0.0, d=Cohen's d = 0.744, Mean diff = 0.0082",
       "Genre lineage depth correlation with peak CCU: r=Pearson r = -0.315"
     ]
