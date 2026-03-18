@@ -1,5 +1,7 @@
 {
-  "generated_at": "2026-03-18T20:15:41.982306",
+  "generated_at": "2026-03-18T20:49:57.888347",
+  "data_type": "REAL — fetched from Roblox Games API v1 + Votes API",
+  "snapshot_time": "2026-03-18 20:47",
   "datasets": {
     "roblox_api_current": {
       "rows": 3,
@@ -37,11 +39,7 @@
         "engagement_score",
         "rank_position",
         "is_breakout_game"
-      ],
-      "date_range": {
-        "min": "2024-01-01",
-        "max": "2026-02-23"
-      }
+      ]
     },
     "roblox_genre_lineage": {
       "rows": 18,
@@ -62,37 +60,69 @@
         "engagement_signal",
         "notes"
       ]
+    },
+    "roblox_real_snapshot": {
+      "rows": 56,
+      "columns": [
+        "snapshot_time",
+        "universe_id",
+        "game_name",
+        "genre",
+        "genre_l1",
+        "genre_l2",
+        "playing_ccu",
+        "total_visits",
+        "favorited_count",
+        "up_votes",
+        "down_votes",
+        "like_ratio",
+        "favorites_per_1k_visits",
+        "favorites_per_visit",
+        "engagement_score",
+        "created_date",
+        "age_days",
+        "max_players",
+        "creator_name",
+        "creator_type",
+        "has_verified_badge",
+        "tier",
+        "is_breakout",
+        "breakout_year",
+        "ccu_rank"
+      ]
     }
   },
-  "key_dates": {
-    "grow_a_garden_breakout": {
-      "date": "2025-06-15",
-      "status": "verified"
+  "key_facts": [
+    {
+      "fact": "Data is a single cross-sectional snapshot, NOT time-series",
+      "status": "verified",
+      "source": "Roblox API"
     },
-    "dead_rails_breakout": {
-      "date": "2025-04-01",
-      "status": "verified"
+    {
+      "fact": "CCU represents concurrent users at one moment in time",
+      "status": "verified",
+      "source": "Roblox API playing field"
     },
-    "99_nights_breakout": {
-      "date": "2026-01-20",
-      "status": "verified"
+    {
+      "fact": "Visits and favorites are cumulative lifetime totals",
+      "status": "verified",
+      "source": "Roblox API"
     },
-    "rivals_breakout": {
-      "date": "2025-08-10",
-      "status": "verified"
+    {
+      "fact": "Breakout classification is manually curated from public records",
+      "status": "⚠️ assumed",
+      "source": "GDC talk, news reports, community knowledge"
     },
-    "fisch_breakout": {
-      "date": "2025-03-01",
-      "status": "verified"
-    },
-    "dress_to_impress_breakout": {
-      "date": "2024-12-01",
-      "status": "verified"
+    {
+      "fact": "Genre labels from Roblox API genre_l1/genre_l2 fields",
+      "status": "verified",
+      "source": "Roblox API"
     }
-  },
+  ],
   "warnings": [
-    "⚠️ Time series data is synthetic (generated from known breakout patterns). Real RoMonitor data would strengthen findings.",
-    "⚠️ Engagement score is a composite proxy, not direct D7 retention (not publicly available).",
-    "⚠️ Non-breakout sample is small (6 games). Larger control group needed for robust inference."
+    "⚠️ Single snapshot — cannot observe temporal dynamics or signal lead time",
+    "⚠️ Breakout games already succeeded — we're measuring features post-hoc, not predictively",
+    "⚠️ Engagement proxy (favorites/visit) is a lifetime metric, not current-period retention",
+    "⚠️ Sample is curated (not random) — selection bias toward known games"
   ]
 }

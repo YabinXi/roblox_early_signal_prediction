@@ -1,0 +1,335 @@
+{
+  "generated_at": "2026-03-18T20:49:55.837919",
+  "datasets": {
+    "roblox_api_current": {
+      "rows": 3,
+      "columns": [
+        "universe_id",
+        "name",
+        "playing",
+        "visits",
+        "favoritedCount",
+        "updated",
+        "created",
+        "genre"
+      ],
+      "dtypes": {
+        "universe_id": "int64",
+        "name": "str",
+        "playing": "int64",
+        "visits": "int64",
+        "favoritedCount": "int64",
+        "updated": "str",
+        "created": "str",
+        "genre": "str"
+      },
+      "numeric_summary": {
+        "universe_id": {
+          "mean": 1021709273.33,
+          "std": 473588059.61,
+          "min": 606849621.0,
+          "max": 1537690962.0
+        },
+        "playing": {
+          "mean": 0.0,
+          "std": 0.0,
+          "min": 0.0,
+          "max": 0.0
+        },
+        "visits": {
+          "mean": 429.33,
+          "std": 264.23,
+          "min": 226.0,
+          "max": 728.0
+        },
+        "favoritedCount": {
+          "mean": 181.0,
+          "std": 61.58,
+          "min": 129.0,
+          "max": 249.0
+        }
+      }
+    },
+    "roblox_breakout_events": {
+      "rows": 10,
+      "columns": [
+        "game_name",
+        "universe_id",
+        "genre",
+        "breakout_date",
+        "peak_ccu",
+        "prior_avg_rank",
+        "prior_engagement_signal",
+        "notes"
+      ],
+      "dtypes": {
+        "game_name": "str",
+        "universe_id": "float64",
+        "genre": "str",
+        "breakout_date": "str",
+        "peak_ccu": "int64",
+        "prior_avg_rank": "int64",
+        "prior_engagement_signal": "bool",
+        "notes": "str"
+      },
+      "numeric_summary": {
+        "universe_id": {
+          "mean": 1021709273.33,
+          "std": 473588059.61,
+          "min": 606849621.0,
+          "max": 1537690962.0
+        },
+        "peak_ccu": {
+          "mean": 1981400.0,
+          "std": 4291823.45,
+          "min": 264000.0,
+          "max": 14150000.0
+        },
+        "prior_avg_rank": {
+          "mean": 101.0,
+          "std": 27.16,
+          "min": 60.0,
+          "max": 150.0
+        }
+      }
+    },
+    "roblox_game_timeseries": {
+      "rows": 1356,
+      "columns": [
+        "date",
+        "game_name",
+        "genre",
+        "ccu_avg",
+        "engagement_score",
+        "rank_position",
+        "is_breakout_game"
+      ],
+      "dtypes": {
+        "date": "datetime64[us]",
+        "game_name": "str",
+        "genre": "str",
+        "ccu_avg": "int64",
+        "engagement_score": "float64",
+        "rank_position": "int64",
+        "is_breakout_game": "bool"
+      },
+      "date_range": {
+        "min": "2024-01-01",
+        "max": "2026-02-23"
+      },
+      "numeric_summary": {
+        "ccu_avg": {
+          "mean": 107895.64,
+          "std": 865493.04,
+          "min": 140.0,
+          "max": 15935548.0
+        },
+        "engagement_score": {
+          "mean": 0.36,
+          "std": 0.2,
+          "min": 0.01,
+          "max": 1.0
+        },
+        "rank_position": {
+          "mean": 98.1,
+          "std": 54.99,
+          "min": 1.0,
+          "max": 195.0
+        }
+      }
+    },
+    "roblox_genre_lineage": {
+      "rows": 18,
+      "columns": [
+        "genre",
+        "era",
+        "ancestor",
+        "exemplar",
+        "year"
+      ],
+      "dtypes": {
+        "genre": "str",
+        "era": "str",
+        "ancestor": "str",
+        "exemplar": "str",
+        "year": "int64"
+      },
+      "numeric_summary": {
+        "year": {
+          "mean": 2018.89,
+          "std": 4.17,
+          "min": 2013.0,
+          "max": 2026.0
+        }
+      }
+    },
+    "roblox_non_breakout_stable": {
+      "rows": 6,
+      "columns": [
+        "game_name",
+        "genre",
+        "avg_rank",
+        "engagement_signal",
+        "notes"
+      ],
+      "dtypes": {
+        "game_name": "str",
+        "genre": "str",
+        "avg_rank": "int64",
+        "engagement_signal": "bool",
+        "notes": "str"
+      },
+      "numeric_summary": {
+        "avg_rank": {
+          "mean": 124.17,
+          "std": 44.99,
+          "min": 70.0,
+          "max": 180.0
+        }
+      }
+    },
+    "roblox_real_snapshot": {
+      "rows": 56,
+      "columns": [
+        "snapshot_time",
+        "universe_id",
+        "game_name",
+        "genre",
+        "genre_l1",
+        "genre_l2",
+        "playing_ccu",
+        "total_visits",
+        "favorited_count",
+        "up_votes",
+        "down_votes",
+        "like_ratio",
+        "favorites_per_1k_visits",
+        "favorites_per_visit",
+        "engagement_score",
+        "created_date",
+        "age_days",
+        "max_players",
+        "creator_name",
+        "creator_type",
+        "has_verified_badge",
+        "tier",
+        "is_breakout",
+        "breakout_year",
+        "ccu_rank"
+      ],
+      "dtypes": {
+        "snapshot_time": "str",
+        "universe_id": "int64",
+        "game_name": "str",
+        "genre": "str",
+        "genre_l1": "str",
+        "genre_l2": "str",
+        "playing_ccu": "int64",
+        "total_visits": "int64",
+        "favorited_count": "int64",
+        "up_votes": "int64",
+        "down_votes": "int64",
+        "like_ratio": "float64",
+        "favorites_per_1k_visits": "float64",
+        "favorites_per_visit": "float64",
+        "engagement_score": "float64",
+        "created_date": "str",
+        "age_days": "int64",
+        "max_players": "int64",
+        "creator_name": "str",
+        "creator_type": "str",
+        "has_verified_badge": "bool",
+        "tier": "str",
+        "is_breakout": "bool",
+        "breakout_year": "float64",
+        "ccu_rank": "int64"
+      },
+      "numeric_summary": {
+        "universe_id": {
+          "mean": 1558006078.86,
+          "std": 1691417577.95,
+          "min": 47545.0,
+          "max": 6035872082.0
+        },
+        "playing_ccu": {
+          "mean": 36016.64,
+          "std": 93162.79,
+          "min": 0.0,
+          "max": 413270.0
+        },
+        "total_visits": {
+          "mean": 7314881618.32,
+          "std": 14232426362.8,
+          "min": 0.0,
+          "max": 80094161278.0
+        },
+        "favorited_count": {
+          "mean": 7771918.52,
+          "std": 10222887.17,
+          "min": 0.0,
+          "max": 64679251.0
+        },
+        "up_votes": {
+          "mean": 2721777.18,
+          "std": 2731800.05,
+          "min": 0.0,
+          "max": 11780903.0
+        },
+        "down_votes": {
+          "mean": 310674.86,
+          "std": 332157.02,
+          "min": 0.0,
+          "max": 1497605.0
+        },
+        "like_ratio": {
+          "mean": 0.76,
+          "std": 0.32,
+          "min": 0.0,
+          "max": 0.96
+        },
+        "favorites_per_1k_visits": {
+          "mean": 1.78,
+          "std": 1.66,
+          "min": 0.0,
+          "max": 8.13
+        },
+        "favorites_per_visit": {
+          "mean": 0.0,
+          "std": 0.0,
+          "min": 0.0,
+          "max": 0.01
+        },
+        "engagement_score": {
+          "mean": 0.01,
+          "std": 0.01,
+          "min": 0.0,
+          "max": 0.07
+        },
+        "age_days": {
+          "mean": 2796.61,
+          "std": 1370.43,
+          "min": 660.0,
+          "max": 6563.0
+        },
+        "max_players": {
+          "mean": 23.71,
+          "std": 15.29,
+          "min": 5.0,
+          "max": 75.0
+        },
+        "breakout_year": {
+          "mean": 2020.42,
+          "std": 3.47,
+          "min": 2014.0,
+          "max": 2025.0
+        },
+        "ccu_rank": {
+          "mean": 28.5,
+          "std": 16.31,
+          "min": 1.0,
+          "max": 56.0
+        }
+      }
+    }
+  }
+}

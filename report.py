@@ -59,74 +59,121 @@ def load_processed_data() -> dict:
 # === Visualization functions ===
 
 def plot_engagement_timeseries(data: dict) -> str:
-    """Plot engagement score over time for breakout vs non-breakout games."""
-    ts = data.get("roblox_game_timeseries")
-    if ts is None:
-        return ""
+    """Plot engagement vs CCU scatter for real snapshot data (replaces timeseries for cross-sectional)."""
+    snap = data.get("roblox_real_snapshot")
+    if snap is None:
+        # Fall back to synthetic timeseries if no real data
+        ts = data.get("roblox_game_timeseries")
+        if ts is None:
+            return ""
+        fig, axes = plt.subplots(1, 2, figsize=(16, 6))
+        brk_col = "is_breakout_game" if "is_breakout_game" in ts.columns else "is_breakout"
+        breakout = ts[ts[brk_col] == True]
+        for name, group in breakout.groupby("game_name"):
+            axes[0].plot(group["date"], group["engagement_score"], alpha=0.7, label=name, linewidth=1.5)
+        axes[0].set_title("Breakout Games: Engagement Score Over Time", fontsize=12)
+        axes[0].set_ylabel("Engagement Score")
+        axes[0].legend(fontsize=7, loc="upper left")
+        stable = ts[ts[brk_col] == False]
+        for name, group in stable.groupby("game_name"):
+            axes[1].plot(group["date"], group["engagement_score"], alpha=0.7, label=name, linewidth=1.5)
+        axes[1].set_title("Non-Breakout Games", fontsize=12)
+        axes[1].legend(fontsize=8, loc="upper left")
+        for ax in axes:
+            ax.grid(True, alpha=0.3)
+        plt.tight_layout()
+        path = FIGURES_DIR / "01_engagement_timeseries.png"
+        fig.savefig(path, dpi=150, bbox_inches="tight")
+        plt.close(fig)
+        return str(path.relative_to(BASE_DIR))
 
+    # Real data: scatter plot of favorites/1kv vs CCU, colored by breakout status
     fig, axes = plt.subplots(1, 2, figsize=(16, 6))
 
-    # Panel 1: Breakout games engagement trajectory
-    breakout = ts[ts["is_breakout_game"] == True]
-    for name, group in breakout.groupby("game_name"):
-        axes[0].plot(group["date"], group["engagement_score"], alpha=0.7, label=name, linewidth=1.5)
-    axes[0].set_title("Breakout Games: Engagement Score Over Time", fontsize=12)
-    axes[0].set_ylabel("Engagement Score")
-    axes[0].legend(fontsize=7, loc="upper left")
-    axes[0].axhline(y=0.5, color="red", linestyle="--", alpha=0.5, label="Anomaly threshold")
+    breakout = snap[snap["is_breakout"] == True]
+    stable = snap[snap["is_breakout"] == False]
 
-    # Panel 2: Non-breakout games
-    stable = ts[ts["is_breakout_game"] == False]
-    for name, group in stable.groupby("game_name"):
-        axes[1].plot(group["date"], group["engagement_score"], alpha=0.7, label=name, linewidth=1.5)
-    axes[1].set_title("Non-Breakout Games: Engagement Score Over Time", fontsize=12)
-    axes[1].set_ylabel("Engagement Score")
-    axes[1].legend(fontsize=8, loc="upper left")
-    axes[1].axhline(y=0.5, color="red", linestyle="--", alpha=0.5)
+    # Panel 1: Favorites per 1k visits vs log(CCU)
+    axes[0].scatter(np.log10(stable["playing_ccu"].clip(lower=1)), stable["favorites_per_1k_visits"],
+                   alpha=0.6, s=60, c="gray", label=f"Non-breakout (n={len(stable)})", edgecolors="black", linewidth=0.5)
+    axes[0].scatter(np.log10(breakout["playing_ccu"].clip(lower=1)), breakout["favorites_per_1k_visits"],
+                   alpha=0.8, s=80, c="red", marker="*", label=f"Breakout (n={len(breakout)})", edgecolors="black", linewidth=0.5)
 
-    for ax in axes:
-        ax.set_xlabel("Date")
-        ax.grid(True, alpha=0.3)
+    # Annotate top engagement games
+    top_eng = snap.nlargest(5, "favorites_per_1k_visits")
+    for _, row in top_eng.iterrows():
+        name = row["game_name"][:20]
+        axes[0].annotate(name, (np.log10(max(row["playing_ccu"], 1)), row["favorites_per_1k_visits"]),
+                        fontsize=6, alpha=0.7, xytext=(5, 5), textcoords="offset points")
+
+    axes[0].set_xlabel("log10(Current CCU)", fontsize=11)
+    axes[0].set_ylabel("Favorites per 1K Visits", fontsize=11)
+    axes[0].set_title("Engagement vs Popularity: Real Roblox Data", fontsize=12)
+    axes[0].legend(fontsize=9)
+    axes[0].grid(True, alpha=0.3)
+
+    # Panel 2: Like ratio vs favorites/1kv
+    axes[1].scatter(stable["like_ratio"], stable["favorites_per_1k_visits"],
+                   alpha=0.6, s=60, c="gray", label="Non-breakout", edgecolors="black", linewidth=0.5)
+    axes[1].scatter(breakout["like_ratio"], breakout["favorites_per_1k_visits"],
+                   alpha=0.8, s=80, c="red", marker="*", label="Breakout", edgecolors="black", linewidth=0.5)
+    axes[1].set_xlabel("Like Ratio (upvotes / total votes)", fontsize=11)
+    axes[1].set_ylabel("Favorites per 1K Visits", fontsize=11)
+    axes[1].set_title("Two Engagement Dimensions", fontsize=12)
+    axes[1].legend(fontsize=9)
+    axes[1].grid(True, alpha=0.3)
 
     plt.tight_layout()
-    path = FIGURES_DIR / "01_engagement_timeseries.png"
+    path = FIGURES_DIR / "01_engagement_scatter.png"
     fig.savefig(path, dpi=150, bbox_inches="tight")
     plt.close(fig)
     return str(path.relative_to(BASE_DIR))
 
 
 def plot_signal_detection(data: dict) -> str:
-    """Plot engagement vs CCU scatter with anomaly detection overlay."""
-    ts = data.get("roblox_game_timeseries")
-    if ts is None:
+    """Plot engagement distribution comparison: breakout vs non-breakout."""
+    snap = data.get("roblox_real_snapshot")
+    if snap is None:
         return ""
 
-    fig, ax = plt.subplots(figsize=(10, 7))
+    fig, axes = plt.subplots(1, 3, figsize=(18, 5))
 
-    midtier = ts[(ts["rank_position"] >= 30) & (ts["rank_position"] <= 250)]
+    breakout = snap[snap["is_breakout"] == True]
+    stable = snap[snap["is_breakout"] == False]
 
-    breakout = midtier[midtier["is_breakout_game"] == True]
-    stable = midtier[midtier["is_breakout_game"] == False]
+    # 1. Histogram: favorites_per_1k_visits
+    axes[0].hist(stable["favorites_per_1k_visits"], bins=15, alpha=0.6, color="gray", label=f"Non-breakout (n={len(stable)})")
+    axes[0].hist(breakout["favorites_per_1k_visits"], bins=10, alpha=0.7, color="red", label=f"Breakout (n={len(breakout)})")
+    median = snap["favorites_per_1k_visits"].median()
+    mad = np.median(np.abs(snap["favorites_per_1k_visits"] - median))
+    threshold = median + 1.5 * mad * 1.4826
+    axes[0].axvline(x=threshold, color="orange", linestyle="--", linewidth=2, label=f"Anomaly threshold ({threshold:.2f})")
+    axes[0].set_xlabel("Favorites per 1K Visits")
+    axes[0].set_ylabel("Count")
+    axes[0].set_title("Engagement Distribution (Favorites/Visit)")
+    axes[0].legend(fontsize=8)
 
-    ax.scatter(np.log10(stable["ccu_avg"].clip(lower=1)), stable["engagement_score"],
-               alpha=0.2, s=15, c="gray", label="Non-breakout (mid-tier)")
-    ax.scatter(np.log10(breakout["ccu_avg"].clip(lower=1)), breakout["engagement_score"],
-               alpha=0.4, s=25, c="red", label="Breakout (pre+post)")
+    # 2. Box plot comparison
+    box_data = [breakout["favorites_per_1k_visits"].dropna(), stable["favorites_per_1k_visits"].dropna()]
+    bp = axes[1].boxplot(box_data, labels=["Breakout", "Non-breakout"], patch_artist=True)
+    bp["boxes"][0].set_facecolor("salmon")
+    bp["boxes"][1].set_facecolor("lightgray")
+    axes[1].set_ylabel("Favorites per 1K Visits")
+    axes[1].set_title("Breakout vs Non-Breakout Engagement")
 
-    # Add anomaly zone
-    eng_mean = midtier["engagement_score"].mean()
-    eng_std = midtier["engagement_score"].std()
-    ax.axhline(y=eng_mean + 1.5 * eng_std, color="orange", linestyle="--",
-               alpha=0.7, label=f"Anomaly threshold (μ+1.5σ = {eng_mean + 1.5*eng_std:.2f})")
+    # 3. Like ratio comparison
+    axes[2].hist(stable["like_ratio"], bins=15, alpha=0.6, color="gray", label="Non-breakout")
+    axes[2].hist(breakout["like_ratio"], bins=10, alpha=0.7, color="red", label="Breakout")
+    axes[2].set_xlabel("Like Ratio")
+    axes[2].set_ylabel("Count")
+    axes[2].set_title("Like Ratio Distribution")
+    axes[2].legend(fontsize=8)
 
-    ax.set_xlabel("log10(CCU Average)", fontsize=12)
-    ax.set_ylabel("Engagement Score", fontsize=12)
-    ax.set_title("Signal Detection: Engagement vs CCU (Rank 30-250 Band)", fontsize=13)
-    ax.legend(fontsize=9)
-    ax.grid(True, alpha=0.3)
+    for ax in axes:
+        ax.grid(True, alpha=0.3)
 
     plt.tight_layout()
-    path = FIGURES_DIR / "02_signal_detection_scatter.png"
+    path = FIGURES_DIR / "02_signal_detection_distribution.png"
     fig.savefig(path, dpi=150, bbox_inches="tight")
     plt.close(fig)
     return str(path.relative_to(BASE_DIR))
@@ -144,7 +191,7 @@ def plot_threshold_sensitivity(findings: dict) -> str:
 
     fig, ax = plt.subplots(figsize=(8, 5))
 
-    thresholds = [t["threshold"] for t in thresh_data]
+    thresholds = [t.get("threshold", t.get("multiplier", 0)) for t in thresh_data]
     precisions = [t["precision"] for t in thresh_data]
     recalls = [t["recall"] for t in thresh_data]
     f1s = [t["f1"] for t in thresh_data]

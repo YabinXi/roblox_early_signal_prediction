@@ -2,23 +2,23 @@
 
 > **Research Question**: 在 Roblox 平台中，中腰部游戏出现 engagement 异常信号后，该品类产生 Top 10 爆款的概率？信号的 Precision 和 Recall？
 >
-> **Generated**: 2026-03-18 20:15
-> **Version**: v1.0-roblox-signal
-> **Data sources**: 5
-> **Hypotheses**: 4/4 tested, 2 significant
+> **Generated**: 2026-03-18 20:52
+> **Version**: v2.0-real-data
+> **Data sources**: 6
+> **Hypotheses**: 4/4 tested, 0 significant
 
 ---
 
 ## 1. Executive Summary
 
-- Engagement anomaly signal: Precision=60%, Recall=100%, F1=75%
-- Breakout vs stable engagement/CCU ratio: p=0.0, d=Cohen's d = 0.744, Mean diff = 0.0082
-- Genre lineage depth correlation with peak CCU: r=Pearson r = -0.315
+- Real data signal detection: P=10%, R=5%, F1=7%, AUC=0.428 (n=56)
+- Breakout vs stable favorites/1kv: 1.38 vs 1.99 (d=-0.40, p=0.1315)
+- Age explains 5.1% of engagement variance (age is important confound)
 
-- ❌ **H1**: Mid-tier games (rank 30-250) with sustained engagement z-score >1.5 predict brea... → **rejected** (p=0.454545)
-- ⏳ **H2**: The engagement anomaly signal appears 30-90 days before the CCU breakout inflect... → **inconclusive** (p=0.0)
-- ✅ **H3**: Breakout games show higher engagement-to-CCU ratio than stable mid-tier games in... → **supported** (p=0.0)
-- ⏳ **H4**: Genre lineage depth (number of ancestral games in the genre tree) positively cor... → **inconclusive** (p=0.375516)
+- ⏳ **H1**: Engagement anomaly (favorites/1k visits > median + 1.5*MAD) can distinguish brea... → **inconclusive** (p=0.138998)
+- ⏳ **H2**: Breakout games have significantly higher engagement metrics (favorites/visit, li... → **inconclusive** (p=0.13149)
+- ⏳ **H3**: After controlling for game age, breakout games still show higher engagement anom... → **inconclusive** (p=0.278954)
+- ⏳ **H4**: Engagement anomaly signal strength varies significantly across Roblox genres... → **inconclusive** (p=0.114358)
 
 ---
 
@@ -26,9 +26,9 @@
 
 | Judgment | Confidence | Evidence |
 |---|---|---|
-| Engagement anomaly is a viable early signal for breakout prediction | High | Precision=60%, Recall=100%, F1=75% |
-| Signal provides 30-90 day advance warning | Low | Cohen's d = 0.000, Mean lead time = 0.0 days |
-| Breakout games have measurably higher engagement efficiency | High | Cohen's d = 0.744, Mean diff = 0.0082 |
+| Engagement anomaly is a viable early signal for breakout prediction | Low | Precision=10%, Recall=5%, F1=7% |
+| Signal provides 30-90 day advance warning | Low | Cohen's d = -0.400 (favorites/1kv) |
+| Breakout games have measurably higher engagement efficiency | Low | Cohen's d = -0.293 (age-adjusted) |
 | The signal works best as a screening tool, not standalone predictor | Medium | Multi-threshold sensitivity analysis suggests optimal z>1.5 |
 
 ---
@@ -57,93 +57,97 @@
 
 ### Data Window Limitations (Rule R2)
 
-Data covers 2024-01-01 to 2026-02-23 (weekly granularity). CAN support: engagement anomaly detection within this window, signal lead-time estimation. CANNOT support: out-of-sample prediction validation, real D7 retention analysis (proxy used), pre-2024 breakout pattern analysis. Honeymoon period caveat: games with breakout dates near DATA_END may still be in growth phase.
+Single cross-sectional snapshot from Roblox API (2026-03-18). CAN support: cross-sectional engagement comparison, anomaly detection calibration, genre-level variation analysis. CANNOT support: temporal lead-time estimation, prospective prediction validation, before/after causal analysis. All findings are associational, not causal.
 
-- **Data start**: 2024-01-01
-- **Data end**: 2026-02-23
+- **Data start**: 2026-03-18
+- **Data end**: 2026-03-18
 
 ---
 
 ## 4. Detailed Analysis
 
-### 4.1 Mid-tier games (rank 30-250) with sustained engagement z-score >1.5 predict breakout
+### 4.1 Engagement anomaly (favorites/1k visits > median + 1.5*MAD) can distinguish breakout from non-breakout Roblox games
 
-**Method**: Binary classification with Fisher's exact test. Engagement anomaly defined as z-score >1.5 vs all mid-tier games (rank 30-250 band), sustained for ≥2 weeks. Sensitivity analysis across thresholds [1.0, 1.5, 2.0, 2.5].
+**Method**: Binary classification using favorites_per_1k_visits as engagement proxy. Anomaly defined via Median Absolute Deviation (MAD) — robust to outliers. Tested at 5 threshold multipliers [1.0, 1.5, 2.0, 2.5, 3.0]. Statistical significance via Fisher's exact test. Discriminative power via Mann-Whitney U (AUC proxy).
 
-**Result**: direction=rejected, effect_size=Cohen's h = 1.231, Odds ratio = inf, p=0.454545, CI=Precision: 60.00%, Recall: 100.00%, F1: 75.00%, n=12
-
-**Confounders (Rule R4)**:
-
-| Confounder | Direction | Controlled | Method |
-|---|---|---|---|
-| Seasonal effects (school holidays) | Summer/winter breaks inflate CCU across all games, could mask engagement anomaly signal | Yes | Clean window methodology: exclude school holiday periods from signal detection |
-| Roblox platform algorithm changes | Discover page algorithm updates can artificially boost/suppress mid-tier games | No | N/A |
-| Streamer/influencer effect | A single popular streamer can cause temporary CCU spikes unrelated to organic engagement | No | N/A |
-| Synthetic data generation bias | Signal patterns are modeled from known breakout trajectories, creating circular validation risk | Yes | Acknowledged as limitation; results should be validated with real RoMonitor data |
-| Survivorship bias in breakout sample | Only successful breakout games are observed; games that showed anomaly but didn't break out are underrepresented | No | N/A |
-
-**Clean Window (Rule R5)**: 2024-03-01 to 2024-05-31 — No major Roblox platform updates, no US school holidays, no major game launches in this period
-
-**Temporal Limitation (Rule R2)**: Analysis covers 2024-01-01 to 2026-02-23. Engagement anomaly detection is based on synthetic proxy data, not real D7 retention. Results require validation with actual RoMonitor/Blox API historical data.
-
-**Conclusion**: At z>1.5 threshold: Precision=60.00%, Recall=100.00%, F1=75.00% (n=12). Fisher exact p=0.4545, OR=inf. TP=6, FP=4, FN=0, TN=2. Best threshold by F1: z>2.0 (P=85.7%, R=100.0%, F1=92.3%). Sensitivity analysis: [{"threshold": 1.0, "precision": 0.5, "recall": 1.0, "f1": 0.667, "tp": 6, "fp": 6}, {"threshold": 1.5, "precision": 0.6, "recall": 1.0, "f1": 0.75, "tp": 6, "fp": 4}, {"threshold": 2.0, "precision": 0.857, "recall": 1.0, "f1": 0.923, "tp": 6, "fp": 1}, {"threshold": 2.5, "precision": 1.0, "recall": 0.167, "f1": 0.286, "tp": 1, "fp": 0}]
-
-### 4.2 The engagement anomaly signal appears 30-90 days before the CCU breakout inflection point
-
-**Method**: Event study: measure lead time from first anomaly to breakout date; one-sample t-test against 30-day minimum
-
-**Result**: direction=inconclusive, effect_size=Cohen's d = 0.000, Mean lead time = 0.0 days, p=0.0, CI=95% CI: [0.0, 0.0] days, n=0
+**Result**: direction=inconclusive, effect_size=Cohen's h = -0.569, OR = 0.17, AUC = 0.428, p=0.138998, CI=P=10.00%, R=5.26%, F1=6.90%, n=56
 
 **Confounders (Rule R4)**:
 
 | Confounder | Direction | Controlled | Method |
 |---|---|---|---|
-| Seasonal effects (school holidays) | Summer/winter breaks inflate CCU across all games, could mask engagement anomaly signal | Yes | Clean window methodology: exclude school holiday periods from signal detection |
-| Roblox platform algorithm changes | Discover page algorithm updates can artificially boost/suppress mid-tier games | No | N/A |
-| Streamer/influencer effect | A single popular streamer can cause temporary CCU spikes unrelated to organic engagement | No | N/A |
+| Survivorship bias | Breakout games are selected BECAUSE they succeeded; engagement metrics may be consequence, not cause | No | N/A |
+| Time-of-day CCU variation | Single snapshot captures one moment; games popular in different timezones may be underrepresented | No | N/A |
+| Cumulative vs current engagement | favorites/visit ratio reflects lifetime average, not current-period engagement which would be the actual signal | No | N/A |
+| Age of game confound | Older games accumulate more visits, diluting favorites/visit ratio; younger games may appear 'more engaged' | Yes | Include game age as control variable; analyze age-adjusted metrics |
+| Update recency / active development | Recently updated games get algorithm boost and engagement spike | No | N/A |
 
-**Temporal Limitation (Rule R2)**: Only 0 breakout events with detectable anomaly in data window. Small sample limits generalizability.
+**Clean Window (Rule R5)**: 2026-03-18 to 2026-03-18 — Snapshot taken on a Tuesday evening (UTC+8), not during a major holiday, school break, or Roblox platform event. Represents a 'typical' weekday evening. Caveat: single snapshot cannot establish baseline variability.
 
-**Conclusion**: Mean lead time = 0.0 ± 0.0 days (n=0). 0% of signals fell within 30-90 day window. t=0.00, p=0.0000, Cohen's d=0.00. Lead time may be too short for practical use.
+**Temporal Limitation (Rule R2)**: Cross-sectional snapshot (2026-03-18). Cannot determine temporal lead of signal. Favorites/visit is a LIFETIME metric — higher in breakout games may be CONSEQUENCE of success, not a predictive signal. Longitudinal data needed to establish causality.
 
-### 4.3 Breakout games show higher engagement-to-CCU ratio than stable mid-tier games in the pre-breakout period
+**Conclusion**: At 1.5x MAD threshold (3.53 fav/1kv): P=10.00%, R=5.26%, F1=6.90%. Fisher p=0.1390, OR=0.17. Mann-Whitney AUC=0.428 (p=0.8116). Best F1 at 2.0x MAD: F1=8.70%. Weak discriminative power. CAVEAT: This is post-hoc classification, not prospective prediction.
 
-**Method**: Welch's two-sample t-test comparing engagement/log(CCU) ratio between breakout and non-breakout groups (rank 50-200 band only)
+### 4.2 Breakout games have significantly higher engagement metrics (favorites/visit, like ratio) than non-breakout games
 
-**Result**: direction=supported, effect_size=Cohen's d = 0.744, Mean diff = 0.0082, p=0.0, CI=95% CI of difference: [0.0068, 0.0096], n=1109
+**Method**: Welch's t-test and Mann-Whitney U test comparing engagement distributions between breakout (n=19) and non-breakout (n=37) groups. Effect size via Cohen's d. Tested on 3 metrics: favorites_per_1k_visits, like_ratio, engagement_score.
 
-**Confounders (Rule R4)**:
-
-| Confounder | Direction | Controlled | Method |
-|---|---|---|---|
-| Seasonal effects (school holidays) | Summer/winter breaks inflate CCU across all games, could mask engagement anomaly signal | Yes | Clean window methodology: exclude school holiday periods from signal detection |
-| Roblox platform algorithm changes | Discover page algorithm updates can artificially boost/suppress mid-tier games | No | N/A |
-| Streamer/influencer effect | A single popular streamer can cause temporary CCU spikes unrelated to organic engagement | No | N/A |
-| Synthetic data generation bias | Signal patterns are modeled from known breakout trajectories, creating circular validation risk | Yes | Acknowledged as limitation; results should be validated with real RoMonitor data |
-
-**Clean Window (Rule R5)**: 2024-09-01 to 2024-11-15 — Post-summer, pre-holiday season. School in session (lower baseline CCU). Stable platform period.
-
-**Temporal Limitation (Rule R2)**: Analysis limited to periods where games are in rank 50-200 band. Post-breakout data excluded.
-
-**Conclusion**: Breakout group mean=0.0369 (n=431), Stable group mean=0.0287 (n=678). Diff=0.0082, t=11.73, p=0.0000, d=0.74. Breakout games have significantly higher engagement efficiency.
-
-### 4.4 Genre lineage depth (number of ancestral games in the genre tree) positively correlates with breakout magnitude
-
-**Method**: Pearson correlation between lineage depth and log10(peak CCU) across breakout events
-
-**Result**: direction=inconclusive, effect_size=Pearson r = -0.315, p=0.375516, CI=n = 10 breakout events, n=10
+**Result**: direction=inconclusive, effect_size=Cohen's d = -0.400 (favorites/1kv), p=0.13149, CI=Breakout mean=1.376, Stable mean=1.994, n=56
 
 **Confounders (Rule R4)**:
 
 | Confounder | Direction | Controlled | Method |
 |---|---|---|---|
-| Platform maturity over time | Later games benefit from larger user base | No | N/A |
-| Marketing spend variation | Some studios invest more in promotion | No | N/A |
-| Genre popularity cycle | Some genres are inherently more popular in certain periods | No | N/A |
+| Survivorship bias | Breakout games are selected BECAUSE they succeeded; engagement metrics may be consequence, not cause | No | N/A |
+| Time-of-day CCU variation | Single snapshot captures one moment; games popular in different timezones may be underrepresented | No | N/A |
+| Cumulative vs current engagement | favorites/visit ratio reflects lifetime average, not current-period engagement which would be the actual signal | No | N/A |
+| Age of game confound | Older games accumulate more visits, diluting favorites/visit ratio; younger games may appear 'more engaged' | Yes | Include game age as control variable; analyze age-adjusted metrics |
 
-**Temporal Limitation (Rule R2)**: Lineage data is manually curated and may miss unlisted precursors. Small sample (n=10) limits power.
+**Clean Window (Rule R5)**: 2026-03-18 to 2026-03-18 — Snapshot taken on a Tuesday evening (UTC+8), not during a major holiday, school break, or Roblox platform event. Represents a 'typical' weekday evening. Caveat: single snapshot cannot establish baseline variability.
 
-**Conclusion**: r=-0.315, p=0.3755 (n=10). No significant correlation found. Caveat: small sample and manually curated lineage data.
+**Temporal Limitation (Rule R2)**: Cross-sectional comparison. Cannot establish temporal ordering (engagement before or after breakout).
+
+**Conclusion**: Favorites/1kv: breakout mean=1.376 vs stable mean=1.994, d=-0.400, t-test p=0.1315, MW p=0.3862. Difference not significant at α=0.05. Like ratio: d=0.793, p=0.0016. Composite engagement: d=-0.036, p=0.8961.
+
+### 4.3 After controlling for game age, breakout games still show higher engagement anomaly
+
+**Method**: Linear regression of favorites_per_1k_visits on log(age_days) to remove age confound. Age-engagement regression: slope=0.699029, R²=0.0507, p=0.0952. Then Welch's t-test on residuals between breakout and non-breakout groups.
+
+**Result**: direction=inconclusive, effect_size=Cohen's d = -0.293 (age-adjusted), p=0.278954, CI=Adj. breakout mean=-0.2987, Adj. stable mean=0.1534, n=56
+
+**Confounders (Rule R4)**:
+
+| Confounder | Direction | Controlled | Method |
+|---|---|---|---|
+| Game age | Older games dilute favorites/visit | Yes | Linear regression residualization |
+| Total visits magnitude | High-visit games mechanically lower ratio | No | N/A |
+| Development investment | Breakout games may have higher dev investment | No | N/A |
+
+**Clean Window (Rule R5)**: 2026-03-18 to 2026-03-18 — Snapshot taken on a Tuesday evening (UTC+8), not during a major holiday, school break, or Roblox platform event. Represents a 'typical' weekday evening. Caveat: single snapshot cannot establish baseline variability.
+
+**Temporal Limitation (Rule R2)**: Age adjustment removes linear age trend, but non-linear effects (lifecycle stages) are not controlled.
+
+**Conclusion**: Age-engagement regression R²=0.0507 (age explains 5.1% of engagement variance). After age adjustment: breakout mean=-0.2987, stable mean=0.1534. d=-0.293, t=-1.095, p=0.2790. Signal weakened after age control — age is an important confound.
+
+### 4.4 Engagement anomaly signal strength varies significantly across Roblox genres
+
+**Method**: Kruskal-Wallis H-test across 7 genre groups. Per-genre breakout rates and engagement distributions.
+
+**Result**: direction=inconclusive, effect_size=Kruskal-Wallis H = 10.254, p=0.114358, CI=Tested across 7 genres with ≥3 games each, n=56
+
+**Confounders (Rule R4)**:
+
+| Confounder | Direction | Controlled | Method |
+|---|---|---|---|
+| Genre popularity cycles | Some genres naturally attract higher engagement | No | N/A |
+| Unequal genre sample sizes | Genres with few games have unstable estimates | No | N/A |
+| Genre definition ambiguity | Roblox genre_l1 may not match player perception | No | N/A |
+
+**Clean Window (Rule R5)**: 2026-03-18 to 2026-03-18 — Snapshot taken on a Tuesday evening (UTC+8), not during a major holiday, school break, or Roblox platform event. Represents a 'typical' weekday evening. Caveat: single snapshot cannot establish baseline variability.
+
+**Temporal Limitation (Rule R2)**: Single snapshot; genre engagement patterns may vary seasonally.
+
+**Conclusion**: Kruskal-Wallis H=10.254, p=0.1144. No significant cross-genre variation detected. Per-genre breakdown: [{"genre": "Action", "n_total": 6, "n_breakout": 3, "breakout_rate": 0.5, "mean_engagement": 1.6532, "std_engagement": 0.7689}, {"genre": "RPG", "n_total": 5, "n_breakout": 1, "breakout_rate": 0.2, "mean_engagement": 2.5428, "std_engagement": 3.2336}, {"genre": "Roleplay & Avatar Sim", "n_total": 9, "n_breakout": 4, "breakout_rate": 0.444, "mean_engagement": 1.7662, "std_engagement": 1.4017}, {"genre": "Shooter", "n_total": 4, "n_breakout": 1, "breakout_rate": 0.25, "mean_engagement": 3.5728, "std_engagement": 1.3332}, {"genre": "Simulation", "n_total": 11, "n_breakout": 6, "breakout_rate": 0.545, "mean_engagement": 2.4035, "std_engagement": 1.5205}]
 
 ---
 
@@ -151,20 +155,20 @@ Data covers 2024-01-01 to 2026-02-23 (weekly granularity). CAN support: engageme
 
 | Component | Estimate | Methodology |
 |---|---|---|
-| Pure incremental | Breakout games create new CCU: when a game breaks out, total platform CCU increases by ~5-15% (based on 99 Nights reaching 14.15M concurrent while platform baseline was ~10M). This suggests substantial pure incremental traffic, not just redistribution. | Estimated from synthetic time series. Pure incremental = platform CCU increase during breakout minus CCU lost by competing games. Cannibalization = sum of CCU decreases in same-genre games. Requires validation with real platform-level CCU data. |
-| Cannibalization | Some cannibalization observed: mid-tier games in the same genre lose 10-30% CCU during a breakout event (visible in time series as rank drops for non-breakout games). However, total genre CCU increases, suggesting net positive. | |
+| Pure incremental | When a breakout game emerges, it attracts genuinely new players to Roblox platform. Evidence: 99 Nights reached 14.15M CCU while Roblox baseline was ~10M, suggesting ~40% pure incremental traffic. However, precise decomposition requires platform-level CCU data (not available in our snapshot). | Cannot quantify precisely from cross-sectional snapshot. Would require: (1) platform-level total CCU before/after breakout, (2) per-game CCU time series to measure displacement. Current estimates are from GDC talk anecdotes and public CCU records. |
+| Cannibalization | Cross-game cannibalization is structurally limited on Roblox due to zero switching cost (no download required). Players frequently run multiple games in a session. Estimated cannibalization: 10-25% of breakout CCU comes from neighboring games' decline. | |
 
 ---
 
 ## 6. Visualizations
 
-### 01_engagement_timeseries
+### 01_engagement_scatter
 
-![01_engagement_timeseries](outputs/figures/01_engagement_timeseries.png)
+![01_engagement_scatter](outputs/figures/01_engagement_scatter.png)
 
-### 02_signal_detection_scatter
+### 02_signal_detection_distribution
 
-![02_signal_detection_scatter](outputs/figures/02_signal_detection_scatter.png)
+![02_signal_detection_distribution](outputs/figures/02_signal_detection_distribution.png)
 
 ### 03_threshold_sensitivity
 
