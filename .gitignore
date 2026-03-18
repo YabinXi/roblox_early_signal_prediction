@@ -1,0 +1,28 @@
+# Data
+data/raw/
+data/processed/
+data/data_snapshot.json
+data_audit.json
+
+# Outputs (tracked selectively)
+outputs/eval_result.json
+outputs/figures/
+
+# Logs
+*.log
+results.tsv
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# OS
+.DS_Store
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Secrets
+.env
+credentials*.json
