@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-19T11:50:35.537507",
+  "generated_at": "2026-03-19T13:29:27.398358",
   "data_type": "REAL — fetched from Roblox Games API v1 + Votes API",
   "snapshot_time": "2026-03-18 20:47",
   "datasets": {
@@ -44,6 +44,13 @@
         "youtube_volume",
         "youtube_total_views",
         "youtube_avg_views",
+        "upload_velocity_7d",
+        "upload_velocity_30d",
+        "recent_video_avg_views",
+        "unique_creators",
+        "view_acceleration",
+        "short_video_ratio",
+        "title_update_freq",
         "composite_buzz"
       ]
     },
@@ -101,7 +108,7 @@
       ]
     },
     "roblox_google_trends": {
-      "rows": 1365,
+      "rows": 6279,
       "columns": [
         "date",
         "keyword",
@@ -152,10 +159,17 @@
     "roblox_youtube_metrics": {
       "rows": 55,
       "columns": [
-        "game_name_clean",
         "youtube_video_count",
         "youtube_total_views",
-        "youtube_avg_views"
+        "youtube_avg_views",
+        "upload_velocity_7d",
+        "upload_velocity_30d",
+        "recent_video_avg_views",
+        "unique_creators",
+        "view_acceleration",
+        "short_video_ratio",
+        "title_update_freq",
+        "game_name_clean"
       ]
     }
   },

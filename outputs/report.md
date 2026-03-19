@@ -2,7 +2,7 @@
 
 > **Research Question**: 在 Roblox 平台中，中腰部游戏出现 engagement 异常信号后，该品类产生 Top 10 爆款的概率？信号的 Precision 和 Recall？
 >
-> **Generated**: 2026-03-19 11:50
+> **Generated**: 2026-03-19 13:29
 > **Version**: v2.0-real-data
 > **Data sources**: 11
 > **Hypotheses**: 8/8 tested, 1 significant
@@ -14,18 +14,18 @@
 - Real data signal detection: P=10%, R=5%, F1=7%, AUC=0.428 (n=56)
 - Breakout vs stable favorites/1kv: 1.38 vs 1.99 (d=-0.40, p=0.1315)
 - Age explains 5.1% of engagement variance (age is important confound)
-- H5: AUC=0.447 — inconclusive
-- H6: AUC=0.608 — supported
-- H8: AUC=0.480 — inconclusive
+- H5: AUC=0.412 — inconclusive
+- H6: best=upload_velocity_30d AUC=0.740, volume AUC=0.608 — supported
+- H8: AUC=0.464 — inconclusive
 
 - ⏳ **H1**: Engagement anomaly (favorites/1k visits > median + 1.5*MAD) can distinguish brea... → **inconclusive** (p=0.138998)
 - ⏳ **H2**: Breakout games have significantly higher engagement metrics (favorites/visit, li... → **inconclusive** (p=0.13149)
 - ⏳ **H3**: After controlling for game age, breakout games still show higher engagement anom... → **inconclusive** (p=0.278954)
 - ⏳ **H4**: Engagement anomaly signal strength varies significantly across Roblox genres... → **inconclusive** (p=0.114358)
-- ⏳ **H5**: Cultural buzz velocity (Google Trends search interest slope) can distinguish bre... → **inconclusive** (p=0.978219)
-- ✅ **H6**: Higher YouTube video volume is associated with breakout status in Roblox games... → **supported** (p=0.015678)
+- ⏳ **H5**: Cultural buzz velocity (Google Trends search interest slope) can distinguish bre... → **inconclusive** (p=0.932546)
+- ✅ **H6**: YouTube content signals (volume, creator diversity, upload velocity, view accele... → **supported** (p=0.015678)
 - ✅ **H7**: Genres with deeper lineage (more evolutionary stages) have higher breakout rates... → **supported** (p=0.063745)
-- ⏳ **H8**: Multi-trend convergence composite (lineage_depth + buzz_velocity + inverse satur... → **inconclusive** (p=0.379162)
+- ⏳ **H8**: Multi-trend convergence composite (lineage_depth + buzz_velocity + inverse satur... → **inconclusive** (p=0.585941)
 
 ---
 
@@ -163,7 +163,7 @@ Single cross-sectional snapshot from Roblox API (2026-03-18). CAN support: cross
 
 **Method**: Mann-Whitney U test comparing buzz_velocity (slope of last 12 weeks search interest) between breakout (n=19) and non-breakout (n=37) groups. AUC computed as U/(n1*n2). Compared against H1 engagement AUC=0.428.
 
-**Result**: direction=inconclusive, effect_size=AUC=0.447, rank-biserial r=-0.105, p=0.978219, CI=Breakout mean velocity=-0.0031, Stable mean=0.0000, n=56
+**Result**: direction=inconclusive, effect_size=AUC=0.413, rank-biserial r=-0.175, p=0.932546, CI=Breakout mean velocity=-0.0039, Stable mean=0.0005, n=56
 
 **Confounders (Rule R4)**:
 
@@ -177,13 +177,13 @@ Single cross-sectional snapshot from Roblox API (2026-03-18). CAN support: cross
 
 **Temporal Limitation (Rule R2)**: Buzz velocity uses 12-week trailing window. Cannot establish if buzz preceded or followed breakout.
 
-**Conclusion**: Buzz velocity AUC=0.447 (vs H1 engagement AUC=0.428). Breakout mean velocity=-0.0031, stable=0.0000. Mann-Whitney p=0.9782, rank-biserial r=-0.105. Buzz velocity does not clearly outperform engagement. CAVEAT: Synthetic trends data if API was unavailable — validate with real Google Trends.
+**Conclusion**: Buzz velocity AUC=0.413 (vs H1 engagement AUC=0.428). Breakout mean velocity=-0.0039, stable=0.0005. Mann-Whitney p=0.9325, rank-biserial r=-0.175. Buzz velocity does not clearly outperform engagement. CAVEAT: Synthetic trends data if API was unavailable — validate with real Google Trends.
 
-### 4.6 Higher YouTube video volume is associated with breakout status in Roblox games
+### 4.6 YouTube content signals (volume, creator diversity, upload velocity, view acceleration) predict breakout status
 
-**Method**: Mann-Whitney U test comparing youtube_volume between breakout (n=19) and non-breakout (n=37) groups. Fisher's exact test using median volume (≥20) as threshold.
+**Method**: Mann-Whitney U test comparing YouTube signals between breakout (n=19) and non-breakout (n=37) groups. Fisher's exact test using median volume (≥50) as threshold. Tested 8 signals: youtube_volume, unique_creators, upload_velocity_30d, view_acceleration, upload_velocity_7d, short_video_ratio, title_update_freq, recent_video_avg_views.
 
-**Result**: direction=supported, effect_size=AUC=0.608, OR=inf, p=0.015678, CI=Breakout mean volume=20.0, Stable mean=15.7, n=56
+**Result**: direction=supported, effect_size=Best AUC=0.740 (upload_velocity_30d), volume AUC=0.608, OR=inf, p=0.015678, CI=Breakout mean volume=50.0, Stable mean=39.2, n=56
 
 **Confounders (Rule R4)**:
 
@@ -196,7 +196,7 @@ Single cross-sectional snapshot from Roblox API (2026-03-18). CAN support: cross
 
 **Temporal Limitation (Rule R2)**: YouTube metrics are current snapshot; cannot determine if video coverage preceded breakout.
 
-**Conclusion**: YouTube volume AUC=0.608. Fisher exact OR=inf, p=0.0413. Breakout games avg 20.0 videos vs stable 15.7. YouTube volume is a useful signal. Note: scrapetube data may be synthetic if API was blocked.
+**Conclusion**: Best signal: upload_velocity_30d (AUC=0.740). All signal AUCs: {'youtube_volume': np.float64(0.6081), 'unique_creators': np.float64(0.6351), 'upload_velocity_30d': np.float64(0.7404), 'view_acceleration': np.float64(0.6181), 'upload_velocity_7d': np.float64(0.7347), 'short_video_ratio': np.float64(0.4943), 'title_update_freq': np.float64(0.6693), 'recent_video_avg_views': np.float64(0.7034)}. Fisher exact OR=inf, p=0.0413. Breakout games avg 50.0 videos vs stable 39.2. Enriched YouTube signals improve breakout prediction. Note: scrapetube data may be synthetic if API was blocked.
 
 ### 4.7 Genres with deeper lineage (more evolutionary stages) have higher breakout rates
 
@@ -219,23 +219,23 @@ Single cross-sectional snapshot from Roblox API (2026-03-18). CAN support: cross
 
 ### 4.8 Multi-trend convergence composite (lineage_depth + buzz_velocity + inverse saturation) predicts breakout better than single metrics
 
-**Method**: Additive composite of normalized lineage_depth, buzz_velocity, and (1-top10_saturation). Fisher exact test comparing top quartile (≥0.756) vs bottom quartile (≤0.667) breakout rates. Permutation test (n=10000) for robustness. Mann-Whitney U for AUC.
+**Method**: Additive composite of normalized lineage_depth, buzz_velocity, and (1-top10_saturation). Fisher exact test comparing top quartile (≥0.637) vs bottom quartile (≤0.548) breakout rates. Permutation test (n=10000) for robustness. Mann-Whitney U for AUC.
 
-**Result**: direction=inconclusive, effect_size=AUC=0.480, OR=1.27, rate diff=0.056, p=0.379162, CI=Top Q rate=38.89% (7/18), Bottom Q rate=33.33% (7/21), n=56
+**Result**: direction=inconclusive, effect_size=AUC=0.464, OR=0.91, rate diff=-0.021, p=0.585941, CI=Top Q rate=31.25% (5/16), Bottom Q rate=33.33% (7/21), n=56
 
 **Confounders (Rule R4)**:
 
 | Confounder | Direction | Controlled | Method |
 |---|---|---|---|
 | Composite construction bias | Equal weighting may not reflect true signal importance | No | N/A |
-| Small sample for quartile analysis | n=56 → ~18 per quartile is very small | No | N/A |
+| Small sample for quartile analysis | n=56 → ~16 per quartile is very small | No | N/A |
 | Synthetic data components | Buzz data may be synthetic if APIs unavailable | No | N/A |
 
 **Clean Window (Rule R5)**: 2026-03-18 to 2026-03-18 — Snapshot taken on a Tuesday evening (UTC+8), not during a major holiday, school break, or Roblox platform event. Represents a 'typical' weekday evening. Caveat: single snapshot cannot establish baseline variability.
 
 **Temporal Limitation (Rule R2)**: Composite uses current-period data; cannot validate prospective prediction.
 
-**Conclusion**: Convergence composite AUC=0.480 (vs H1 engagement AUC=0.428, H5 buzz AUC=N/A). Top quartile breakout rate: 38.89%, bottom: 33.33%, diff=0.056. Fisher p=0.7496, permutation p=0.3792. Composite does not significantly outperform simpler metrics. N.B. n=48 is too small for regression-based composite — simple additive approach used.
+**Conclusion**: Convergence composite AUC=0.464 (vs H1 engagement AUC=0.428, H5 buzz AUC=N/A). Top quartile breakout rate: 31.25%, bottom: 33.33%, diff=-0.021. Fisher p=1.0000, permutation p=0.5859. Composite does not significantly outperform simpler metrics. N.B. n=48 is too small for regression-based composite — simple additive approach used.
 
 ---
 

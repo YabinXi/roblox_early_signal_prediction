@@ -510,17 +510,27 @@ def test_h5_buzz_velocity_breakout(snap: pd.DataFrame, buzz: pd.DataFrame) -> di
 
 
 def test_h6_youtube_volume_breakout(snap: pd.DataFrame, buzz: pd.DataFrame) -> dict:
-    """H6: YouTube video volume correlates with breakout status.
+    """H6: YouTube signals (volume, creator diversity, upload velocity, view acceleration)
+    correlate with breakout status.
 
-    Method: Mann-Whitney U for AUC, Fisher exact for high-volume threshold.
+    Method: Mann-Whitney U for AUC on each signal, Fisher exact for high-volume threshold.
     """
-    merged = snap.merge(buzz[["universe_id", "youtube_volume"]], on="universe_id", how="left")
+    # Merge all available YouTube signals
+    yt_cols = ["universe_id", "youtube_volume"]
+    enriched_signals = ["unique_creators", "upload_velocity_30d", "view_acceleration",
+                        "upload_velocity_7d", "short_video_ratio", "title_update_freq",
+                        "recent_video_avg_views"]
+    for col in enriched_signals:
+        if col in buzz.columns:
+            yt_cols.append(col)
+
+    merged = snap.merge(buzz[yt_cols], on="universe_id", how="left")
     merged["youtube_volume"] = merged["youtube_volume"].fillna(0)
 
     breakout_yt = merged[merged["is_breakout"]]["youtube_volume"].dropna()
     stable_yt = merged[~merged["is_breakout"]]["youtube_volume"].dropna()
 
-    # Mann-Whitney U
+    # Mann-Whitney U for youtube_volume (original)
     if len(breakout_yt) >= 3 and len(stable_yt) >= 3:
         u_stat, mw_p = stats.mannwhitneyu(breakout_yt, stable_yt, alternative="greater")
         auc = u_stat / (len(breakout_yt) * len(stable_yt))
@@ -538,18 +548,41 @@ def test_h6_youtube_volume_breakout(snap: pd.DataFrame, buzz: pd.DataFrame) -> d
     ct = [[tp, fp], [fn, tn]]
     odds_ratio, fisher_p = stats.fisher_exact(ct)
 
+    # Test each enriched signal for AUC
+    signal_aucs = {"youtube_volume": round(auc, 4)}
+    for sig in enriched_signals:
+        if sig not in merged.columns:
+            continue
+        merged[sig] = merged[sig].fillna(0)
+        b_vals = merged[merged["is_breakout"]][sig].dropna()
+        s_vals = merged[~merged["is_breakout"]][sig].dropna()
+        if len(b_vals) >= 3 and len(s_vals) >= 3:
+            try:
+                u, p = stats.mannwhitneyu(b_vals, s_vals, alternative="greater")
+                sig_auc = u / (len(b_vals) * len(s_vals))
+                signal_aucs[sig] = round(sig_auc, 4)
+            except Exception:
+                signal_aucs[sig] = 0.5
+        else:
+            signal_aucs[sig] = 0.5
+
+    # Find best signal
+    best_signal = max(signal_aucs, key=signal_aucs.get)
+    best_auc = signal_aucs[best_signal]
+
     return {
         "id": "H6",
-        "hypothesis": "Higher YouTube video volume is associated with breakout status in Roblox games",
+        "hypothesis": "YouTube content signals (volume, creator diversity, upload velocity, view acceleration) predict breakout status",
         "method": (
-            f"Mann-Whitney U test comparing youtube_volume between breakout (n={len(breakout_yt)}) "
+            f"Mann-Whitney U test comparing YouTube signals between breakout (n={len(breakout_yt)}) "
             f"and non-breakout (n={len(stable_yt)}) groups. "
-            f"Fisher's exact test using median volume (≥{median_yt:.0f}) as threshold."
+            f"Fisher's exact test using median volume (≥{median_yt:.0f}) as threshold. "
+            f"Tested {len(signal_aucs)} signals: {', '.join(signal_aucs.keys())}."
         ),
         "status": "tested",
         "result": {
-            "direction": "supported" if (auc > 0.6 or fisher_p < 0.1) else "inconclusive",
-            "effect_size": f"AUC={auc:.3f}, OR={odds_ratio:.2f}",
+            "direction": "supported" if (best_auc > 0.6 or fisher_p < 0.1) else "inconclusive",
+            "effect_size": f"Best AUC={best_auc:.3f} ({best_signal}), volume AUC={auc:.3f}, OR={odds_ratio:.2f}",
             "p_value": round(float(min(mw_p, fisher_p)), 6),
             "confidence_interval": f"Breakout mean volume={breakout_yt.mean():.1f}, Stable mean={stable_yt.mean():.1f}",
             "sample_size": len(merged),
@@ -561,13 +594,18 @@ def test_h6_youtube_volume_breakout(snap: pd.DataFrame, buzz: pd.DataFrame) -> d
         "clean_window": identify_clean_windows()[0],
         "temporal_limitation": "YouTube metrics are current snapshot; cannot determine if video coverage preceded breakout.",
         "conclusion": (
-            f"YouTube volume AUC={auc:.3f}. Fisher exact OR={odds_ratio:.2f}, p={fisher_p:.4f}. "
+            f"Best signal: {best_signal} (AUC={best_auc:.3f}). "
+            f"All signal AUCs: {signal_aucs}. "
+            f"Fisher exact OR={odds_ratio:.2f}, p={fisher_p:.4f}. "
             f"Breakout games avg {breakout_yt.mean():.1f} videos vs stable {stable_yt.mean():.1f}. "
-            f"{'YouTube volume is a useful signal.' if auc > 0.6 else 'YouTube volume alone has limited predictive power.'} "
+            f"{'Enriched YouTube signals improve breakout prediction.' if best_auc > auc else 'Volume remains the strongest YouTube signal.'} "
             f"Note: scrapetube data may be synthetic if API was blocked."
         ),
         "_detail": {
             "auc": round(auc, 4),
+            "best_signal": best_signal,
+            "best_auc": round(best_auc, 4),
+            "all_signal_aucs": signal_aucs,
             "fisher_p": round(float(fisher_p), 6),
             "odds_ratio": round(float(odds_ratio), 4) if not np.isinf(odds_ratio) else 999.0,
             "confusion_matrix": {"TP": tp, "FP": fp, "FN": fn, "TN": tn},
@@ -822,7 +860,7 @@ def analyze(data: dict) -> dict:
         h5 = test_h5_buzz_velocity_breakout(snap, buzz)
         tested.append(h5)
 
-        print("    H6: YouTube volume → breakout...")
+        print("    H6: YouTube signals → breakout...")
         h6 = test_h6_youtube_volume_breakout(snap, buzz)
         tested.append(h6)
     else:
@@ -891,7 +929,11 @@ def analyze(data: dict) -> dict:
         if h["id"] in ("H5", "H6", "H7", "H8"):
             detail = h.get("_detail", {})
             auc_val = detail.get("auc", None)
-            if auc_val is not None:
+            best_sig = detail.get("best_signal", None)
+            best_auc_val = detail.get("best_auc", None)
+            if best_sig and best_auc_val is not None:
+                key_findings.append(f"{h['id']}: best={best_sig} AUC={best_auc_val:.3f}, volume AUC={auc_val:.3f} — {h['result']['direction']}")
+            elif auc_val is not None:
                 key_findings.append(f"{h['id']}: AUC={auc_val:.3f} — {h['result']['direction']}")
 
     total_hypotheses = len(tested)

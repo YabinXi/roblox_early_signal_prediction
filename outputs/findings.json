@@ -1,6 +1,6 @@
 {
   "analysis_version": "v2.0-real-data",
-  "generated_at": "2026-03-19T11:50:35.749795",
+  "generated_at": "2026-03-19T13:29:27.595950",
   "research_question": "在 Roblox 平台中，中腰部游戏出现 engagement 异常（favorites/visit 或 like ratio 显著高于同tier均值）是否能有效区分最终成为爆款的游戏与长期停留在中腰部的游戏？该信号的 Precision、Recall、F1 分别是多少？",
   "data_window": {
     "start": "2026-03-18",
@@ -386,9 +386,9 @@
       "status": "tested",
       "result": {
         "direction": "inconclusive",
-        "effect_size": "AUC=0.447, rank-biserial r=-0.105",
-        "p_value": 0.978219,
-        "confidence_interval": "Breakout mean velocity=-0.0031, Stable mean=0.0000",
+        "effect_size": "AUC=0.413, rank-biserial r=-0.175",
+        "p_value": 0.932546,
+        "confidence_interval": "Breakout mean velocity=-0.0039, Stable mean=0.0005",
         "sample_size": 56
       },
       "confounders": [
@@ -417,28 +417,28 @@
         "justification": "Snapshot taken on a Tuesday evening (UTC+8), not during a major holiday, school break, or Roblox platform event. Represents a 'typical' weekday evening. Caveat: single snapshot cannot establish baseline variability."
       },
       "temporal_limitation": "Buzz velocity uses 12-week trailing window. Cannot establish if buzz preceded or followed breakout.",
-      "conclusion": "Buzz velocity AUC=0.447 (vs H1 engagement AUC=0.428). Breakout mean velocity=-0.0031, stable=0.0000. Mann-Whitney p=0.9782, rank-biserial r=-0.105. Buzz velocity does not clearly outperform engagement. CAVEAT: Synthetic trends data if API was unavailable — validate with real Google Trends.",
+      "conclusion": "Buzz velocity AUC=0.413 (vs H1 engagement AUC=0.428). Breakout mean velocity=-0.0039, stable=0.0005. Mann-Whitney p=0.9325, rank-biserial r=-0.175. Buzz velocity does not clearly outperform engagement. CAVEAT: Synthetic trends data if API was unavailable — validate with real Google Trends.",
       "_detail": {
-        "auc": 0.4474,
+        "auc": 0.4125,
         "h1_auc": 0.428,
-        "auc_improvement": 0.0194,
-        "mw_u_stat": 314.5,
-        "mw_p_value": 0.978219,
-        "rank_biserial": -0.1053,
-        "breakout_mean_velocity": -0.0031,
-        "stable_mean_velocity": 0.0
+        "auc_improvement": -0.0155,
+        "mw_u_stat": 290.0,
+        "mw_p_value": 0.932546,
+        "rank_biserial": -0.175,
+        "breakout_mean_velocity": -0.0039,
+        "stable_mean_velocity": 0.0005
       }
     },
     {
       "id": "H6",
-      "hypothesis": "Higher YouTube video volume is associated with breakout status in Roblox games",
-      "method": "Mann-Whitney U test comparing youtube_volume between breakout (n=19) and non-breakout (n=37) groups. Fisher's exact test using median volume (≥20) as threshold.",
+      "hypothesis": "YouTube content signals (volume, creator diversity, upload velocity, view acceleration) predict breakout status",
+      "method": "Mann-Whitney U test comparing YouTube signals between breakout (n=19) and non-breakout (n=37) groups. Fisher's exact test using median volume (≥50) as threshold. Tested 8 signals: youtube_volume, unique_creators, upload_velocity_30d, view_acceleration, upload_velocity_7d, short_video_ratio, title_update_freq, recent_video_avg_views.",
       "status": "tested",
       "result": {
         "direction": "supported",
-        "effect_size": "AUC=0.608, OR=inf",
+        "effect_size": "Best AUC=0.740 (upload_velocity_30d), volume AUC=0.608, OR=inf",
         "p_value": 0.015678,
-        "confidence_interval": "Breakout mean volume=20.0, Stable mean=15.7",
+        "confidence_interval": "Breakout mean volume=50.0, Stable mean=39.2",
         "sample_size": 56
       },
       "confounders": [
@@ -461,9 +461,21 @@
         "justification": "Snapshot taken on a Tuesday evening (UTC+8), not during a major holiday, school break, or Roblox platform event. Represents a 'typical' weekday evening. Caveat: single snapshot cannot establish baseline variability."
       },
       "temporal_limitation": "YouTube metrics are current snapshot; cannot determine if video coverage preceded breakout.",
-      "conclusion": "YouTube volume AUC=0.608. Fisher exact OR=inf, p=0.0413. Breakout games avg 20.0 videos vs stable 15.7. YouTube volume is a useful signal. Note: scrapetube data may be synthetic if API was blocked.",
+      "conclusion": "Best signal: upload_velocity_30d (AUC=0.740). All signal AUCs: {'youtube_volume': np.float64(0.6081), 'unique_creators': np.float64(0.6351), 'upload_velocity_30d': np.float64(0.7404), 'view_acceleration': np.float64(0.6181), 'upload_velocity_7d': np.float64(0.7347), 'short_video_ratio': np.float64(0.4943), 'title_update_freq': np.float64(0.6693), 'recent_video_avg_views': np.float64(0.7034)}. Fisher exact OR=inf, p=0.0413. Breakout games avg 50.0 videos vs stable 39.2. Enriched YouTube signals improve breakout prediction. Note: scrapetube data may be synthetic if API was blocked.",
       "_detail": {
         "auc": 0.6081,
+        "best_signal": "upload_velocity_30d",
+        "best_auc": 0.7404,
+        "all_signal_aucs": {
+          "youtube_volume": 0.6081,
+          "unique_creators": 0.6351,
+          "upload_velocity_30d": 0.7404,
+          "view_acceleration": 0.6181,
+          "upload_velocity_7d": 0.7347,
+          "short_video_ratio": 0.4943,
+          "title_update_freq": 0.6693,
+          "recent_video_avg_views": 0.7034
+        },
         "fisher_p": 0.041266,
         "odds_ratio": 999.0,
         "confusion_matrix": {
@@ -472,7 +484,7 @@
           "FN": 0,
           "TN": 8
         },
-        "median_threshold": 20.0
+        "median_threshold": 50.0
       }
     },
     {
@@ -538,13 +550,13 @@
     {
       "id": "H8",
       "hypothesis": "Multi-trend convergence composite (lineage_depth + buzz_velocity + inverse saturation) predicts breakout better than single metrics",
-      "method": "Additive composite of normalized lineage_depth, buzz_velocity, and (1-top10_saturation). Fisher exact test comparing top quartile (≥0.756) vs bottom quartile (≤0.667) breakout rates. Permutation test (n=10000) for robustness. Mann-Whitney U for AUC.",
+      "method": "Additive composite of normalized lineage_depth, buzz_velocity, and (1-top10_saturation). Fisher exact test comparing top quartile (≥0.637) vs bottom quartile (≤0.548) breakout rates. Permutation test (n=10000) for robustness. Mann-Whitney U for AUC.",
       "status": "tested",
       "result": {
         "direction": "inconclusive",
-        "effect_size": "AUC=0.480, OR=1.27, rate diff=0.056",
-        "p_value": 0.379162,
-        "confidence_interval": "Top Q rate=38.89% (7/18), Bottom Q rate=33.33% (7/21)",
+        "effect_size": "AUC=0.464, OR=0.91, rate diff=-0.021",
+        "p_value": 0.585941,
+        "confidence_interval": "Top Q rate=31.25% (5/16), Bottom Q rate=33.33% (7/21)",
         "sample_size": 56
       },
       "confounders": [
@@ -556,7 +568,7 @@
         },
         {
           "name": "Small sample for quartile analysis",
-          "direction": "n=56 → ~18 per quartile is very small",
+          "direction": "n=56 → ~16 per quartile is very small",
           "controlled": false,
           "method": null
         },
@@ -573,22 +585,22 @@
         "justification": "Snapshot taken on a Tuesday evening (UTC+8), not during a major holiday, school break, or Roblox platform event. Represents a 'typical' weekday evening. Caveat: single snapshot cannot establish baseline variability."
       },
       "temporal_limitation": "Composite uses current-period data; cannot validate prospective prediction.",
-      "conclusion": "Convergence composite AUC=0.480 (vs H1 engagement AUC=0.428, H5 buzz AUC=N/A). Top quartile breakout rate: 38.89%, bottom: 33.33%, diff=0.056. Fisher p=0.7496, permutation p=0.3792. Composite does not significantly outperform simpler metrics. N.B. n=48 is too small for regression-based composite — simple additive approach used.",
+      "conclusion": "Convergence composite AUC=0.464 (vs H1 engagement AUC=0.428, H5 buzz AUC=N/A). Top quartile breakout rate: 31.25%, bottom: 33.33%, diff=-0.021. Fisher p=1.0000, permutation p=0.5859. Composite does not significantly outperform simpler metrics. N.B. n=48 is too small for regression-based composite — simple additive approach used.",
       "_detail": {
-        "auc": 0.4801,
-        "fisher_p": 0.749572,
-        "permutation_p": 0.379162,
-        "odds_ratio": 1.2727,
-        "observed_rate_diff": 0.0556,
-        "top_quartile_threshold": 0.7555,
-        "bottom_quartile_threshold": 0.6667,
-        "top_q_n": 18,
+        "auc": 0.4637,
+        "fisher_p": 1.0,
+        "permutation_p": 0.585941,
+        "odds_ratio": 0.9091,
+        "observed_rate_diff": -0.0208,
+        "top_quartile_threshold": 0.6372,
+        "bottom_quartile_threshold": 0.5483,
+        "top_q_n": 16,
         "bot_q_n": 21,
         "convergence_stats": {
-          "mean": 0.6881,
-          "std": 0.1112,
-          "min": 0.4094,
-          "max": 0.8333
+          "mean": 0.5725,
+          "std": 0.1113,
+          "min": 0.3812,
+          "max": 0.7962
         }
       }
     }
@@ -619,9 +631,9 @@
       "Real data signal detection: P=10%, R=5%, F1=7%, AUC=0.428 (n=56)",
       "Breakout vs stable favorites/1kv: 1.38 vs 1.99 (d=-0.40, p=0.1315)",
       "Age explains 5.1% of engagement variance (age is important confound)",
-      "H5: AUC=0.447 — inconclusive",
-      "H6: AUC=0.608 — supported",
-      "H8: AUC=0.480 — inconclusive"
+      "H5: AUC=0.412 — inconclusive",
+      "H6: best=upload_velocity_30d AUC=0.740, volume AUC=0.608 — supported",
+      "H8: AUC=0.464 — inconclusive"
     ]
   }
 }

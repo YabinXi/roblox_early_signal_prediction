@@ -140,8 +140,165 @@ def fetch_related_queries() -> list[str]:
     return []
 
 
+def parse_published_days(text: str) -> int | None:
+    """Parse YouTube relative time like '3 days ago' → 3, '2 weeks ago' → 14.
+
+    Returns None if unparseable.
+    """
+    if not text:
+        return None
+    # Strip "Streamed " prefix
+    text = text.replace("Streamed ", "").strip()
+    import re as _re
+    m = _re.match(r"(\d+)\s+(second|minute|hour|day|week|month|year)s?\s+ago", text)
+    if not m:
+        return None
+    n = int(m.group(1))
+    unit = m.group(2)
+    multipliers = {
+        "second": 0, "minute": 0, "hour": 0,
+        "day": 1, "week": 7, "month": 30, "year": 365,
+    }
+    return n * multipliers.get(unit, 0)
+
+
+def parse_duration_seconds(text: str) -> int | None:
+    """Parse YouTube duration like '20:17' → 1217, '1:02:30' → 3750.
+
+    Returns None if unparseable.
+    """
+    if not text:
+        return None
+    parts = text.strip().split(":")
+    try:
+        parts = [int(p) for p in parts]
+    except ValueError:
+        return None
+    if len(parts) == 2:
+        return parts[0] * 60 + parts[1]
+    elif len(parts) == 3:
+        return parts[0] * 3600 + parts[1] * 60 + parts[2]
+    return None
+
+
+def _extract_video_fields(v: dict) -> dict:
+    """Extract structured fields from a scrapetube videoRenderer dict."""
+    # View count
+    views = 0
+    try:
+        view_text = v.get("viewCountText", {}).get("simpleText", "0")
+        views = int(re.sub(r"[^\d]", "", view_text))
+    except (ValueError, TypeError, AttributeError):
+        pass
+
+    # Published time
+    pub_text = ""
+    try:
+        pub_text = v.get("publishedTimeText", {}).get("simpleText", "")
+    except (TypeError, AttributeError):
+        pass
+    days_ago = parse_published_days(pub_text)
+
+    # Duration
+    dur_text = ""
+    try:
+        dur_text = v.get("lengthText", {}).get("simpleText", "")
+    except (TypeError, AttributeError):
+        pass
+    duration_sec = parse_duration_seconds(dur_text)
+
+    # Channel name
+    channel = ""
+    try:
+        channel = v.get("ownerText", {}).get("runs", [{}])[0].get("text", "")
+    except (TypeError, AttributeError, IndexError):
+        pass
+
+    # Title
+    title = ""
+    try:
+        title = v.get("title", {}).get("runs", [{}])[0].get("text", "")
+    except (TypeError, AttributeError, IndexError):
+        pass
+
+    return {
+        "views": views,
+        "days_ago": days_ago,
+        "duration_sec": duration_sec,
+        "channel": channel,
+        "title": title,
+    }
+
+
+def _compute_youtube_signals(video_fields: list[dict]) -> dict:
+    """Compute 7 enriched YouTube signals from extracted video fields."""
+    n = len(video_fields)
+    if n == 0:
+        return {
+            "youtube_video_count": 0,
+            "youtube_total_views": 0,
+            "youtube_avg_views": 0.0,
+            "upload_velocity_7d": 0,
+            "upload_velocity_30d": 0,
+            "recent_video_avg_views": 0.0,
+            "unique_creators": 0,
+            "view_acceleration": 0.0,
+            "short_video_ratio": 0.0,
+            "title_update_freq": 0.0,
+        }
+
+    total_views = sum(vf["views"] for vf in video_fields)
+    avg_views = total_views / n
+
+    # 1 & 2: Upload velocity
+    upload_7d = sum(1 for vf in video_fields if vf["days_ago"] is not None and vf["days_ago"] <= 7)
+    upload_30d = sum(1 for vf in video_fields if vf["days_ago"] is not None and vf["days_ago"] <= 30)
+
+    # 3: Recent video avg views (last 30 days)
+    recent_views = [vf["views"] for vf in video_fields if vf["days_ago"] is not None and vf["days_ago"] <= 30]
+    recent_avg = np.mean(recent_views) if recent_views else 0.0
+
+    # 4: Unique creators
+    creators = set(vf["channel"] for vf in video_fields if vf["channel"])
+    unique_creators = len(creators)
+
+    # 5: View acceleration (recent avg / older avg)
+    older_views = [vf["views"] for vf in video_fields if vf["days_ago"] is not None and vf["days_ago"] > 30]
+    older_avg = np.mean(older_views) if older_views else 0.0
+    view_acceleration = (recent_avg / older_avg) if older_avg > 0 else (1.0 if recent_avg > 0 else 0.0)
+
+    # 6: Short video ratio (< 60 seconds)
+    with_duration = [vf for vf in video_fields if vf["duration_sec"] is not None]
+    if with_duration:
+        short_count = sum(1 for vf in with_duration if vf["duration_sec"] < 60)
+        short_ratio = short_count / len(with_duration)
+    else:
+        short_ratio = 0.0
+
+    # 7: Title update frequency
+    update_keywords = {"update", "codes", "new", "patch", "release", "trailer", "gameplay"}
+    titles_with_keywords = sum(
+        1 for vf in video_fields
+        if any(kw in vf["title"].lower() for kw in update_keywords)
+    )
+    title_update_freq = titles_with_keywords / n
+
+    return {
+        "youtube_video_count": n,
+        "youtube_total_views": total_views,
+        "youtube_avg_views": round(avg_views, 2),
+        "upload_velocity_7d": upload_7d,
+        "upload_velocity_30d": upload_30d,
+        "recent_video_avg_views": round(float(recent_avg), 2),
+        "unique_creators": unique_creators,
+        "view_acceleration": round(float(view_acceleration), 4),
+        "short_video_ratio": round(float(short_ratio), 4),
+        "title_update_freq": round(float(title_update_freq), 4),
+    }
+
+
 def fetch_youtube_metrics(game_names: list[str]) -> pd.DataFrame:
-    """Fetch YouTube video counts for each game (optional, wrapped in try/except)."""
+    """Fetch enriched YouTube metrics for each game (50 videos per game)."""
     try:
         import scrapetube
     except ImportError:
@@ -151,37 +308,22 @@ def fetch_youtube_metrics(game_names: list[str]) -> pd.DataFrame:
     results = []
     valid_games = [(i, name) for i, name in enumerate(game_names) if len(name) > 2]
 
-    print(f"  Fetching YouTube metrics for {len(valid_games)} games...")
+    print(f"  Fetching YouTube metrics for {len(valid_games)} games (50 videos each)...")
 
     for idx, (orig_idx, name) in enumerate(valid_games):
         query = f"Roblox {name}"
         print(f"    [{idx + 1}/{len(valid_games)}] Searching: {query}")
         try:
-            videos = list(scrapetube.get_search(query=query, limit=20))
-            total_views = 0
-            video_count = len(videos)
-            for v in videos:
-                try:
-                    view_text = v.get("viewCountText", {}).get("simpleText", "0")
-                    view_num = int(re.sub(r"[^\d]", "", view_text))
-                    total_views += view_num
-                except (ValueError, TypeError, AttributeError):
-                    pass
-
-            results.append({
-                "game_name_clean": name,
-                "youtube_video_count": video_count,
-                "youtube_total_views": total_views,
-                "youtube_avg_views": total_views / max(video_count, 1),
-            })
+            videos = list(scrapetube.get_search(query=query, limit=50))
+            video_fields = [_extract_video_fields(v) for v in videos]
+            signals = _compute_youtube_signals(video_fields)
+            signals["game_name_clean"] = name
+            results.append(signals)
         except Exception as e:
             print(f"      [ERROR] YouTube search failed for {name}: {e}")
-            results.append({
-                "game_name_clean": name,
-                "youtube_video_count": 0,
-                "youtube_total_views": 0,
-                "youtube_avg_views": 0,
-            })
+            signals = _compute_youtube_signals([])
+            signals["game_name_clean"] = name
+            results.append(signals)
 
     return pd.DataFrame(results)
 
@@ -258,15 +400,32 @@ def generate_synthetic_youtube(game_names: list[str], snapshot_df: pd.DataFrame)
         if is_breakout:
             base_videos = int(base_videos * np.random.uniform(1.5, 3.0))
 
-        video_count = min(20, base_videos + np.random.randint(0, 5))
+        video_count = min(50, base_videos + np.random.randint(0, 5))
         avg_views = int(np.random.lognormal(mean=np.log(max(1000, ccu * 10)), sigma=1.0))
         total_views = video_count * avg_views
+
+        # Enriched signals (synthetic)
+        upload_7d = np.random.poisson(3 if is_breakout else 1)
+        upload_30d = np.random.poisson(12 if is_breakout else 4)
+        unique_creators = np.random.poisson(8 if is_breakout else 3) + 1
+        recent_avg = avg_views * np.random.uniform(1.2, 2.0) if is_breakout else avg_views * np.random.uniform(0.5, 1.0)
+        older_avg = avg_views * np.random.uniform(0.5, 1.0)
+        view_accel = recent_avg / max(older_avg, 1)
+        short_ratio = np.random.uniform(0.1, 0.4) if is_breakout else np.random.uniform(0.0, 0.2)
+        title_freq = np.random.uniform(0.2, 0.5) if is_breakout else np.random.uniform(0.05, 0.25)
 
         results.append({
             "game_name_clean": name,
             "youtube_video_count": video_count,
             "youtube_total_views": total_views,
             "youtube_avg_views": avg_views,
+            "upload_velocity_7d": upload_7d,
+            "upload_velocity_30d": upload_30d,
+            "recent_video_avg_views": round(float(recent_avg), 2),
+            "unique_creators": unique_creators,
+            "view_acceleration": round(float(view_accel), 4),
+            "short_video_ratio": round(float(short_ratio), 4),
+            "title_update_freq": round(float(title_freq), 4),
         })
 
     return pd.DataFrame(results)
@@ -332,17 +491,39 @@ def compute_buzz_metrics(
         if not youtube_df.empty:
             yt_row = youtube_df[youtube_df["game_name_clean"] == name]
             if len(yt_row) > 0:
-                metrics["youtube_volume"] = int(yt_row.iloc[0]["youtube_video_count"])
-                metrics["youtube_total_views"] = int(yt_row.iloc[0]["youtube_total_views"])
-                metrics["youtube_avg_views"] = float(yt_row.iloc[0]["youtube_avg_views"])
+                r = yt_row.iloc[0]
+                metrics["youtube_volume"] = int(r["youtube_video_count"])
+                metrics["youtube_total_views"] = int(r["youtube_total_views"])
+                metrics["youtube_avg_views"] = float(r["youtube_avg_views"])
+                metrics["upload_velocity_7d"] = int(r.get("upload_velocity_7d", 0))
+                metrics["upload_velocity_30d"] = int(r.get("upload_velocity_30d", 0))
+                metrics["recent_video_avg_views"] = float(r.get("recent_video_avg_views", 0))
+                metrics["unique_creators"] = int(r.get("unique_creators", 0))
+                metrics["view_acceleration"] = float(r.get("view_acceleration", 0))
+                metrics["short_video_ratio"] = float(r.get("short_video_ratio", 0))
+                metrics["title_update_freq"] = float(r.get("title_update_freq", 0))
             else:
                 metrics["youtube_volume"] = 0
                 metrics["youtube_total_views"] = 0
                 metrics["youtube_avg_views"] = 0.0
+                metrics["upload_velocity_7d"] = 0
+                metrics["upload_velocity_30d"] = 0
+                metrics["recent_video_avg_views"] = 0.0
+                metrics["unique_creators"] = 0
+                metrics["view_acceleration"] = 0.0
+                metrics["short_video_ratio"] = 0.0
+                metrics["title_update_freq"] = 0.0
         else:
             metrics["youtube_volume"] = 0
             metrics["youtube_total_views"] = 0
             metrics["youtube_avg_views"] = 0.0
+            metrics["upload_velocity_7d"] = 0
+            metrics["upload_velocity_30d"] = 0
+            metrics["recent_video_avg_views"] = 0.0
+            metrics["unique_creators"] = 0
+            metrics["view_acceleration"] = 0.0
+            metrics["short_video_ratio"] = 0.0
+            metrics["title_update_freq"] = 0.0
 
         # Composite buzz score: normalize and combine
         # Will be normalized across all games after collection
@@ -352,12 +533,13 @@ def compute_buzz_metrics(
 
     # Compute composite_buzz as normalized combination
     if len(df) > 0:
-        for col in ["buzz_velocity", "buzz_peak", "youtube_volume"]:
-            col_range = df[col].max() - df[col].min()
-            if col_range > 0:
-                df[f"{col}_norm"] = (df[col] - df[col].min()) / col_range
-            else:
-                df[f"{col}_norm"] = 0.0
+        for col in ["buzz_velocity", "buzz_peak", "youtube_volume", "unique_creators", "upload_velocity_30d", "view_acceleration"]:
+            if col in df.columns:
+                col_range = df[col].max() - df[col].min()
+                if col_range > 0:
+                    df[f"{col}_norm"] = (df[col] - df[col].min()) / col_range
+                else:
+                    df[f"{col}_norm"] = 0.0
 
         # Recency: lower is better (more recent peak), so invert
         rec_range = df["buzz_recency"].max() - df["buzz_recency"].min()
@@ -366,12 +548,15 @@ def compute_buzz_metrics(
         else:
             df["buzz_recency_norm"] = 0.5
 
-        # Composite: weighted sum
+        # Composite: weighted sum (updated with enriched YouTube signals)
         df["composite_buzz"] = (
-            0.35 * df["buzz_velocity_norm"]
-            + 0.25 * df["buzz_peak_norm"]
-            + 0.20 * df["buzz_recency_norm"]
-            + 0.20 * df["youtube_volume_norm"]
+            0.20 * df.get("buzz_velocity_norm", 0)
+            + 0.10 * df.get("buzz_peak_norm", 0)
+            + 0.10 * df["buzz_recency_norm"]
+            + 0.10 * df.get("youtube_volume_norm", 0)
+            + 0.20 * df.get("unique_creators_norm", 0)
+            + 0.15 * df.get("upload_velocity_30d_norm", 0)
+            + 0.15 * df.get("view_acceleration_norm", 0)
         ).round(4)
 
         # Drop norm columns from output

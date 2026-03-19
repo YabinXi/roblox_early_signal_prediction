@@ -1,5 +1,5 @@
 {
-  "evaluated_at": "2026-03-19T11:50:41.047484",
+  "evaluated_at": "2026-03-19T13:29:37.820249",
   "total_score": 83.3,
   "dimensions": {
     "data_support": {
@@ -45,7 +45,7 @@
       "comment": "Actionable conclusions with quantified predictions"
     }
   },
-  "overall_feedback": "Total score: 83.3/100. 8 hypotheses, 11 data sources, report length 23342 chars. Consider DID causal inference. Clean window methodology applied. Confounders discussed. ",
+  "overall_feedback": "Total score: 83.3/100. 8 hypotheses, 11 data sources, report length 24030 chars. Consider DID causal inference. Clean window methodology applied. Confounders discussed. ",
   "key_gaps": [],
   "strengths": [
     "Uses 11 data sources with statistical tests",

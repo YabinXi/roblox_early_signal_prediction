@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-19T11:50:29.184644",
+  "generated_at": "2026-03-19T13:29:18.707719",
   "datasets": {
     "roblox_api_current": {
       "rows": 3,
@@ -108,6 +108,13 @@
         "youtube_volume",
         "youtube_total_views",
         "youtube_avg_views",
+        "upload_velocity_7d",
+        "upload_velocity_30d",
+        "recent_video_avg_views",
+        "unique_creators",
+        "view_acceleration",
+        "short_video_ratio",
+        "title_update_freq",
         "composite_buzz"
       ],
       "dtypes": {
@@ -123,6 +130,13 @@
         "youtube_volume": "int64",
         "youtube_total_views": "int64",
         "youtube_avg_views": "float64",
+        "upload_velocity_7d": "int64",
+        "upload_velocity_30d": "int64",
+        "recent_video_avg_views": "float64",
+        "unique_creators": "int64",
+        "view_acceleration": "float64",
+        "short_video_ratio": "float64",
+        "title_update_freq": "float64",
         "composite_buzz": "float64"
       },
       "numeric_summary": {
@@ -136,49 +150,91 @@
           "mean": -0.0,
           "std": 0.01,
           "min": -0.05,
-          "max": 0.0
+          "max": 0.03
         },
         "buzz_trend_r2": {
-          "mean": 0.02,
-          "std": 0.08,
+          "mean": 0.13,
+          "std": 0.17,
           "min": 0.0,
-          "max": 0.38
+          "max": 0.43
         },
         "buzz_peak": {
-          "mean": 0.27,
-          "std": 1.89,
+          "mean": 3.16,
+          "std": 13.96,
           "min": 0.0,
-          "max": 14.0
+          "max": 100.0
         },
         "buzz_recency": {
-          "mean": 28.85,
-          "std": 32.21,
-          "min": 12.0,
+          "mean": 82.53,
+          "std": 18.05,
+          "min": 5.0,
           "max": 90.0
         },
         "youtube_volume": {
-          "mean": 17.47,
-          "std": 6.68,
+          "mean": 43.65,
+          "std": 16.77,
           "min": 0.0,
-          "max": 20.0
+          "max": 50.0
         },
         "youtube_total_views": {
-          "mean": 26812707.35,
-          "std": 29283059.58,
+          "mean": 65495669.8,
+          "std": 87801195.07,
           "min": 0.0,
-          "max": 102769847.0
+          "max": 477692878.0
         },
         "youtube_avg_views": {
-          "mean": 1345113.24,
-          "std": 1460389.09,
+          "mean": 1314532.96,
+          "std": 1752859.35,
           "min": 0.0,
-          "max": 5138492.35
+          "max": 9553857.56
+        },
+        "upload_velocity_7d": {
+          "mean": 6.04,
+          "std": 9.6,
+          "min": 0.0,
+          "max": 44.0
+        },
+        "upload_velocity_30d": {
+          "mean": 10.67,
+          "std": 13.48,
+          "min": 0.0,
+          "max": 45.0
+        },
+        "recent_video_avg_views": {
+          "mean": 93768.9,
+          "std": 194532.97,
+          "min": 0.0,
+          "max": 1263002.8
+        },
+        "unique_creators": {
+          "mean": 22.33,
+          "std": 11.32,
+          "min": 0.0,
+          "max": 42.0
+        },
+        "view_acceleration": {
+          "mean": 0.09,
+          "std": 0.25,
+          "min": 0.0,
+          "max": 1.72
+        },
+        "short_video_ratio": {
+          "mean": 0.04,
+          "std": 0.12,
+          "min": 0.0,
+          "max": 0.86
+        },
+        "title_update_freq": {
+          "mean": 0.12,
+          "std": 0.12,
+          "min": 0.0,
+          "max": 0.5
         },
         "composite_buzz": {
-          "mean": 0.68,
-          "std": 0.1,
-          "min": 0.47,
-          "max": 0.75
+          "mean": 0.38,
+          "std": 0.12,
+          "min": 0.13,
+          "max": 0.6
         }
       }
     },
@@ -403,7 +459,7 @@
       }
     },
     "roblox_google_trends": {
-      "rows": 1365,
+      "rows": 6279,
       "columns": [
         "date",
         "keyword",
@@ -417,21 +473,21 @@
         "batch": "int64"
       },
       "date_range": {
-        "min": "2025-12-18",
-        "max": "2026-03-18"
+        "min": "2025-12-19",
+        "max": "2026-03-19"
       },
       "numeric_summary": {
         "interest": {
-          "mean": 12.74,
-          "std": 25.46,
+          "mean": 12.93,
+          "std": 24.87,
           "min": 0.0,
           "max": 100.0
         },
         "batch": {
-          "mean": 2.0,
-          "std": 0.82,
-          "min": 1.0,
-          "max": 3.0
+          "mean": 6.41,
+          "std": 3.98,
+          "min": 0.0,
+          "max": 13.0
         }
       }
     },
@@ -606,35 +662,91 @@
     "roblox_youtube_metrics": {
       "rows": 55,
       "columns": [
-        "game_name_clean",
         "youtube_video_count",
         "youtube_total_views",
-        "youtube_avg_views"
+        "youtube_avg_views",
+        "upload_velocity_7d",
+        "upload_velocity_30d",
+        "recent_video_avg_views",
+        "unique_creators",
+        "view_acceleration",
+        "short_video_ratio",
+        "title_update_freq",
+        "game_name_clean"
       ],
       "dtypes": {
-        "game_name_clean": "str",
         "youtube_video_count": "int64",
         "youtube_total_views": "int64",
-        "youtube_avg_views": "float64"
+        "youtube_avg_views": "float64",
+        "upload_velocity_7d": "int64",
+        "upload_velocity_30d": "int64",
+        "recent_video_avg_views": "float64",
+        "unique_creators": "int64",
+        "view_acceleration": "float64",
+        "short_video_ratio": "float64",
+        "title_update_freq": "float64",
+        "game_name_clean": "str"
       },
       "numeric_summary": {
         "youtube_video_count": {
-          "mean": 17.47,
-          "std": 6.68,
+          "mean": 43.65,
+          "std": 16.77,
           "min": 0.0,
-          "max": 20.0
+          "max": 50.0
         },
         "youtube_total_views": {
-          "mean": 26812707.35,
-          "std": 29283059.58,
+          "mean": 65495669.8,
+          "std": 87801195.07,
           "min": 0.0,
-          "max": 102769847.0
+          "max": 477692878.0
         },
         "youtube_avg_views": {
-          "mean": 1345113.24,
-          "std": 1460389.09,
+          "mean": 1314532.96,
+          "std": 1752859.35,
           "min": 0.0,
-          "max": 5138492.35
+          "max": 9553857.56
+        },
+        "upload_velocity_7d": {
+          "mean": 6.04,
+          "std": 9.6,
+          "min": 0.0,
+          "max": 44.0
+        },
+        "upload_velocity_30d": {
+          "mean": 10.67,
+          "std": 13.48,
+          "min": 0.0,
+          "max": 45.0
+        },
+        "recent_video_avg_views": {
+          "mean": 93768.9,
+          "std": 194532.97,
+          "min": 0.0,
+          "max": 1263002.8
+        },
+        "unique_creators": {
+          "mean": 22.33,
+          "std": 11.32,
+          "min": 0.0,
+          "max": 42.0
+        },
+        "view_acceleration": {
+          "mean": 0.09,
+          "std": 0.25,
+          "min": 0.0,
+          "max": 1.72
+        },
+        "short_video_ratio": {
+          "mean": 0.04,
+          "std": 0.12,
+          "min": 0.0,
+          "max": 0.86
+        },
+        "title_update_freq": {
+          "mean": 0.12,
+          "std": 0.12,
+          "min": 0.0,
+          "max": 0.5
         }
       }
     }
