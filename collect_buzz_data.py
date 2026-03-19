@@ -34,7 +34,7 @@ BUZZ_PATH = RAW_DIR / "roblox_buzz_metrics.csv"
 
 # How many games per pytrends batch (max 4 + 1 reference = 5)
 BATCH_SIZE = 4
-BATCH_DELAY = 60  # seconds between batches to avoid rate limiting
+BATCH_DELAY = 120  # seconds between batches to avoid rate limiting
 
 
 def clean_game_name(name: str) -> str:

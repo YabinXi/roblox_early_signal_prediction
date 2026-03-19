@@ -2,7 +2,7 @@
 
 > **Research Question**: 在 Roblox 平台中，中腰部游戏出现 engagement 异常信号后，该品类产生 Top 10 爆款的概率？信号的 Precision 和 Recall？
 >
-> **Generated**: 2026-03-18 21:30
+> **Generated**: 2026-03-19 09:05
 > **Version**: v2.0-real-data
 > **Data sources**: 11
 > **Hypotheses**: 8/8 tested, 1 significant
@@ -14,18 +14,18 @@
 - Real data signal detection: P=10%, R=5%, F1=7%, AUC=0.428 (n=56)
 - Breakout vs stable favorites/1kv: 1.38 vs 1.99 (d=-0.40, p=0.1315)
 - Age explains 5.1% of engagement variance (age is important confound)
-- H5: AUC=0.446 — inconclusive
+- H5: AUC=0.447 — inconclusive
 - H6: AUC=0.608 — supported
-- H8: AUC=0.479 — inconclusive
+- H8: AUC=0.480 — inconclusive
 
 - ⏳ **H1**: Engagement anomaly (favorites/1k visits > median + 1.5*MAD) can distinguish brea... → **inconclusive** (p=0.138998)
 - ⏳ **H2**: Breakout games have significantly higher engagement metrics (favorites/visit, li... → **inconclusive** (p=0.13149)
 - ⏳ **H3**: After controlling for game age, breakout games still show higher engagement anom... → **inconclusive** (p=0.278954)
 - ⏳ **H4**: Engagement anomaly signal strength varies significantly across Roblox genres... → **inconclusive** (p=0.114358)
-- ⏳ **H5**: Cultural buzz velocity (Google Trends search interest slope) can distinguish bre... → **inconclusive** (p=0.892676)
+- ⏳ **H5**: Cultural buzz velocity (Google Trends search interest slope) can distinguish bre... → **inconclusive** (p=0.978219)
 - ✅ **H6**: Higher YouTube video volume is associated with breakout status in Roblox games... → **supported** (p=0.015678)
 - ✅ **H7**: Genres with deeper lineage (more evolutionary stages) have higher breakout rates... → **supported** (p=0.063745)
-- ⏳ **H8**: Multi-trend convergence composite (lineage_depth + buzz_velocity + inverse satur... → **inconclusive** (p=0.410559)
+- ⏳ **H8**: Multi-trend convergence composite (lineage_depth + buzz_velocity + inverse satur... → **inconclusive** (p=0.379162)
 
 ---
 
@@ -163,7 +163,7 @@ Single cross-sectional snapshot from Roblox API (2026-03-18). CAN support: cross
 
 **Method**: Mann-Whitney U test comparing buzz_velocity (slope of last 12 weeks search interest) between breakout (n=19) and non-breakout (n=37) groups. AUC computed as U/(n1*n2). Compared against H1 engagement AUC=0.428.
 
-**Result**: direction=inconclusive, effect_size=AUC=0.446, rank-biserial r=-0.108, p=0.892676, CI=Breakout mean velocity=-0.0030, Stable mean=0.0011, n=56
+**Result**: direction=inconclusive, effect_size=AUC=0.447, rank-biserial r=-0.105, p=0.978219, CI=Breakout mean velocity=-0.0031, Stable mean=0.0000, n=56
 
 **Confounders (Rule R4)**:
 
@@ -177,7 +177,7 @@ Single cross-sectional snapshot from Roblox API (2026-03-18). CAN support: cross
 
 **Temporal Limitation (Rule R2)**: Buzz velocity uses 12-week trailing window. Cannot establish if buzz preceded or followed breakout.
 
-**Conclusion**: Buzz velocity AUC=0.446 (vs H1 engagement AUC=0.428). Breakout mean velocity=-0.0030, stable=0.0011. Mann-Whitney p=0.8927, rank-biserial r=-0.108. Buzz velocity does not clearly outperform engagement. CAVEAT: Synthetic trends data if API was unavailable — validate with real Google Trends.
+**Conclusion**: Buzz velocity AUC=0.447 (vs H1 engagement AUC=0.428). Breakout mean velocity=-0.0031, stable=0.0000. Mann-Whitney p=0.9782, rank-biserial r=-0.105. Buzz velocity does not clearly outperform engagement. CAVEAT: Synthetic trends data if API was unavailable — validate with real Google Trends.
 
 ### 4.6 Higher YouTube video volume is associated with breakout status in Roblox games
 
@@ -219,23 +219,23 @@ Single cross-sectional snapshot from Roblox API (2026-03-18). CAN support: cross
 
 ### 4.8 Multi-trend convergence composite (lineage_depth + buzz_velocity + inverse saturation) predicts breakout better than single metrics
 
-**Method**: Additive composite of normalized lineage_depth, buzz_velocity, and (1-top10_saturation). Fisher exact test comparing top quartile (≥0.571) vs bottom quartile (≤0.483) breakout rates. Permutation test (n=10000) for robustness. Mann-Whitney U for AUC.
+**Method**: Additive composite of normalized lineage_depth, buzz_velocity, and (1-top10_saturation). Fisher exact test comparing top quartile (≥0.756) vs bottom quartile (≤0.667) breakout rates. Permutation test (n=10000) for robustness. Mann-Whitney U for AUC.
 
-**Result**: direction=inconclusive, effect_size=AUC=0.479, OR=1.27, rate diff=0.053, p=0.410559, CI=Top Q rate=35.29% (6/17), Bottom Q rate=30.00% (6/20), n=56
+**Result**: direction=inconclusive, effect_size=AUC=0.480, OR=1.27, rate diff=0.056, p=0.379162, CI=Top Q rate=38.89% (7/18), Bottom Q rate=33.33% (7/21), n=56
 
 **Confounders (Rule R4)**:
 
 | Confounder | Direction | Controlled | Method |
 |---|---|---|---|
 | Composite construction bias | Equal weighting may not reflect true signal importance | No | N/A |
-| Small sample for quartile analysis | n=56 → ~17 per quartile is very small | No | N/A |
+| Small sample for quartile analysis | n=56 → ~18 per quartile is very small | No | N/A |
 | Synthetic data components | Buzz data may be synthetic if APIs unavailable | No | N/A |
 
 **Clean Window (Rule R5)**: 2026-03-18 to 2026-03-18 — Snapshot taken on a Tuesday evening (UTC+8), not during a major holiday, school break, or Roblox platform event. Represents a 'typical' weekday evening. Caveat: single snapshot cannot establish baseline variability.
 
 **Temporal Limitation (Rule R2)**: Composite uses current-period data; cannot validate prospective prediction.
 
-**Conclusion**: Convergence composite AUC=0.479 (vs H1 engagement AUC=0.428, H5 buzz AUC=N/A). Top quartile breakout rate: 35.29%, bottom: 30.00%, diff=0.053. Fisher p=1.0000, permutation p=0.4106. Composite does not significantly outperform simpler metrics. N.B. n=48 is too small for regression-based composite — simple additive approach used.
+**Conclusion**: Convergence composite AUC=0.480 (vs H1 engagement AUC=0.428, H5 buzz AUC=N/A). Top quartile breakout rate: 38.89%, bottom: 33.33%, diff=0.056. Fisher p=0.7496, permutation p=0.3792. Composite does not significantly outperform simpler metrics. N.B. n=48 is too small for regression-based composite — simple additive approach used.
 
 ---
 

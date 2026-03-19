@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-18T21:30:33.266549",
+  "generated_at": "2026-03-19T09:05:23.275818",
   "datasets": {
     "roblox_api_current": {
       "rows": 3,
@@ -135,25 +135,25 @@
         "buzz_velocity": {
           "mean": -0.0,
           "std": 0.01,
-          "min": -0.04,
-          "max": 0.04
+          "min": -0.05,
+          "max": 0.0
         },
         "buzz_trend_r2": {
           "mean": 0.02,
-          "std": 0.09,
+          "std": 0.08,
           "min": 0.0,
-          "max": 0.46
+          "max": 0.38
         },
         "buzz_peak": {
-          "mean": 2.31,
-          "std": 13.54,
+          "mean": 0.27,
+          "std": 1.89,
           "min": 0.0,
-          "max": 100.0
+          "max": 14.0
         },
         "buzz_recency": {
-          "mean": 31.45,
-          "std": 32.98,
-          "min": 4.0,
+          "mean": 28.85,
+          "std": 32.21,
+          "min": 12.0,
           "max": 90.0
         },
         "youtube_volume": {
@@ -163,22 +163,22 @@
           "max": 20.0
         },
         "youtube_total_views": {
-          "mean": 24720113.78,
-          "std": 35672636.25,
+          "mean": 26812707.35,
+          "std": 29283059.58,
           "min": 0.0,
-          "max": 221147603.0
+          "max": 102769847.0
         },
         "youtube_avg_views": {
-          "mean": 1240483.56,
-          "std": 1780811.38,
+          "mean": 1345113.24,
+          "std": 1460389.09,
           "min": 0.0,
-          "max": 11057380.15
+          "max": 5138492.35
         },
         "composite_buzz": {
-          "mean": 0.47,
-          "std": 0.13,
-          "min": 0.16,
-          "max": 0.89
+          "mean": 0.68,
+          "std": 0.1,
+          "min": 0.47,
+          "max": 0.75
         }
       }
     },
@@ -403,7 +403,7 @@
       }
     },
     "roblox_google_trends": {
-      "rows": 1820,
+      "rows": 1365,
       "columns": [
         "date",
         "keyword",
@@ -422,16 +422,16 @@
       },
       "numeric_summary": {
         "interest": {
-          "mean": 12.66,
-          "std": 23.18,
+          "mean": 12.74,
+          "std": 25.46,
           "min": 0.0,
           "max": 100.0
         },
         "batch": {
-          "mean": 5.0,
-          "std": 4.85,
-          "min": 0.0,
-          "max": 12.0
+          "mean": 2.0,
+          "std": 0.82,
+          "min": 1.0,
+          "max": 3.0
         }
       }
     },
@@ -625,16 +625,16 @@
           "max": 20.0
         },
         "youtube_total_views": {
-          "mean": 24720113.78,
-          "std": 35672636.25,
+          "mean": 26812707.35,
+          "std": 29283059.58,
           "min": 0.0,
-          "max": 221147603.0
+          "max": 102769847.0
         },
         "youtube_avg_views": {
-          "mean": 1240483.56,
-          "std": 1780811.38,
+          "mean": 1345113.24,
+          "std": 1460389.09,
           "min": 0.0,
-          "max": 11057380.15
+          "max": 5138492.35
         }
       }
     }
