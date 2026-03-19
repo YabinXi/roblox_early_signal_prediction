@@ -2,7 +2,7 @@
 
 > **Research Question**: 在 Roblox 平台中，中腰部游戏出现 engagement 异常信号后，该品类产生 Top 10 爆款的概率？信号的 Precision 和 Recall？
 >
-> **Generated**: 2026-03-19 09:05
+> **Generated**: 2026-03-19 11:50
 > **Version**: v2.0-real-data
 > **Data sources**: 11
 > **Hypotheses**: 8/8 tested, 1 significant

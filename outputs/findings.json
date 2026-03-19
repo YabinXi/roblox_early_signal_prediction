@@ -1,6 +1,6 @@
 {
   "analysis_version": "v2.0-real-data",
-  "generated_at": "2026-03-19T09:05:25.072043",
+  "generated_at": "2026-03-19T11:50:35.749795",
   "research_question": "在 Roblox 平台中，中腰部游戏出现 engagement 异常（favorites/visit 或 like ratio 显著高于同tier均值）是否能有效区分最终成为爆款的游戏与长期停留在中腰部的游戏？该信号的 Precision、Recall、F1 分别是多少？",
   "data_window": {
     "start": "2026-03-18",
