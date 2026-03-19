@@ -1,0 +1,1021 @@
+{
+  "mechanic_catalog": {
+    "tycoon": {
+      "category": "core_loop",
+      "desc": "Build/manage/earn cycle (place objects, earn currency, expand)"
+    },
+    "incremental": {
+      "category": "core_loop",
+      "desc": "Click/idle to grow numbers; prestige resets; exponential scaling"
+    },
+    "collection": {
+      "category": "core_loop",
+      "desc": "Acquire, catalog, and complete sets of items/creatures/cards"
+    },
+    "combat_pve": {
+      "category": "core_loop",
+      "desc": "Fight AI enemies (melee, ranged, or ability-based)"
+    },
+    "combat_pvp": {
+      "category": "core_loop",
+      "desc": "Fight other players (arena, battleground, FPS)"
+    },
+    "fps_shooter": {
+      "category": "core_loop",
+      "desc": "First-person or third-person shooting as primary mechanic"
+    },
+    "tower_defense": {
+      "category": "core_loop",
+      "desc": "Place towers/units to defend against waves"
+    },
+    "obby_platformer": {
+      "category": "core_loop",
+      "desc": "Obstacle course / precision platforming"
+    },
+    "survival": {
+      "category": "core_loop",
+      "desc": "Stay alive against environmental or AI threats, resource scarcity"
+    },
+    "exploration": {
+      "category": "core_loop",
+      "desc": "Discover areas, secrets, lore; map traversal as reward"
+    },
+    "building": {
+      "category": "core_loop",
+      "desc": "Free-form construction (sandbox, creative)"
+    },
+    "racing": {
+      "category": "core_loop",
+      "desc": "Speed competition (vehicles, running)"
+    },
+    "rhythm": {
+      "category": "core_loop",
+      "desc": "Input timing matched to music/beats"
+    },
+    "fishing": {
+      "category": "core_loop",
+      "desc": "Cast, wait, reel; timing-based catch mechanic"
+    },
+    "farming": {
+      "category": "core_loop",
+      "desc": "Plant, grow, harvest cycle"
+    },
+    "puzzle": {
+      "category": "core_loop",
+      "desc": "Logic/spatial challenges as primary gameplay"
+    },
+    "minigame_variety": {
+      "category": "core_loop",
+      "desc": "Rotating set of short distinct games"
+    },
+    "rng_gacha": {
+      "category": "meta",
+      "desc": "Randomized rewards with rarity tiers; lootbox/gacha pull"
+    },
+    "trading": {
+      "category": "meta",
+      "desc": "Player-to-player item exchange; emergent economy"
+    },
+    "leveling_rpg": {
+      "category": "meta",
+      "desc": "XP, levels, skill trees, stat progression"
+    },
+    "crafting": {
+      "category": "meta",
+      "desc": "Combine materials into items/equipment"
+    },
+    "pet_companion": {
+      "category": "meta",
+      "desc": "Collectible followers that assist gameplay or are cosmetic"
+    },
+    "codes_freebie": {
+      "category": "meta",
+      "desc": "Promotional codes / daily login rewards drive retention"
+    },
+    "upgrade_merge": {
+      "category": "meta",
+      "desc": "Upgrade or merge items/units to higher tiers"
+    },
+    "quest_mission": {
+      "category": "meta",
+      "desc": "Structured objectives that guide play sessions"
+    },
+    "leaderboard": {
+      "category": "meta",
+      "desc": "Competitive ranking; high-score chasing"
+    },
+    "permadeath": {
+      "category": "meta",
+      "desc": "Permanent loss on death; high stakes"
+    },
+    "roleplay_social": {
+      "category": "social",
+      "desc": "Act out roles (family, jobs, life sim); social sandbox"
+    },
+    "coop_mandatory": {
+      "category": "social",
+      "desc": "Must cooperate with others to progress/survive"
+    },
+    "asymmetric_mp": {
+      "category": "social",
+      "desc": "Different roles per team (1vAll, killer vs survivors)"
+    },
+    "fashion_dress": {
+      "category": "social",
+      "desc": "Avatar customization as competitive/social expression"
+    },
+    "donation_gifting": {
+      "category": "social",
+      "desc": "Give currency/items to others as core interaction"
+    },
+    "proximity_voice": {
+      "category": "social",
+      "desc": "Voice chat proximity creates emergent social dynamics"
+    },
+    "open_world_social": {
+      "category": "social",
+      "desc": "Shared open world where social interaction is the content"
+    },
+    "horror_atmosphere": {
+      "category": "aesthetic",
+      "desc": "Fear, tension, jumpscare, dark environments"
+    },
+    "anime_ip": {
+      "category": "aesthetic",
+      "desc": "Anime/manga-inspired characters, abilities, franchises"
+    },
+    "retro_pixel": {
+      "category": "aesthetic",
+      "desc": "Deliberately retro/pixel art visual style"
+    },
+    "narrative_story": {
+      "category": "aesthetic",
+      "desc": "Story-driven progression; chapters/episodes"
+    },
+    "vehicle_sim": {
+      "category": "aesthetic",
+      "desc": "Realistic or semi-realistic vehicle operation"
+    }
+  },
+  "mechanic_history": {
+    "tycoon": {
+      "first_roblox_hit": 2015,
+      "predecessors": [
+        "Lumber Tycoon 2",
+        "Theme Park Tycoon 2",
+        "My Restaurant!",
+        "Retail Tycoon"
+      ],
+      "steam_equivalent_tag_count": 3500
+    },
+    "incremental": {
+      "first_roblox_hit": 2017,
+      "predecessors": [
+        "Snow Shoveling Simulator",
+        "Bee Swarm Simulator",
+        "Pet Simulator X",
+        "Ninja Legends",
+        "Giant Simulator"
+      ],
+      "steam_equivalent_tag_count": 1200
+    },
+    "collection": {
+      "first_roblox_hit": 2017,
+      "predecessors": [
+        "Bee Swarm Simulator",
+        "Pet Simulator X",
+        "Adopt Me!",
+        "Dragon Adventures",
+        "Creatures of Sonaria"
+      ],
+      "steam_equivalent_tag_count": 800
+    },
+    "combat_pve": {
+      "first_roblox_hit": 2016,
+      "predecessors": [
+        "Dungeon Quest!",
+        "Blox Fruits",
+        "Shindo Life",
+        "Deepwoken"
+      ],
+      "steam_equivalent_tag_count": 15000
+    },
+    "combat_pvp": {
+      "first_roblox_hit": 2014,
+      "predecessors": [
+        "Prison Life",
+        "Jailbreak",
+        "Da Hood",
+        "The Strongest Battlegrounds"
+      ],
+      "steam_equivalent_tag_count": 8000
+    },
+    "fps_shooter": {
+      "first_roblox_hit": 2015,
+      "predecessors": [
+        "Phantom Forces",
+        "Arsenal",
+        "Bad Business",
+        "RiVALS"
+      ],
+      "steam_equivalent_tag_count": 12000
+    },
+    "tower_defense": {
+      "first_roblox_hit": 2017,
+      "predecessors": [
+        "Tower Defense Simulator",
+        "All Star Tower Defense",
+        "Skibidi Tower Defense"
+      ],
+      "steam_equivalent_tag_count": 2500
+    },
+    "obby_platformer": {
+      "first_roblox_hit": 2006,
+      "predecessors": [
+        "Speed Run 4",
+        "Mega Easy Obby",
+        "Tower of Hell"
+      ],
+      "steam_equivalent_tag_count": 6000
+    },
+    "survival": {
+      "first_roblox_hit": 2014,
+      "predecessors": [
+        "Natural Disaster Survival",
+        "Dead Rails",
+        "99 Nights in the Forest"
+      ],
+      "steam_equivalent_tag_count": 9000
+    },
+    "exploration": {
+      "first_roblox_hit": 2018,
+      "predecessors": [
+        "DOORS",
+        "a dusty trip",
+        "99 Nights in the Forest"
+      ],
+      "steam_equivalent_tag_count": 5000
+    },
+    "building": {
+      "first_roblox_hit": 2015,
+      "predecessors": [
+        "Build A Boat For Treasure",
+        "Welcome to Bloxburg"
+      ],
+      "steam_equivalent_tag_count": 4000
+    },
+    "racing": {
+      "first_roblox_hit": 2016,
+      "predecessors": [
+        "Vehicle Simulator",
+        "Greenville"
+      ],
+      "steam_equivalent_tag_count": 3000
+    },
+    "rhythm": {
+      "first_roblox_hit": 2021,
+      "predecessors": [
+        "Funky Friday"
+      ],
+      "steam_equivalent_tag_count": 1500
+    },
+    "fishing": {
+      "first_roblox_hit": 2024,
+      "predecessors": [
+        "Fisch"
+      ],
+      "steam_equivalent_tag_count": 400
+    },
+    "farming": {
+      "first_roblox_hit": 2025,
+      "predecessors": [
+        "Grow a Garden"
+      ],
+      "steam_equivalent_tag_count": 1800
+    },
+    "puzzle": {
+      "first_roblox_hit": 2018,
+      "predecessors": [
+        "Flee the Facility",
+        "DOORS"
+      ],
+      "steam_equivalent_tag_count": 8000
+    },
+    "minigame_variety": {
+      "first_roblox_hit": 2015,
+      "predecessors": [
+        "Epic Minigames"
+      ],
+      "steam_equivalent_tag_count": 2000
+    },
+    "rng_gacha": {
+      "first_roblox_hit": 2022,
+      "predecessors": [
+        "Sol's RNG",
+        "Pet Simulator X",
+        "Grow a Garden"
+      ],
+      "steam_equivalent_tag_count": 600
+    },
+    "trading": {
+      "first_roblox_hit": 2017,
+      "predecessors": [
+        "Adopt Me!",
+        "Murder Mystery 2",
+        "Pet Simulator X",
+        "Grow a Garden"
+      ],
+      "steam_equivalent_tag_count": 1500
+    },
+    "leveling_rpg": {
+      "first_roblox_hit": 2016,
+      "predecessors": [
+        "Blox Fruits",
+        "Shindo Life",
+        "Dungeon Quest!",
+        "Deepwoken"
+      ],
+      "steam_equivalent_tag_count": 10000
+    },
+    "crafting": {
+      "first_roblox_hit": 2017,
+      "predecessors": [
+        "Lumber Tycoon 2",
+        "Fisch"
+      ],
+      "steam_equivalent_tag_count": 5000
+    },
+    "pet_companion": {
+      "first_roblox_hit": 2018,
+      "predecessors": [
+        "Adopt Me!",
+        "Pet Simulator X",
+        "Bee Swarm Simulator"
+      ],
+      "steam_equivalent_tag_count": 800
+    },
+    "codes_freebie": {
+      "first_roblox_hit": 2019,
+      "predecessors": [
+        "Blox Fruits",
+        "All Star Tower Defense",
+        "Shindo Life"
+      ],
+      "steam_equivalent_tag_count": 100
+    },
+    "upgrade_merge": {
+      "first_roblox_hit": 2018,
+      "predecessors": [
+        "Pet Simulator X",
+        "Ninja Legends",
+        "Sol's RNG"
+      ],
+      "steam_equivalent_tag_count": 1000
+    },
+    "quest_mission": {
+      "first_roblox_hit": 2016,
+      "predecessors": [
+        "Blox Fruits",
+        "Royale High",
+        "Bee Swarm Simulator"
+      ],
+      "steam_equivalent_tag_count": 12000
+    },
+    "leaderboard": {
+      "first_roblox_hit": 2015,
+      "predecessors": [
+        "Phantom Forces",
+        "The Strongest Battlegrounds",
+        "PLS DONATE"
+      ],
+      "steam_equivalent_tag_count": 4000
+    },
+    "permadeath": {
+      "first_roblox_hit": 2022,
+      "predecessors": [
+        "Deepwoken",
+        "Dead Rails"
+      ],
+      "steam_equivalent_tag_count": 3000
+    },
+    "roleplay_social": {
+      "first_roblox_hit": 2016,
+      "predecessors": [
+        "MeepCity",
+        "Brookhaven RP",
+        "Welcome to Bloxburg",
+        "Greenville"
+      ],
+      "steam_equivalent_tag_count": 500
+    },
+    "coop_mandatory": {
+      "first_roblox_hit": 2025,
+      "predecessors": [
+        "Dead Rails",
+        "99 Nights in the Forest"
+      ],
+      "steam_equivalent_tag_count": 4000
+    },
+    "asymmetric_mp": {
+      "first_roblox_hit": 2017,
+      "predecessors": [
+        "Murder Mystery 2",
+        "Flee the Facility",
+        "Piggy"
+      ],
+      "steam_equivalent_tag_count": 1500
+    },
+    "fashion_dress": {
+      "first_roblox_hit": 2017,
+      "predecessors": [
+        "Royale High",
+        "Dress to Impress"
+      ],
+      "steam_equivalent_tag_count": 300
+    },
+    "donation_gifting": {
+      "first_roblox_hit": 2022,
+      "predecessors": [
+        "PLS DONATE"
+      ],
+      "steam_equivalent_tag_count": 50
+    },
+    "proximity_voice": {
+      "first_roblox_hit": 2025,
+      "predecessors": [
+        "Dead Rails",
+        "99 Nights in the Forest"
+      ],
+      "steam_equivalent_tag_count": 200
+    },
+    "open_world_social": {
+      "first_roblox_hit": 2014,
+      "predecessors": [
+        "Prison Life",
+        "Jailbreak",
+        "Da Hood",
+        "Emergency Response: Liberty County"
+      ],
+      "steam_equivalent_tag_count": 3000
+    },
+    "horror_atmosphere": {
+      "first_roblox_hit": 2018,
+      "predecessors": [
+        "Camping",
+        "Piggy",
+        "DOORS",
+        "Dead Rails"
+      ],
+      "steam_equivalent_tag_count": 7000
+    },
+    "anime_ip": {
+      "first_roblox_hit": 2020,
+      "predecessors": [
+        "Shindo Life",
+        "All Star Tower Defense",
+        "Anime Fighters Simulator",
+        "Blox Fruits"
+      ],
+      "steam_equivalent_tag_count": 2000
+    },
+    "retro_pixel": {
+      "first_roblox_hit": 2025,
+      "predecessors": [
+        "Grow a Garden"
+      ],
+      "steam_equivalent_tag_count": 5000
+    },
+    "narrative_story": {
+      "first_roblox_hit": 2018,
+      "predecessors": [
+        "Camping",
+        "Piggy",
+        "DOORS"
+      ],
+      "steam_equivalent_tag_count": 6000
+    },
+    "vehicle_sim": {
+      "first_roblox_hit": 2016,
+      "predecessors": [
+        "Vehicle Simulator",
+        "Greenville",
+        "Emergency Response: Liberty County"
+      ],
+      "steam_equivalent_tag_count": 2500
+    }
+  },
+  "game_dna": {
+    "Adopt Me!": {
+      "mechanics": [
+        "collection",
+        "pet_companion",
+        "trading",
+        "roleplay_social",
+        "codes_freebie"
+      ],
+      "is_breakout": true,
+      "year": 2019
+    },
+    "Blox Fruits": {
+      "mechanics": [
+        "combat_pve",
+        "leveling_rpg",
+        "exploration",
+        "anime_ip",
+        "codes_freebie",
+        "quest_mission"
+      ],
+      "is_breakout": true,
+      "year": 2021
+    },
+    "Brookhaven RP": {
+      "mechanics": [
+        "roleplay_social",
+        "open_world_social",
+        "vehicle_sim"
+      ],
+      "is_breakout": true,
+      "year": 2020
+    },
+    "RiVALS": {
+      "mechanics": [
+        "fps_shooter",
+        "combat_pvp",
+        "leaderboard"
+      ],
+      "is_breakout": true,
+      "year": 2025
+    },
+    "Murder Mystery 2": {
+      "mechanics": [
+        "asymmetric_mp",
+        "trading",
+        "survival"
+      ],
+      "is_breakout": true,
+      "year": 2017
+    },
+    "The Strongest Battlegrounds": {
+      "mechanics": [
+        "combat_pvp",
+        "anime_ip",
+        "leaderboard"
+      ],
+      "is_breakout": true,
+      "year": 2024
+    },
+    "Bee Swarm Simulator": {
+      "mechanics": [
+        "incremental",
+        "collection",
+        "pet_companion",
+        "quest_mission",
+        "exploration"
+      ],
+      "is_breakout": true,
+      "year": 2018
+    },
+    "Sol's RNG": {
+      "mechanics": [
+        "rng_gacha",
+        "incremental",
+        "trading",
+        "leaderboard",
+        "codes_freebie"
+      ],
+      "is_breakout": true,
+      "year": 2024
+    },
+    "Fisch": {
+      "mechanics": [
+        "fishing",
+        "collection",
+        "crafting",
+        "trading",
+        "exploration"
+      ],
+      "is_breakout": true,
+      "year": 2025
+    },
+    "PLS DONATE": {
+      "mechanics": [
+        "donation_gifting",
+        "roleplay_social",
+        "leaderboard"
+      ],
+      "is_breakout": true,
+      "year": 2022
+    },
+    "Blade Ball": {
+      "mechanics": [
+        "combat_pvp",
+        "minigame_variety",
+        "leaderboard"
+      ],
+      "is_breakout": true,
+      "year": 2024
+    },
+    "Build A Boat For Treasure": {
+      "mechanics": [
+        "building",
+        "survival",
+        "exploration",
+        "quest_mission"
+      ],
+      "is_breakout": true,
+      "year": 2017
+    },
+    "DOORS": {
+      "mechanics": [
+        "horror_atmosphere",
+        "exploration",
+        "survival",
+        "puzzle",
+        "narrative_story",
+        "coop_mandatory"
+      ],
+      "is_breakout": true,
+      "year": 2022
+    },
+    "Jailbreak": {
+      "mechanics": [
+        "open_world_social",
+        "combat_pvp",
+        "vehicle_sim",
+        "roleplay_social"
+      ],
+      "is_breakout": true,
+      "year": 2017
+    },
+    "Royale High": {
+      "mechanics": [
+        "fashion_dress",
+        "roleplay_social",
+        "quest_mission",
+        "collection",
+        "trading"
+      ],
+      "is_breakout": true,
+      "year": 2017
+    },
+    "Natural Disaster Survival": {
+      "mechanics": [
+        "survival",
+        "minigame_variety"
+      ],
+      "is_breakout": true,
+      "year": 2014
+    },
+    "Pet Simulator X": {
+      "mechanics": [
+        "incremental",
+        "collection",
+        "pet_companion",
+        "rng_gacha",
+        "trading",
+        "upgrade_merge"
+      ],
+      "is_breakout": true,
+      "year": 2022
+    },
+    "Ninja Legends": {
+      "mechanics": [
+        "incremental",
+        "combat_pve",
+        "pet_companion",
+        "upgrade_merge"
+      ],
+      "is_breakout": true,
+      "year": 2019
+    },
+    "MeepCity": {
+      "mechanics": [
+        "roleplay_social",
+        "minigame_variety",
+        "fashion_dress"
+      ],
+      "is_breakout": true,
+      "year": 2016
+    },
+    "Dead Rails": {
+      "mechanics": [
+        "coop_mandatory",
+        "survival",
+        "horror_atmosphere",
+        "proximity_voice",
+        "combat_pve",
+        "permadeath"
+      ],
+      "is_breakout": true,
+      "year": 2025
+    },
+    "99 Nights in the Forest": {
+      "mechanics": [
+        "coop_mandatory",
+        "exploration",
+        "horror_atmosphere",
+        "survival",
+        "proximity_voice",
+        "narrative_story"
+      ],
+      "is_breakout": true,
+      "year": 2026
+    },
+    "Dress to Impress": {
+      "mechanics": [
+        "fashion_dress",
+        "roleplay_social",
+        "leaderboard",
+        "minigame_variety"
+      ],
+      "is_breakout": true,
+      "year": 2024
+    },
+    "Grow a Garden": {
+      "mechanics": [
+        "farming",
+        "rng_gacha",
+        "trading",
+        "tycoon",
+        "retro_pixel",
+        "codes_freebie"
+      ],
+      "is_breakout": true,
+      "year": 2025
+    },
+    "Creatures of Sonaria": {
+      "mechanics": [
+        "collection",
+        "roleplay_social",
+        "survival",
+        "pet_companion"
+      ],
+      "is_breakout": false,
+      "year": 2020
+    },
+    "All Star Tower Defense": {
+      "mechanics": [
+        "tower_defense",
+        "anime_ip",
+        "collection",
+        "codes_freebie"
+      ],
+      "is_breakout": false,
+      "year": 2020
+    },
+    "Dragon Adventures": {
+      "mechanics": [
+        "collection",
+        "pet_companion",
+        "exploration",
+        "trading"
+      ],
+      "is_breakout": false,
+      "year": 2019
+    },
+    "Flee the Facility": {
+      "mechanics": [
+        "asymmetric_mp",
+        "survival",
+        "puzzle"
+      ],
+      "is_breakout": false,
+      "year": 2017
+    },
+    "Welcome to Bloxburg": {
+      "mechanics": [
+        "roleplay_social",
+        "building",
+        "tycoon"
+      ],
+      "is_breakout": false,
+      "year": 2016
+    },
+    "Tower Defense Simulator": {
+      "mechanics": [
+        "tower_defense",
+        "coop_mandatory",
+        "collection"
+      ],
+      "is_breakout": false,
+      "year": 2019
+    },
+    "a dusty trip": {
+      "mechanics": [
+        "exploration",
+        "survival",
+        "vehicle_sim",
+        "coop_mandatory"
+      ],
+      "is_breakout": false,
+      "year": 2024
+    },
+    "Prison Life": {
+      "mechanics": [
+        "open_world_social",
+        "combat_pvp",
+        "roleplay_social"
+      ],
+      "is_breakout": false,
+      "year": 2014
+    },
+    "Work at a Pizza Place": {
+      "mechanics": [
+        "roleplay_social",
+        "tycoon",
+        "coop_mandatory"
+      ],
+      "is_breakout": false,
+      "year": 2007
+    },
+    "Piggy": {
+      "mechanics": [
+        "horror_atmosphere",
+        "asymmetric_mp",
+        "narrative_story",
+        "puzzle"
+      ],
+      "is_breakout": false,
+      "year": 2020
+    },
+    "Emergency Response: Liberty County": {
+      "mechanics": [
+        "roleplay_social",
+        "open_world_social",
+        "vehicle_sim"
+      ],
+      "is_breakout": false,
+      "year": 2018
+    },
+    "Theme Park Tycoon 2": {
+      "mechanics": [
+        "tycoon",
+        "building"
+      ],
+      "is_breakout": false,
+      "year": 2015
+    },
+    "Deepwoken": {
+      "mechanics": [
+        "combat_pve",
+        "combat_pvp",
+        "leveling_rpg",
+        "permadeath",
+        "exploration"
+      ],
+      "is_breakout": false,
+      "year": 2022
+    },
+    "Arsenal": {
+      "mechanics": [
+        "fps_shooter",
+        "combat_pvp",
+        "minigame_variety"
+      ],
+      "is_breakout": false,
+      "year": 2018
+    },
+    "Greenville": {
+      "mechanics": [
+        "roleplay_social",
+        "vehicle_sim",
+        "open_world_social"
+      ],
+      "is_breakout": false,
+      "year": 2018
+    },
+    "Phantom Forces": {
+      "mechanics": [
+        "fps_shooter",
+        "combat_pvp",
+        "leaderboard"
+      ],
+      "is_breakout": false,
+      "year": 2015
+    },
+    "Shindo Life": {
+      "mechanics": [
+        "combat_pve",
+        "combat_pvp",
+        "anime_ip",
+        "leveling_rpg",
+        "codes_freebie"
+      ],
+      "is_breakout": false,
+      "year": 2020
+    },
+    "Lumber Tycoon 2": {
+      "mechanics": [
+        "tycoon",
+        "building",
+        "trading"
+      ],
+      "is_breakout": false,
+      "year": 2009
+    },
+    "Da Hood": {
+      "mechanics": [
+        "open_world_social",
+        "combat_pvp",
+        "roleplay_social"
+      ],
+      "is_breakout": false,
+      "year": 2019
+    },
+    "Dungeon Quest!": {
+      "mechanics": [
+        "combat_pve",
+        "leveling_rpg",
+        "collection",
+        "quest_mission"
+      ],
+      "is_breakout": false,
+      "year": 2019
+    },
+    "Epic Minigames": {
+      "mechanics": [
+        "minigame_variety"
+      ],
+      "is_breakout": false,
+      "year": 2015
+    },
+    "Funky Friday": {
+      "mechanics": [
+        "rhythm",
+        "combat_pvp",
+        "leaderboard"
+      ],
+      "is_breakout": false,
+      "year": 2021
+    },
+    "My Restaurant!": {
+      "mechanics": [
+        "tycoon",
+        "roleplay_social"
+      ],
+      "is_breakout": false,
+      "year": 2020
+    },
+    "Speed Run 4": {
+      "mechanics": [
+        "obby_platformer",
+        "racing",
+        "leaderboard"
+      ],
+      "is_breakout": false,
+      "year": 2014
+    },
+    "Super Golf!": {
+      "mechanics": [
+        "racing",
+        "minigame_variety"
+      ],
+      "is_breakout": false,
+      "year": 2020
+    },
+    "Bad Business": {
+      "mechanics": [
+        "fps_shooter",
+        "combat_pvp"
+      ],
+      "is_breakout": false,
+      "year": 2018
+    },
+    "Anime Fighters Simulator": {
+      "mechanics": [
+        "incremental",
+        "anime_ip",
+        "collection",
+        "combat_pve"
+      ],
+      "is_breakout": false,
+      "year": 2021
+    },
+    "Giant Simulator": {
+      "mechanics": [
+        "incremental",
+        "combat_pvp",
+        "pet_companion"
+      ],
+      "is_breakout": false,
+      "year": 2019
+    },
+    "Vehicle Simulator": {
+      "mechanics": [
+        "vehicle_sim",
+        "racing",
+        "open_world_social"
+      ],
+      "is_breakout": false,
+      "year": 2017
+    },
+    "Skibidi Tower Defense": {
+      "mechanics": [
+        "tower_defense",
+        "anime_ip"
+      ],
+      "is_breakout": false,
+      "year": 2024
+    }
+  }
+}

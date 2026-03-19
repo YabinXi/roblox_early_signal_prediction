@@ -1,0 +1,54 @@
+game,is_breakout,year,n_mechanics,avg_maturity,novelty_score,sweet_spot_score,rarest_pair,rarest_pair_count,rarest_triple,rarest_triple_count
+Phantom Forces,False,2015,3,0.849,1.4427,1.2249,combat_pvp × fps_shooter,0,combat_pvp × fps_shooter × leaderboard,0
+Prison Life,False,2014,3,0.84,1.4427,1.2114,combat_pvp × open_world_social,0,combat_pvp × open_world_social × roleplay_social,0
+Dungeon Quest!,False,2019,4,0.856,1.3946,1.1931,collection × combat_pve,0,collection × combat_pve × leveling_rpg,0
+Shindo Life,False,2020,5,0.806,1.4214,1.1459,anime_ip × codes_freebie,0,anime_ip × codes_freebie × combat_pve,0
+Lumber Tycoon 2,False,2009,3,0.782,1.4427,1.1287,building × trading,0,building × trading × tycoon,0
+Murder Mystery 2,True,2017,3,0.778,1.4427,1.1224,asymmetric_mp × survival,0,asymmetric_mp × survival × trading,0
+Giant Simulator,False,2019,3,0.818,1.3717,1.1216,combat_pvp × incremental,0,combat_pvp × incremental × pet_companion,0
+Bee Swarm Simulator,True,2018,5,0.796,1.4001,1.1145,collection × exploration,0,collection × exploration × incremental,0
+Ninja Legends,True,2019,4,0.788,1.4072,1.1092,combat_pve × incremental,0,combat_pve × incremental × pet_companion,0
+Build A Boat For Treasure,True,2017,4,0.762,1.4427,1.1001,building × exploration,0,building × exploration × quest_mission,0
+Vehicle Simulator,False,2017,3,0.76,1.4427,1.096,open_world_social × racing,0,open_world_social × racing × vehicle_sim,0
+Royale High,True,2017,5,0.768,1.4214,1.0914,collection × fashion_dress,0,collection × fashion_dress × quest_mission,0
+Speed Run 4,False,2014,3,0.753,1.4427,1.0868,leaderboard × obby_platformer,0,leaderboard × obby_platformer × racing,0
+Arsenal,False,2018,3,0.788,1.3717,1.0814,combat_pvp × minigame_variety,0,combat_pvp × fps_shooter × minigame_variety,0
+Anime Fighters Simulator,False,2021,4,0.85,1.2652,1.0751,anime_ip × incremental,0,anime_ip × collection × combat_pve,0
+Flee the Facility,False,2017,3,0.738,1.4427,1.0652,asymmetric_mp × puzzle,0,asymmetric_mp × puzzle × survival,0
+Piggy,False,2020,4,0.75,1.4072,1.0561,asymmetric_mp × horror_atmosphere,0,asymmetric_mp × horror_atmosphere × narrative_story,0
+The Strongest Battlegrounds,True,2024,3,0.811,1.2755,1.034,anime_ip × leaderboard,0,anime_ip × combat_pvp × leaderboard,0
+Jailbreak,True,2017,4,0.817,1.2563,1.0267,combat_pvp × vehicle_sim,0,combat_pvp × open_world_social × vehicle_sim,0
+All Star Tower Defense,False,2020,4,0.748,1.3717,1.0253,anime_ip × codes_freebie,0,anime_ip × codes_freebie × collection,0
+Work at a Pizza Place,False,2007,3,0.709,1.4427,1.0224,coop_mandatory × roleplay_social,0,coop_mandatory × roleplay_social × tycoon,0
+Tower Defense Simulator,False,2019,3,0.7,1.4427,1.0094,collection × coop_mandatory,0,collection × coop_mandatory × tower_defense,0
+Deepwoken,False,2022,5,0.796,1.2608,1.0038,combat_pve × permadeath,0,combat_pve × combat_pvp × exploration,0
+Adopt Me!,True,2019,5,0.751,1.3256,0.995,codes_freebie × collection,0,codes_freebie × collection × pet_companion,0
+Funky Friday,False,2021,3,0.722,1.3717,0.9904,combat_pvp × rhythm,0,combat_pvp × leaderboard × rhythm,0
+Welcome to Bloxburg,False,2016,3,0.775,1.2755,0.9881,building × roleplay_social,0,building × roleplay_social × tycoon,0
+DOORS,True,2022,6,0.722,1.3557,0.9788,coop_mandatory × exploration,0,coop_mandatory × exploration × horror_atmosphere,0
+Sol's RNG,True,2024,5,0.737,1.3256,0.977,codes_freebie × incremental,0,codes_freebie × incremental × leaderboard,0
+Creatures of Sonaria,False,2020,4,0.786,1.2245,0.9625,collection × survival,0,collection × pet_companion × survival,0
+Blade Ball,True,2024,3,0.75,1.2755,0.9571,leaderboard × minigame_variety,0,combat_pvp × leaderboard × minigame_variety,0
+Blox Fruits,True,2021,6,0.782,1.2199,0.9544,anime_ip × exploration,0,anime_ip × codes_freebie × exploration,0
+Pet Simulator X,True,2022,6,0.759,1.2548,0.952,collection × rng_gacha,0,collection × incremental × rng_gacha,0
+Dragon Adventures,False,2019,4,0.777,1.2208,0.9486,exploration × trading,0,collection × exploration × trading,0
+MeepCity,True,2016,3,0.655,1.4427,0.945,fashion_dress × minigame_variety,0,fashion_dress × minigame_variety × roleplay_social,0
+PLS DONATE,True,2022,3,0.645,1.4427,0.9305,donation_gifting × leaderboard,0,donation_gifting × leaderboard × roleplay_social,0
+Fisch,True,2025,5,0.697,1.3252,0.9239,collection × crafting,0,collection × crafting × exploration,0
+Dead Rails,True,2025,6,0.67,1.3649,0.9145,combat_pve × coop_mandatory,0,combat_pve × coop_mandatory × horror_atmosphere,0
+a dusty trip,False,2024,4,0.701,1.2437,0.8715,coop_mandatory × vehicle_sim,0,coop_mandatory × exploration × vehicle_sim,0
+Grow a Garden,True,2025,6,0.616,1.3599,0.8384,codes_freebie × farming,0,codes_freebie × farming × retro_pixel,0
+Dress to Impress,True,2024,4,0.685,1.2082,0.8273,fashion_dress × leaderboard,0,fashion_dress × leaderboard × minigame_variety,0
+RiVALS,True,2025,3,0.849,0.8248,0.7003,fps_shooter × leaderboard,1,combat_pvp × fps_shooter × leaderboard,1
+Emergency Response: Liberty County,False,2018,3,0.795,0.8599,0.6833,roleplay_social × vehicle_sim,1,open_world_social × roleplay_social × vehicle_sim,1
+Greenville,False,2018,3,0.795,0.8599,0.6833,roleplay_social × vehicle_sim,1,open_world_social × roleplay_social × vehicle_sim,1
+99 Nights in the Forest,True,2026,6,0.675,1.0036,0.6774,exploration × proximity_voice,0,coop_mandatory × exploration × proximity_voice,0
+Da Hood,False,2019,3,0.84,0.6996,0.5874,combat_pvp × open_world_social,2,combat_pvp × open_world_social × roleplay_social,2
+Brookhaven RP,True,2020,3,0.795,0.5986,0.4757,roleplay_social × vehicle_sim,3,open_world_social × roleplay_social × vehicle_sim,3
+Natural Disaster Survival,True,2014,2,0.7,0.5771,0.404,minigame_variety × survival,0,,inf
+Super Golf!,False,2020,2,0.633,0.5771,0.3656,minigame_variety × racing,0,,inf
+Bad Business,False,2018,2,0.887,0.3641,0.3228,combat_pvp × fps_shooter,1,,inf
+Theme Park Tycoon 2,False,2015,2,0.772,0.3641,0.2811,building × tycoon,1,,inf
+Skibidi Tower Defense,False,2024,2,0.756,0.3641,0.2753,anime_ip × tower_defense,1,,inf
+My Restaurant!,False,2020,2,0.815,0.2885,0.2351,roleplay_social × tycoon,2,,inf
+Epic Minigames,False,2015,1,0.592,0.0,0.0,,inf,,inf

@@ -1,0 +1,885 @@
+[
+  {
+    "game": "99 Nights in the Forest",
+    "action": "WATCH",
+    "rationale": "Strong DNA but no dynamic signal yet",
+    "dna_tier": "STRONG",
+    "yt_alert_tier": "NORMAL",
+    "mechanics": [
+      "coop_mandatory",
+      "exploration",
+      "horror_atmosphere",
+      "survival",
+      "proximity_voice",
+      "narrative_story"
+    ],
+    "rarest_pair": "exploration × proximity_voice",
+    "yt_acceleration": null,
+    "yt_velocity": null,
+    "is_breakout_actual": true
+  },
+  {
+    "game": "Adopt Me!",
+    "action": "IGNORE",
+    "rationale": "No actionable signal",
+    "dna_tier": "WATCH",
+    "yt_alert_tier": "NORMAL",
+    "mechanics": [
+      "collection",
+      "pet_companion",
+      "trading",
+      "roleplay_social",
+      "codes_freebie"
+    ],
+    "rarest_pair": "codes_freebie × pet_companion",
+    "yt_acceleration": null,
+    "yt_velocity": null,
+    "is_breakout_actual": true
+  },
+  {
+    "game": "All Star Tower Defense",
+    "action": "IGNORE",
+    "rationale": "No actionable signal",
+    "dna_tier": "WATCH",
+    "yt_alert_tier": "NORMAL",
+    "mechanics": [
+      "tower_defense",
+      "anime_ip",
+      "collection",
+      "codes_freebie"
+    ],
+    "rarest_pair": "codes_freebie × tower_defense",
+    "yt_acceleration": null,
+    "yt_velocity": null,
+    "is_breakout_actual": false
+  },
+  {
+    "game": "Anime Fighters Simulator",
+    "action": "IGNORE",
+    "rationale": "No actionable signal",
+    "dna_tier": "WATCH",
+    "yt_alert_tier": "NORMAL",
+    "mechanics": [
+      "incremental",
+      "anime_ip",
+      "collection",
+      "combat_pve"
+    ],
+    "rarest_pair": "anime_ip × incremental",
+    "yt_acceleration": null,
+    "yt_velocity": null,
+    "is_breakout_actual": false
+  },
+  {
+    "game": "Arsenal",
+    "action": "IGNORE",
+    "rationale": "No actionable signal",
+    "dna_tier": "LOW",
+    "yt_alert_tier": "NORMAL",
+    "mechanics": [
+      "fps_shooter",
+      "combat_pvp",
+      "minigame_variety"
+    ],
+    "rarest_pair": "fps_shooter × minigame_variety",
+    "yt_acceleration": null,
+    "yt_velocity": null,
+    "is_breakout_actual": false
+  },
+  {
+    "game": "Bad Business",
+    "action": "IGNORE",
+    "rationale": "No actionable signal",
+    "dna_tier": "LOW",
+    "yt_alert_tier": "NORMAL",
+    "mechanics": [
+      "fps_shooter",
+      "combat_pvp"
+    ],
+    "rarest_pair": "combat_pvp × fps_shooter",
+    "yt_acceleration": null,
+    "yt_velocity": null,
+    "is_breakout_actual": false
+  },
+  {
+    "game": "Bee Swarm Simulator",
+    "action": "IGNORE",
+    "rationale": "No actionable signal",
+    "dna_tier": "WATCH",
+    "yt_alert_tier": "NORMAL",
+    "mechanics": [
+      "incremental",
+      "collection",
+      "pet_companion",
+      "quest_mission",
+      "exploration"
+    ],
+    "rarest_pair": "exploration × incremental",
+    "yt_acceleration": null,
+    "yt_velocity": null,
+    "is_breakout_actual": true
+  },
+  {
+    "game": "Blade Ball",
+    "action": "IGNORE",
+    "rationale": "No actionable signal",
+    "dna_tier": "LOW",
+    "yt_alert_tier": "NORMAL",
+    "mechanics": [
+      "combat_pvp",
+      "minigame_variety",
+      "leaderboard"
+    ],
+    "rarest_pair": "combat_pvp × minigame_variety",
+    "yt_acceleration": null,
+    "yt_velocity": null,
+    "is_breakout_actual": true
+  },
+  {
+    "game": "Blox Fruits",
+    "action": "IGNORE",
+    "rationale": "No actionable signal",
+    "dna_tier": "WATCH",
+    "yt_alert_tier": "NORMAL",
+    "mechanics": [
+      "combat_pve",
+      "leveling_rpg",
+      "exploration",
+      "anime_ip",
+      "codes_freebie",
+      "quest_mission"
+    ],
+    "rarest_pair": "anime_ip × exploration",
+    "yt_acceleration": null,
+    "yt_velocity": null,
+    "is_breakout_actual": true
+  },
+  {
+    "game": "Brookhaven RP",
+    "action": "IGNORE",
+    "rationale": "No actionable signal",
+    "dna_tier": "LOW",
+    "yt_alert_tier": "NORMAL",
+    "mechanics": [
+      "roleplay_social",
+      "open_world_social",
+      "vehicle_sim"
+    ],
+    "rarest_pair": "roleplay_social × vehicle_sim",
+    "yt_acceleration": null,
+    "yt_velocity": null,
+    "is_breakout_actual": true
+  },
+  {
+    "game": "Build A Boat For Treasure",
+    "action": "IGNORE",
+    "rationale": "No actionable signal",
+    "dna_tier": "WATCH",
+    "yt_alert_tier": "NORMAL",
+    "mechanics": [
+      "building",
+      "survival",
+      "exploration",
+      "quest_mission"
+    ],
+    "rarest_pair": "building × exploration",
+    "yt_acceleration": null,
+    "yt_velocity": null,
+    "is_breakout_actual": true
+  },
+  {
+    "game": "Creatures of Sonaria",
+    "action": "IGNORE",
+    "rationale": "No actionable signal",
+    "dna_tier": "WATCH",
+    "yt_alert_tier": "NORMAL",
+    "mechanics": [
+      "collection",
+      "roleplay_social",
+      "survival",
+      "pet_companion"
+    ],
+    "rarest_pair": "collection × survival",
+    "yt_acceleration": null,
+    "yt_velocity": null,
+    "is_breakout_actual": false
+  },
+  {
+    "game": "DOORS",
+    "action": "IGNORE",
+    "rationale": "No actionable signal",
+    "dna_tier": "WATCH",
+    "yt_alert_tier": "NORMAL",
+    "mechanics": [
+      "horror_atmosphere",
+      "exploration",
+      "survival",
+      "puzzle",
+      "narrative_story",
+      "coop_mandatory"
+    ],
+    "rarest_pair": "coop_mandatory × narrative_story",
+    "yt_acceleration": null,
+    "yt_velocity": null,
+    "is_breakout_actual": true
+  },
+  {
+    "game": "Da Hood",
+    "action": "IGNORE",
+    "rationale": "No actionable signal",
+    "dna_tier": "LOW",
+    "yt_alert_tier": "NORMAL",
+    "mechanics": [
+      "open_world_social",
+      "combat_pvp",
+      "roleplay_social"
+    ],
+    "rarest_pair": "combat_pvp × open_world_social",
+    "yt_acceleration": null,
+    "yt_velocity": null,
+    "is_breakout_actual": false
+  },
+  {
+    "game": "Dead Rails",
+    "action": "IGNORE",
+    "rationale": "No actionable signal",
+    "dna_tier": "WATCH",
+    "yt_alert_tier": "NORMAL",
+    "mechanics": [
+      "coop_mandatory",
+      "survival",
+      "horror_atmosphere",
+      "proximity_voice",
+      "combat_pve",
+      "permadeath"
+    ],
+    "rarest_pair": "combat_pve × coop_mandatory",
+    "yt_acceleration": null,
+    "yt_velocity": null,
+    "is_breakout_actual": true
+  },
+  {
+    "game": "Deepwoken",
+    "action": "IGNORE",
+    "rationale": "No actionable signal",
+    "dna_tier": "WATCH",
+    "yt_alert_tier": "NORMAL",
+    "mechanics": [
+      "combat_pve",
+      "combat_pvp",
+      "leveling_rpg",
+      "permadeath",
+      "exploration"
+    ],
+    "rarest_pair": "combat_pvp × exploration",
+    "yt_acceleration": null,
+    "yt_velocity": null,
+    "is_breakout_actual": false
+  },
+  {
+    "game": "Dragon Adventures",
+    "action": "IGNORE",
+    "rationale": "No actionable signal",
+    "dna_tier": "WATCH",
+    "yt_alert_tier": "NORMAL",
+    "mechanics": [
+      "collection",
+      "pet_companion",
+      "exploration",
+      "trading"
+    ],
+    "rarest_pair": "exploration × pet_companion",
+    "yt_acceleration": null,
+    "yt_velocity": null,
+    "is_breakout_actual": false
+  },
+  {
+    "game": "Dress to Impress",
+    "action": "IGNORE",
+    "rationale": "No actionable signal",
+    "dna_tier": "WATCH",
+    "yt_alert_tier": "NORMAL",
+    "mechanics": [
+      "fashion_dress",
+      "roleplay_social",
+      "leaderboard",
+      "minigame_variety"
+    ],
+    "rarest_pair": "fashion_dress × leaderboard",
+    "yt_acceleration": null,
+    "yt_velocity": null,
+    "is_breakout_actual": true
+  },
+  {
+    "game": "Dungeon Quest!",
+    "action": "IGNORE",
+    "rationale": "No actionable signal",
+    "dna_tier": "WATCH",
+    "yt_alert_tier": "NORMAL",
+    "mechanics": [
+      "combat_pve",
+      "leveling_rpg",
+      "collection",
+      "quest_mission"
+    ],
+    "rarest_pair": "collection × leveling_rpg",
+    "yt_acceleration": null,
+    "yt_velocity": null,
+    "is_breakout_actual": false
+  },
+  {
+    "game": "Emergency Response: Liberty County",
+    "action": "IGNORE",
+    "rationale": "No actionable signal",
+    "dna_tier": "LOW",
+    "yt_alert_tier": "NORMAL",
+    "mechanics": [
+      "roleplay_social",
+      "open_world_social",
+      "vehicle_sim"
+    ],
+    "rarest_pair": "roleplay_social × vehicle_sim",
+    "yt_acceleration": null,
+    "yt_velocity": null,
+    "is_breakout_actual": false
+  },
+  {
+    "game": "Epic Minigames",
+    "action": "IGNORE",
+    "rationale": "No actionable signal",
+    "dna_tier": "LOW",
+    "yt_alert_tier": "NORMAL",
+    "mechanics": [
+      "minigame_variety"
+    ],
+    "rarest_pair": null,
+    "yt_acceleration": null,
+    "yt_velocity": null,
+    "is_breakout_actual": false
+  },
+  {
+    "game": "Fisch",
+    "action": "IGNORE",
+    "rationale": "No actionable signal",
+    "dna_tier": "WATCH",
+    "yt_alert_tier": "NORMAL",
+    "mechanics": [
+      "fishing",
+      "collection",
+      "crafting",
+      "trading",
+      "exploration"
+    ],
+    "rarest_pair": "collection × crafting",
+    "yt_acceleration": null,
+    "yt_velocity": null,
+    "is_breakout_actual": true
+  },
+  {
+    "game": "Flee the Facility",
+    "action": "IGNORE",
+    "rationale": "No actionable signal",
+    "dna_tier": "LOW",
+    "yt_alert_tier": "NORMAL",
+    "mechanics": [
+      "asymmetric_mp",
+      "survival",
+      "puzzle"
+    ],
+    "rarest_pair": "asymmetric_mp × puzzle",
+    "yt_acceleration": null,
+    "yt_velocity": null,
+    "is_breakout_actual": false
+  },
+  {
+    "game": "Funky Friday",
+    "action": "IGNORE",
+    "rationale": "No actionable signal",
+    "dna_tier": "LOW",
+    "yt_alert_tier": "NORMAL",
+    "mechanics": [
+      "rhythm",
+      "combat_pvp",
+      "leaderboard"
+    ],
+    "rarest_pair": "combat_pvp × rhythm",
+    "yt_acceleration": null,
+    "yt_velocity": null,
+    "is_breakout_actual": false
+  },
+  {
+    "game": "Giant Simulator",
+    "action": "IGNORE",
+    "rationale": "No actionable signal",
+    "dna_tier": "LOW",
+    "yt_alert_tier": "NORMAL",
+    "mechanics": [
+      "incremental",
+      "combat_pvp",
+      "pet_companion"
+    ],
+    "rarest_pair": "combat_pvp × incremental",
+    "yt_acceleration": null,
+    "yt_velocity": null,
+    "is_breakout_actual": false
+  },
+  {
+    "game": "Greenville",
+    "action": "IGNORE",
+    "rationale": "No actionable signal",
+    "dna_tier": "LOW",
+    "yt_alert_tier": "NORMAL",
+    "mechanics": [
+      "roleplay_social",
+      "vehicle_sim",
+      "open_world_social"
+    ],
+    "rarest_pair": "roleplay_social × vehicle_sim",
+    "yt_acceleration": null,
+    "yt_velocity": null,
+    "is_breakout_actual": false
+  },
+  {
+    "game": "Grow a Garden",
+    "action": "IGNORE",
+    "rationale": "No actionable signal",
+    "dna_tier": "WATCH",
+    "yt_alert_tier": "NORMAL",
+    "mechanics": [
+      "farming",
+      "rng_gacha",
+      "trading",
+      "tycoon",
+      "retro_pixel",
+      "codes_freebie"
+    ],
+    "rarest_pair": "codes_freebie × farming",
+    "yt_acceleration": null,
+    "yt_velocity": null,
+    "is_breakout_actual": true
+  },
+  {
+    "game": "Jailbreak",
+    "action": "IGNORE",
+    "rationale": "No actionable signal",
+    "dna_tier": "WATCH",
+    "yt_alert_tier": "NORMAL",
+    "mechanics": [
+      "open_world_social",
+      "combat_pvp",
+      "vehicle_sim",
+      "roleplay_social"
+    ],
+    "rarest_pair": "combat_pvp × vehicle_sim",
+    "yt_acceleration": null,
+    "yt_velocity": null,
+    "is_breakout_actual": true
+  },
+  {
+    "game": "Lumber Tycoon 2",
+    "action": "IGNORE",
+    "rationale": "No actionable signal",
+    "dna_tier": "LOW",
+    "yt_alert_tier": "NORMAL",
+    "mechanics": [
+      "tycoon",
+      "building",
+      "trading"
+    ],
+    "rarest_pair": "building × trading",
+    "yt_acceleration": null,
+    "yt_velocity": null,
+    "is_breakout_actual": false
+  },
+  {
+    "game": "MeepCity",
+    "action": "IGNORE",
+    "rationale": "No actionable signal",
+    "dna_tier": "LOW",
+    "yt_alert_tier": "NORMAL",
+    "mechanics": [
+      "roleplay_social",
+      "minigame_variety",
+      "fashion_dress"
+    ],
+    "rarest_pair": "fashion_dress × minigame_variety",
+    "yt_acceleration": null,
+    "yt_velocity": null,
+    "is_breakout_actual": true
+  },
+  {
+    "game": "Murder Mystery 2",
+    "action": "IGNORE",
+    "rationale": "No actionable signal",
+    "dna_tier": "LOW",
+    "yt_alert_tier": "NORMAL",
+    "mechanics": [
+      "asymmetric_mp",
+      "trading",
+      "survival"
+    ],
+    "rarest_pair": "asymmetric_mp × trading",
+    "yt_acceleration": null,
+    "yt_velocity": null,
+    "is_breakout_actual": true
+  },
+  {
+    "game": "My Restaurant!",
+    "action": "IGNORE",
+    "rationale": "No actionable signal",
+    "dna_tier": "LOW",
+    "yt_alert_tier": "NORMAL",
+    "mechanics": [
+      "tycoon",
+      "roleplay_social"
+    ],
+    "rarest_pair": "roleplay_social × tycoon",
+    "yt_acceleration": null,
+    "yt_velocity": null,
+    "is_breakout_actual": false
+  },
+  {
+    "game": "Natural Disaster Survival",
+    "action": "IGNORE",
+    "rationale": "No actionable signal",
+    "dna_tier": "LOW",
+    "yt_alert_tier": "NORMAL",
+    "mechanics": [
+      "survival",
+      "minigame_variety"
+    ],
+    "rarest_pair": "minigame_variety × survival",
+    "yt_acceleration": null,
+    "yt_velocity": null,
+    "is_breakout_actual": true
+  },
+  {
+    "game": "Ninja Legends",
+    "action": "IGNORE",
+    "rationale": "No actionable signal",
+    "dna_tier": "WATCH",
+    "yt_alert_tier": "NORMAL",
+    "mechanics": [
+      "incremental",
+      "combat_pve",
+      "pet_companion",
+      "upgrade_merge"
+    ],
+    "rarest_pair": "combat_pve × pet_companion",
+    "yt_acceleration": null,
+    "yt_velocity": null,
+    "is_breakout_actual": true
+  },
+  {
+    "game": "PLS DONATE",
+    "action": "IGNORE",
+    "rationale": "No actionable signal",
+    "dna_tier": "LOW",
+    "yt_alert_tier": "NORMAL",
+    "mechanics": [
+      "donation_gifting",
+      "roleplay_social",
+      "leaderboard"
+    ],
+    "rarest_pair": "donation_gifting × leaderboard",
+    "yt_acceleration": null,
+    "yt_velocity": null,
+    "is_breakout_actual": true
+  },
+  {
+    "game": "Pet Simulator X",
+    "action": "IGNORE",
+    "rationale": "No actionable signal",
+    "dna_tier": "WATCH",
+    "yt_alert_tier": "NORMAL",
+    "mechanics": [
+      "incremental",
+      "collection",
+      "pet_companion",
+      "rng_gacha",
+      "trading",
+      "upgrade_merge"
+    ],
+    "rarest_pair": "collection × rng_gacha",
+    "yt_acceleration": null,
+    "yt_velocity": null,
+    "is_breakout_actual": true
+  },
+  {
+    "game": "Phantom Forces",
+    "action": "IGNORE",
+    "rationale": "No actionable signal",
+    "dna_tier": "LOW",
+    "yt_alert_tier": "NORMAL",
+    "mechanics": [
+      "fps_shooter",
+      "combat_pvp",
+      "leaderboard"
+    ],
+    "rarest_pair": "fps_shooter × leaderboard",
+    "yt_acceleration": null,
+    "yt_velocity": null,
+    "is_breakout_actual": false
+  },
+  {
+    "game": "Piggy",
+    "action": "IGNORE",
+    "rationale": "No actionable signal",
+    "dna_tier": "WATCH",
+    "yt_alert_tier": "NORMAL",
+    "mechanics": [
+      "horror_atmosphere",
+      "asymmetric_mp",
+      "narrative_story",
+      "puzzle"
+    ],
+    "rarest_pair": "asymmetric_mp × horror_atmosphere",
+    "yt_acceleration": null,
+    "yt_velocity": null,
+    "is_breakout_actual": false
+  },
+  {
+    "game": "Prison Life",
+    "action": "IGNORE",
+    "rationale": "No actionable signal",
+    "dna_tier": "LOW",
+    "yt_alert_tier": "NORMAL",
+    "mechanics": [
+      "open_world_social",
+      "combat_pvp",
+      "roleplay_social"
+    ],
+    "rarest_pair": "combat_pvp × open_world_social",
+    "yt_acceleration": null,
+    "yt_velocity": null,
+    "is_breakout_actual": false
+  },
+  {
+    "game": "RiVALS",
+    "action": "IGNORE",
+    "rationale": "No actionable signal",
+    "dna_tier": "LOW",
+    "yt_alert_tier": "NORMAL",
+    "mechanics": [
+      "fps_shooter",
+      "combat_pvp",
+      "leaderboard"
+    ],
+    "rarest_pair": "fps_shooter × leaderboard",
+    "yt_acceleration": null,
+    "yt_velocity": null,
+    "is_breakout_actual": true
+  },
+  {
+    "game": "Royale High",
+    "action": "IGNORE",
+    "rationale": "No actionable signal",
+    "dna_tier": "WATCH",
+    "yt_alert_tier": "NORMAL",
+    "mechanics": [
+      "fashion_dress",
+      "roleplay_social",
+      "quest_mission",
+      "collection",
+      "trading"
+    ],
+    "rarest_pair": "collection × fashion_dress",
+    "yt_acceleration": null,
+    "yt_velocity": null,
+    "is_breakout_actual": true
+  },
+  {
+    "game": "Shindo Life",
+    "action": "IGNORE",
+    "rationale": "No actionable signal",
+    "dna_tier": "WATCH",
+    "yt_alert_tier": "NORMAL",
+    "mechanics": [
+      "combat_pve",
+      "combat_pvp",
+      "anime_ip",
+      "leveling_rpg",
+      "codes_freebie"
+    ],
+    "rarest_pair": "codes_freebie × combat_pvp",
+    "yt_acceleration": null,
+    "yt_velocity": null,
+    "is_breakout_actual": false
+  },
+  {
+    "game": "Skibidi Tower Defense",
+    "action": "IGNORE",
+    "rationale": "No actionable signal",
+    "dna_tier": "LOW",
+    "yt_alert_tier": "NORMAL",
+    "mechanics": [
+      "tower_defense",
+      "anime_ip"
+    ],
+    "rarest_pair": "anime_ip × tower_defense",
+    "yt_acceleration": null,
+    "yt_velocity": null,
+    "is_breakout_actual": false
+  },
+  {
+    "game": "Sol's RNG",
+    "action": "IGNORE",
+    "rationale": "No actionable signal",
+    "dna_tier": "WATCH",
+    "yt_alert_tier": "NORMAL",
+    "mechanics": [
+      "rng_gacha",
+      "incremental",
+      "trading",
+      "leaderboard",
+      "codes_freebie"
+    ],
+    "rarest_pair": "codes_freebie × incremental",
+    "yt_acceleration": null,
+    "yt_velocity": null,
+    "is_breakout_actual": true
+  },
+  {
+    "game": "Speed Run 4",
+    "action": "IGNORE",
+    "rationale": "No actionable signal",
+    "dna_tier": "LOW",
+    "yt_alert_tier": "NORMAL",
+    "mechanics": [
+      "obby_platformer",
+      "racing",
+      "leaderboard"
+    ],
+    "rarest_pair": "leaderboard × obby_platformer",
+    "yt_acceleration": null,
+    "yt_velocity": null,
+    "is_breakout_actual": false
+  },
+  {
+    "game": "Super Golf!",
+    "action": "IGNORE",
+    "rationale": "No actionable signal",
+    "dna_tier": "LOW",
+    "yt_alert_tier": "NORMAL",
+    "mechanics": [
+      "racing",
+      "minigame_variety"
+    ],
+    "rarest_pair": "minigame_variety × racing",
+    "yt_acceleration": null,
+    "yt_velocity": null,
+    "is_breakout_actual": false
+  },
+  {
+    "game": "The Strongest Battlegrounds",
+    "action": "IGNORE",
+    "rationale": "No actionable signal",
+    "dna_tier": "LOW",
+    "yt_alert_tier": "NORMAL",
+    "mechanics": [
+      "combat_pvp",
+      "anime_ip",
+      "leaderboard"
+    ],
+    "rarest_pair": "anime_ip × leaderboard",
+    "yt_acceleration": null,
+    "yt_velocity": null,
+    "is_breakout_actual": true
+  },
+  {
+    "game": "Theme Park Tycoon 2",
+    "action": "IGNORE",
+    "rationale": "No actionable signal",
+    "dna_tier": "LOW",
+    "yt_alert_tier": "NORMAL",
+    "mechanics": [
+      "tycoon",
+      "building"
+    ],
+    "rarest_pair": "building × tycoon",
+    "yt_acceleration": null,
+    "yt_velocity": null,
+    "is_breakout_actual": false
+  },
+  {
+    "game": "Tower Defense Simulator",
+    "action": "IGNORE",
+    "rationale": "No actionable signal",
+    "dna_tier": "LOW",
+    "yt_alert_tier": "NORMAL",
+    "mechanics": [
+      "tower_defense",
+      "coop_mandatory",
+      "collection"
+    ],
+    "rarest_pair": "collection × coop_mandatory",
+    "yt_acceleration": null,
+    "yt_velocity": null,
+    "is_breakout_actual": false
+  },
+  {
+    "game": "Vehicle Simulator",
+    "action": "IGNORE",
+    "rationale": "No actionable signal",
+    "dna_tier": "LOW",
+    "yt_alert_tier": "NORMAL",
+    "mechanics": [
+      "vehicle_sim",
+      "racing",
+      "open_world_social"
+    ],
+    "rarest_pair": "open_world_social × racing",
+    "yt_acceleration": null,
+    "yt_velocity": null,
+    "is_breakout_actual": false
+  },
+  {
+    "game": "Welcome to Bloxburg",
+    "action": "IGNORE",
+    "rationale": "No actionable signal",
+    "dna_tier": "LOW",
+    "yt_alert_tier": "NORMAL",
+    "mechanics": [
+      "roleplay_social",
+      "building",
+      "tycoon"
+    ],
+    "rarest_pair": "building × roleplay_social",
+    "yt_acceleration": null,
+    "yt_velocity": null,
+    "is_breakout_actual": false
+  },
+  {
+    "game": "Work at a Pizza Place",
+    "action": "IGNORE",
+    "rationale": "No actionable signal",
+    "dna_tier": "LOW",
+    "yt_alert_tier": "NORMAL",
+    "mechanics": [
+      "roleplay_social",
+      "tycoon",
+      "coop_mandatory"
+    ],
+    "rarest_pair": "coop_mandatory × roleplay_social",
+    "yt_acceleration": null,
+    "yt_velocity": null,
+    "is_breakout_actual": false
+  },
+  {
+    "game": "a dusty trip",
+    "action": "IGNORE",
+    "rationale": "No actionable signal",
+    "dna_tier": "WATCH",
+    "yt_alert_tier": "NORMAL",
+    "mechanics": [
+      "exploration",
+      "survival",
+      "vehicle_sim",
+      "coop_mandatory"
+    ],
+    "rarest_pair": "coop_mandatory × vehicle_sim",
+    "yt_acceleration": null,
+    "yt_velocity": null,
+    "is_breakout_actual": false
+  }
+]
