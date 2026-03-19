@@ -8,6 +8,7 @@ Integrates two signal layers:
 Usage: uv run python scanner.py [--scan | --backtest]
 """
 
+import csv
 import json
 import math
 import sys
@@ -18,6 +19,7 @@ from collections import Counter
 BASE_DIR = Path(__file__).parent
 DATA_DIR = BASE_DIR / "data"
 OUTPUT_DIR = BASE_DIR / "outputs"
+YOUTUBE_WEEKLY_CSV = DATA_DIR / "timeseries" / "youtube_weekly.csv"
 
 # Import mechanic DNA system
 from mechanic_dna import (
@@ -93,6 +95,40 @@ def screen_mechanic_dna(game_name: str, mechanics: list[str],
 # ============================================================
 # LAYER 2: YOUTUBE ACCELERATION MONITOR (stub for weekly runs)
 # ============================================================
+
+def load_youtube_history(game_name: str) -> list[dict] | None:
+    """
+    Load real YouTube weekly history for a game from youtube_weekly.csv.
+
+    Returns a list of weekly snapshots sorted by week, or None if no data found.
+    Each entry: {"week": "2026-W12", "upload_velocity_7d": 3, "unique_creators": 2, ...}
+    """
+    if not YOUTUBE_WEEKLY_CSV.exists():
+        return None
+
+    records = []
+    with open(YOUTUBE_WEEKLY_CSV, "r", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            if row.get("game_name") == game_name:
+                records.append({
+                    "week": row["snapshot_week"],
+                    "upload_velocity_7d": int(row.get("upload_velocity_7d", 0)),
+                    "upload_velocity_30d": int(row.get("upload_velocity_30d", 0)),
+                    "unique_creators": int(row.get("unique_creators", 0)),
+                    "recent_video_avg_views": float(row.get("recent_video_avg_views", 0)),
+                    "view_acceleration": float(row.get("view_acceleration", 0)),
+                    "youtube_video_count": int(row.get("youtube_video_count", 0)),
+                    "youtube_total_views": int(row.get("youtube_total_views", 0)),
+                    "youtube_avg_views": float(row.get("youtube_avg_views", 0)),
+                })
+
+    if not records:
+        return None
+
+    # Sort by ISO week string (lexicographic sort works for ISO weeks)
+    records.sort(key=lambda x: x["week"])
+    return records
 
 def check_youtube_acceleration(game_name: str,
                                history: list[dict] = None) -> dict:
@@ -394,25 +430,40 @@ def scan_current():
     print(f"BREAKOUT SCANNER — {datetime.now().strftime('%Y-%m-%d %H:%M')}")
     print("=" * 80)
 
+    # Check for real YouTube timeseries data
+    has_yt_data = YOUTUBE_WEEKLY_CSV.exists()
+    if has_yt_data:
+        print(f"[INFO] Real YouTube timeseries found: {YOUTUBE_WEEKLY_CSV}")
+    else:
+        print("[INFO] No YouTube timeseries data — using NORMAL for all games")
+
     results = []
     for game_name, data in GAME_DNA.items():
         dna = screen_mechanic_dna(game_name, data["mechanics"])
-        # No real-time YouTube data, so use NORMAL
-        yt = {"alert_tier": "NORMAL"}
-        combined = combined_assessment(dna, yt)
+
+        # Try loading real YouTube history
+        yt_result = {"alert_tier": "NORMAL"}
+        if has_yt_data:
+            history = load_youtube_history(game_name)
+            if history:
+                yt_result = check_youtube_acceleration(game_name, history)
+
+        combined = combined_assessment(dna, yt_result)
         combined["is_breakout_actual"] = data["is_breakout"]
+        combined["yt_data_source"] = "real" if (has_yt_data and yt_result.get("status") != "INSUFFICIENT_DATA") else "none"
         results.append(combined)
 
     # Sort by action priority
     action_order = {"ACT": 0, "ALERT": 1, "WATCH": 2, "IGNORE": 3}
     results.sort(key=lambda x: (action_order.get(x["action"], 99), x["game"]))
 
-    print(f"\n{'Action':<8} {'Game':<35} {'DNA Tier':>10} {'YT Tier':>10} {'Actual':>8} {'Rarest Pair':<35}")
-    print("-" * 115)
+    print(f"\n{'Action':<8} {'Game':<35} {'DNA Tier':>10} {'YT Tier':>10} {'YT Src':>6} {'Actual':>8} {'Rarest Pair':<35}")
+    print("-" * 120)
     for r in results:
-        actual = "✅BO" if r.get("is_breakout_actual") else "—"
-        rarest = r.get("rarest_pair") or "—"
-        print(f"{r['action']:<8} {r['game']:<35} {r['dna_tier']:>10} {r['yt_alert_tier']:>10} {actual:>8} {rarest:<35}")
+        actual = "BO" if r.get("is_breakout_actual") else "-"
+        rarest = r.get("rarest_pair") or "-"
+        src = r.get("yt_data_source", "none")
+        print(f"{r['action']:<8} {r['game']:<35} {r['dna_tier']:>10} {r['yt_alert_tier']:>10} {src:>6} {actual:>8} {rarest:<35}")
 
     # Save
     output_path = OUTPUT_DIR / "scanner_results.json"

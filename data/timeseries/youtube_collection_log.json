@@ -1,0 +1,12 @@
+[
+  {
+    "week": "2026-W12",
+    "date": "2026-03-19",
+    "n_games": 47,
+    "n_success": 47,
+    "n_errors": 0,
+    "errors": [],
+    "duration_seconds": 188.8,
+    "status": "ok"
+  }
+]
