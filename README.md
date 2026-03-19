@@ -23,20 +23,26 @@ This research project investigates whether engagement anomalies, cultural buzz (
 
 ```
 roblox_early_signal_prediction/
-├── collect_buzz_data.py        # Google Trends + YouTube data collector
+├── collect_real_data.py         # Roblox API snapshot collector (one-time)
+├── collect_daily_snapshot.py    # Daily time-series collector (cron-scheduled)
+├── collect_buzz_data.py         # Google Trends + YouTube data collector
 ├── collect_genre_opportunity.py # Genre lineage & opportunity scanner
-├── prepare.py                  # Data standardization layer
-├── analyze.py                  # Statistical hypothesis testing (H1-H8)
-├── report.py                   # Report & visualization generator
-├── evaluate.py                 # Research quality scorer (83.3/100)
+├── prepare.py                   # Data standardization layer
+├── analyze.py                   # Statistical hypothesis testing (H1-H8)
+├── report.py                    # Report & visualization generator
+├── evaluate.py                  # Research quality scorer (83.3/100)
+├── test_daily_snapshot.py       # Tests for daily collector (13 tests)
 ├── data/
-│   ├── raw/                    # Source data (API snapshots, trends, YouTube)
-│   └── processed/              # Standardized CSVs
+│   ├── raw/                     # Source data (API snapshots, trends, YouTube)
+│   ├── processed/               # Standardized CSVs
+│   └── timeseries/              # Daily snapshots for temporal analysis
+│       ├── roblox_daily_snapshot.csv  # Append-only daily data
+│       └── collection_log.json        # Run log (date, games, errors, duration)
 └── outputs/
-    ├── findings.json           # Full statistical results
-    ├── report.md               # Research report
-    ├── eval_result.json        # Quality evaluation scores
-    └── figures/                # Visualizations (10 PNGs)
+    ├── findings.json            # Full statistical results
+    ├── report.md                # Research report
+    ├── eval_result.json         # Quality evaluation scores
+    └── figures/                 # Visualizations (10 PNGs)
 ```
 
 ## Data Sources
@@ -88,6 +94,27 @@ uv run python report.py
 uv run python evaluate.py
 ```
 
+## Daily Snapshot Collection
+
+The biggest limitation of the initial research was that all findings came from a single cross-sectional snapshot — we couldn't tell if signals *precede* breakout events. The daily snapshot collector builds a time series to address this.
+
+```bash
+# Run once manually
+uv run python collect_daily_snapshot.py
+
+# Re-collect today's data (overwrites are prevented by default)
+uv run python collect_daily_snapshot.py --force
+```
+
+**Automatic scheduling** — add to your system crontab (`crontab -e`):
+```
+57 8 * * * cd /path/to/roblox_early_signal_prediction && uv run python collect_daily_snapshot.py >> data/timeseries/cron.log 2>&1
+```
+
+The collector is **idempotent** (safe to run multiple times per day), appends to a single CSV for easy pandas time-series analysis, and logs each run to `data/timeseries/collection_log.json`. After 6-8 weeks of daily collection, you'll have real temporal data to test causal hypotheses.
+
+**Run tests**: `uv run --with pytest python -m pytest test_daily_snapshot.py -v`
+
 ## Requirements
 
 - Python >= 3.11
@@ -108,7 +135,7 @@ The automated research quality evaluator scores the output at **83.3/100** acros
 
 ## Limitations
 
-1. **Single snapshot** — cannot establish temporal causality or signal lead time
+1. **Single snapshot** — cannot establish temporal causality or signal lead time *(daily collector now addresses this — see above)*
 2. **Post-hoc classification** — measuring features after success, not predicting prospectively
 3. **Google Trends rate limits** — only partial real trends data (3-4 of 14 batches succeed before 429 errors)
 4. **Small sample** — n=56 games, 19 breakouts; quartile analyses have ~14 games per group
