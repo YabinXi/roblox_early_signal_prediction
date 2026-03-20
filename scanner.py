@@ -96,39 +96,103 @@ def screen_mechanic_dna(game_name: str, mechanics: list[str],
 # LAYER 2: YOUTUBE ACCELERATION MONITOR (stub for weekly runs)
 # ============================================================
 
+def _build_youtube_index() -> dict[str, list[dict]]:
+    """
+    Load youtube_weekly.csv once and index by game_name.
+    Returns {game_name: [row_dicts sorted by week]}.
+    """
+    if not YOUTUBE_WEEKLY_CSV.exists():
+        return {}
+
+    index: dict[str, list[dict]] = {}
+    with open(YOUTUBE_WEEKLY_CSV, "r", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            name = row.get("game_name", "")
+            entry = {
+                "week": row["snapshot_week"],
+                "upload_velocity_7d": int(row.get("upload_velocity_7d", 0)),
+                "upload_velocity_30d": int(row.get("upload_velocity_30d", 0)),
+                "unique_creators": int(row.get("unique_creators", 0)),
+                "recent_video_avg_views": float(row.get("recent_video_avg_views", 0)),
+                "view_acceleration": float(row.get("view_acceleration", 0)),
+                "youtube_video_count": int(row.get("youtube_video_count", 0)),
+                "youtube_total_views": int(row.get("youtube_total_views", 0)),
+                "youtube_avg_views": float(row.get("youtube_avg_views", 0)),
+            }
+            index.setdefault(name, []).append(entry)
+
+    for records in index.values():
+        records.sort(key=lambda x: x["week"])
+    return index
+
+
+def _match_game_name(game_name: str, csv_names: set[str]) -> str | None:
+    """
+    Match a GAME_DNA key to a CSV game_name using progressively looser strategies:
+      1. Exact match
+      2. Case-insensitive match
+      3. CSV name starts with game_name (handles suffixes like "Bad Business | FPS")
+      4. game_name starts with CSV name (handles truncation)
+    """
+    # 1. Exact
+    if game_name in csv_names:
+        return game_name
+
+    # 2. Case-insensitive
+    lower_map = {n.lower(): n for n in csv_names}
+    if game_name.lower() in lower_map:
+        return lower_map[game_name.lower()]
+
+    # 3. CSV name starts with game_name (e.g. "Bad Business" matches "Bad Business | FPS")
+    for csv_name in csv_names:
+        if csv_name.startswith(game_name):
+            return csv_name
+
+    # 4. game_name starts with CSV name (e.g. "Dungeon Quest" matches "Dungeon Quest!  RPG")
+    #    — pick the longest matching CSV name
+    best = None
+    for csv_name in csv_names:
+        if game_name.startswith(csv_name) and (best is None or len(csv_name) > len(best)):
+            best = csv_name
+    if best:
+        return best
+
+    return None
+
+
+# Module-level cache (populated on first call)
+_yt_index: dict[str, list[dict]] | None = None
+_yt_name_map: dict[str, str] = {}  # GAME_DNA key → CSV name
+
+
 def load_youtube_history(game_name: str) -> list[dict] | None:
     """
     Load real YouTube weekly history for a game from youtube_weekly.csv.
 
+    Uses fuzzy name matching to bridge differences between GAME_DNA keys
+    and CSV game names (e.g. "Bad Business" → "Bad Business | FPS").
+
     Returns a list of weekly snapshots sorted by week, or None if no data found.
-    Each entry: {"week": "2026-W12", "upload_velocity_7d": 3, "unique_creators": 2, ...}
     """
-    if not YOUTUBE_WEEKLY_CSV.exists():
+    global _yt_index, _yt_name_map
+
+    if _yt_index is None:
+        _yt_index = _build_youtube_index()
+
+    if not _yt_index:
         return None
 
-    records = []
-    with open(YOUTUBE_WEEKLY_CSV, "r", encoding="utf-8") as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            if row.get("game_name") == game_name:
-                records.append({
-                    "week": row["snapshot_week"],
-                    "upload_velocity_7d": int(row.get("upload_velocity_7d", 0)),
-                    "upload_velocity_30d": int(row.get("upload_velocity_30d", 0)),
-                    "unique_creators": int(row.get("unique_creators", 0)),
-                    "recent_video_avg_views": float(row.get("recent_video_avg_views", 0)),
-                    "view_acceleration": float(row.get("view_acceleration", 0)),
-                    "youtube_video_count": int(row.get("youtube_video_count", 0)),
-                    "youtube_total_views": int(row.get("youtube_total_views", 0)),
-                    "youtube_avg_views": float(row.get("youtube_avg_views", 0)),
-                })
+    # Check cache first
+    if game_name not in _yt_name_map:
+        matched = _match_game_name(game_name, set(_yt_index.keys()))
+        _yt_name_map[game_name] = matched or ""
 
-    if not records:
+    csv_name = _yt_name_map[game_name]
+    if not csv_name:
         return None
 
-    # Sort by ISO week string (lexicographic sort works for ISO weeks)
-    records.sort(key=lambda x: x["week"])
-    return records
+    return _yt_index.get(csv_name)
 
 def check_youtube_acceleration(game_name: str,
                                history: list[dict] = None) -> dict:
@@ -443,14 +507,16 @@ def scan_current():
 
         # Try loading real YouTube history
         yt_result = {"alert_tier": "NORMAL"}
+        has_real_history = False
         if has_yt_data:
             history = load_youtube_history(game_name)
             if history:
+                has_real_history = True
                 yt_result = check_youtube_acceleration(game_name, history)
 
         combined = combined_assessment(dna, yt_result)
         combined["is_breakout_actual"] = data["is_breakout"]
-        combined["yt_data_source"] = "real" if (has_yt_data and yt_result.get("status") != "INSUFFICIENT_DATA") else "none"
+        combined["yt_data_source"] = "real" if has_real_history else "none"
         results.append(combined)
 
     # Sort by action priority
