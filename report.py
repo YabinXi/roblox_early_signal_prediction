@@ -251,7 +251,7 @@ def plot_genre_lineage_tree(data: dict) -> str:
 
 
 def plot_buzz_velocity_scatter(data: dict) -> str:
-    """Fig 5: Buzz velocity scatter (buzz_velocity vs engagement, colored by breakout)."""
+    """Fig 5: Search interest velocity scatter (buzz_velocity vs engagement, colored by breakout)."""
     snap = data.get("roblox_real_snapshot")
     buzz = data.get("roblox_buzz_metrics")
     if snap is None or buzz is None:
@@ -281,9 +281,9 @@ def plot_buzz_velocity_scatter(data: dict) -> str:
         axes[0].annotate(name, (row["buzz_velocity"], row["favorites_per_1k_visits"]),
                         fontsize=6, alpha=0.7, xytext=(5, 5), textcoords="offset points")
 
-    axes[0].set_xlabel("Buzz Velocity (trend slope, last 12 weeks)", fontsize=11)
+    axes[0].set_xlabel("Search Interest Velocity (trend slope, last 12 weeks)", fontsize=11)
     axes[0].set_ylabel("Favorites per 1K Visits", fontsize=11)
-    axes[0].set_title("Buzz Velocity vs Engagement", fontsize=12)
+    axes[0].set_title("Search Interest Velocity vs Engagement", fontsize=12)
     axes[0].legend(fontsize=9)
     axes[0].grid(True, alpha=0.3)
 
@@ -315,7 +315,7 @@ def plot_auc_comparison(findings: dict) -> str:
         if h["id"] == "H1" and "auc" in detail:
             auc_data["H1: Engagement\n(fav/1kv)"] = detail["auc"]
         elif h["id"] == "H5" and "auc" in detail:
-            auc_data["H5: Buzz\nVelocity"] = detail["auc"]
+            auc_data["H5: Search\nVelocity"] = detail["auc"]
         elif h["id"] == "H6" and "auc" in detail:
             auc_data["H6: YouTube\nVolume"] = detail["auc"]
         elif h["id"] == "H8" and "auc" in detail:

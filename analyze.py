@@ -445,10 +445,13 @@ def test_h4_genre_engagement_variation(df: pd.DataFrame) -> dict:
 
 
 def test_h5_buzz_velocity_breakout(snap: pd.DataFrame, buzz: pd.DataFrame) -> dict:
-    """H5: Cultural buzz velocity (Google Trends slope) predicts breakout better than engagement metrics.
+    """H5: Google Trends search interest velocity predicts breakout better than engagement metrics.
 
     Method: Mann-Whitney U test comparing buzz_velocity between breakout and non-breakout games.
     Compute AUC and compare against H1's engagement AUC (0.428).
+
+    Note: 'buzz_velocity' is the slope of 12-week Google Trends interest — a specific,
+    observable metric, not a general 'cultural buzz' construct.
     """
     merged = snap.merge(buzz[["universe_id", "buzz_velocity", "composite_buzz"]], on="universe_id", how="left")
     merged["buzz_velocity"] = merged["buzz_velocity"].fillna(0)
@@ -468,7 +471,7 @@ def test_h5_buzz_velocity_breakout(snap: pd.DataFrame, buzz: pd.DataFrame) -> di
 
     return {
         "id": "H5",
-        "hypothesis": "Cultural buzz velocity (Google Trends search interest slope) can distinguish breakout from non-breakout games better than engagement metrics alone",
+        "hypothesis": "Google Trends search interest velocity (12-week slope) can distinguish breakout from non-breakout games better than engagement metrics alone",
         "method": (
             f"Mann-Whitney U test comparing buzz_velocity (slope of last 12 weeks search interest) "
             f"between breakout (n={n1}) and non-breakout (n={n2}) groups. "
@@ -854,9 +857,9 @@ def analyze(data: dict) -> dict:
 
     tested = [h1, h2, h3, h4]
 
-    # H5-H8: Cultural buzz & genre opportunity hypotheses
+    # H5-H8: YouTube creator activity & genre opportunity hypotheses
     if buzz is not None and not buzz.empty:
-        print("    H5: Buzz velocity → breakout...")
+        print("    H5: Search interest velocity → breakout...")
         h5 = test_h5_buzz_velocity_breakout(snap, buzz)
         tested.append(h5)
 

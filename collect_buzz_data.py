@@ -1,13 +1,14 @@
 """
-collect_buzz_data.py — Cultural Buzz Data Collector
+collect_buzz_data.py — YouTube Creator Activity & Google Trends Collector
 
-Fetches Google Trends interest data and (optionally) YouTube video metrics
-for games in roblox_real_snapshot.csv.
+Fetches Google Trends interest data and YouTube creator activity metrics
+(upload velocity, unique creators, view acceleration) for games in
+roblox_real_snapshot.csv.
 
 Outputs:
   - data/raw/roblox_google_trends.csv   (weekly interest 0-100)
   - data/raw/roblox_youtube_metrics.csv  (video counts & views)
-  - data/raw/roblox_buzz_metrics.csv     (per-game buzz summary)
+  - data/raw/roblox_buzz_metrics.csv     (per-game summary)
 
 Usage: uv run python collect_buzz_data.py
 """
@@ -567,7 +568,7 @@ def compute_buzz_metrics(
 
 def main():
     print("=" * 60)
-    print("Cultural Buzz Data Collector")
+    print("YouTube Creator Activity & Google Trends Collector")
     print("=" * 60)
 
     # Load snapshot
@@ -645,7 +646,7 @@ def main():
         print(f"    Composite buzz (stable): {stable['composite_buzz'].mean():.4f}")
 
     print("\n" + "=" * 60)
-    print("Buzz data collection complete!")
+    print("Data collection complete!")
     print("=" * 60)
 
 
