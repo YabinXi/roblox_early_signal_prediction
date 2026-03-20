@@ -469,7 +469,12 @@ def backtest():
             breakout_date = breakout_dates[game_name]
             # Calculate lead time
             from datetime import datetime as dt
-            alert_dt = dt.strptime(first_alert_week, "%Y-%m-%d")
+            # Parse alert date: supports both "2025-03-24" and "2026-W12" formats
+            try:
+                alert_dt = dt.strptime(first_alert_week, "%Y-%m-%d")
+            except ValueError:
+                # ISO week format "2026-W12" → Monday of that week
+                alert_dt = dt.strptime(first_alert_week + "-1", "%G-W%V-%u")
             breakout_dt = dt.strptime(breakout_date, "%Y-%m-%d")
             lead_days = (breakout_dt - alert_dt).days
         else:
