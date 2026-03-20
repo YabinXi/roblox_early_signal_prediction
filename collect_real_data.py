@@ -118,6 +118,12 @@ KNOWN_GAMES = {
     "Bad Business": {"place_id": 3233893879, "tier": "lower_mid", "is_breakout": False, "breakout_year": None},
     "Club Roblox": {"place_id": 6564677218, "tier": "lower_mid", "is_breakout": False, "breakout_year": None},
     "Prison Life": {"place_id": 155615604, "tier": "established", "is_breakout": False, "breakout_year": None},
+
+    # === Missing from GAME_DNA — added for full coverage ===
+    "Grow a Garden": {"place_id": 126884695634066, "tier": "breakout", "is_breakout": True, "breakout_year": 2025},
+    "Dead Rails": {"place_id": 116495829188952, "tier": "breakout", "is_breakout": True, "breakout_year": 2025},
+    "99 Nights in the Forest": {"place_id": 79546208627805, "tier": "breakout", "is_breakout": True, "breakout_year": 2026},
+    "Anime Fighters Simulator": {"place_id": 6299805723, "tier": "mid", "is_breakout": False, "breakout_year": None},
 }
 
 
