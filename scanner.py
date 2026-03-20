@@ -344,12 +344,15 @@ def backtest():
     Backtest the scanner against known breakouts.
     For each breakout, simulate what the scanner would have flagged
     BEFORE the breakout date, using only data available at that time.
+
+    Uses real YouTube timeseries when ≥3 weeks of data are available;
+    falls back to simulated timelines otherwise.
     """
     print("=" * 80)
     print("BACKTEST: Could we have caught these breakouts?")
     print("=" * 80)
 
-    # Simulated YouTube history for backtesting
+    # Simulated YouTube history for backtesting (fallback)
     # Based on the Grow a Garden timeline reconstruction
     simulated_yt = {
         "Grow a Garden": [
@@ -419,11 +422,32 @@ def backtest():
         "Sol's RNG": "2024-07-15",
     }
 
+    # Determine data source per game: real (≥3 weeks) or simulated
+    real_count = 0
+    sim_count = 0
+    game_yt_sources = {}  # game_name → ("real" | "sim", history)
+
+    for game_name in simulated_yt:
+        real_history = load_youtube_history(game_name)
+        if real_history and len(real_history) >= 3:
+            game_yt_sources[game_name] = ("real", real_history)
+            real_count += 1
+        else:
+            game_yt_sources[game_name] = ("sim", simulated_yt[game_name])
+            sim_count += 1
+
+    if real_count > 0:
+        print(f"[INFO] YouTube data: {real_count} real, {sim_count} simulated")
+    else:
+        print(f"[INFO] YouTube data: all simulated (need ≥3 weeks for real)")
+
     results = []
-    for game_name, yt_history in simulated_yt.items():
+    for game_name in simulated_yt:
         data = GAME_DNA.get(game_name)
         if not data:
             continue
+
+        source, yt_history = game_yt_sources[game_name]
 
         # Layer 1: DNA screen
         dna = screen_mechanic_dna(game_name, data["mechanics"],
@@ -463,23 +487,30 @@ def backtest():
             "combined_action": combined["action"],
             "lead_days": lead_days,
             "breakout_date": breakout_dates[game_name],
+            "yt_source": source,
         })
 
     # Print results
-    print(f"\n{'Game':<30} {'DNA':>8} {'#M':>3} {'YT Alert':>12} {'Action':>8} {'Lead':>6} {'Breakout':>12}")
-    print("-" * 90)
+    print(f"\n{'Game':<30} {'DNA':>8} {'#M':>3} {'YT Alert':>12} {'Action':>8} {'Lead':>6} {'Breakout':>12} {'Src':>4}")
+    print("-" * 95)
     for r in sorted(results, key=lambda x: x["lead_days"], reverse=True):
         print(f"{r['game']:<30} {r['dna_tier']:>8} {r['n_mechanics']:>3} "
               f"{r['yt_first_alert']:>12} {r['combined_action']:>8} "
-              f"{r['lead_days']:>4}d  {r['breakout_date']:>12}")
+              f"{r['lead_days']:>4}d  {r['breakout_date']:>12} {r['yt_source']:>4}")
 
     # Summary
     caught = sum(1 for r in results if r["combined_action"] in ("ACT", "ALERT"))
     avg_lead = sum(r["lead_days"] for r in results if r["lead_days"] > 0) / max(1, sum(1 for r in results if r["lead_days"] > 0))
     print(f"\nCaught: {caught}/{len(results)} breakouts")
     print(f"Avg lead time: {avg_lead:.0f} days")
-    print(f"\nNOTE: YouTube timelines are SIMULATED based on typical patterns.")
-    print(f"Real validation requires actual weekly YouTube data collection.")
+    if sim_count > 0 and real_count == 0:
+        print(f"\nNOTE: YouTube timelines are SIMULATED based on typical patterns.")
+        print(f"Real validation requires ≥3 weeks of YouTube data collection.")
+    elif sim_count > 0:
+        print(f"\nNOTE: {sim_count} games still using simulated YouTube data.")
+        print(f"Collecting more weeks will replace remaining simulations.")
+    else:
+        print(f"\n✓ All games using REAL YouTube timeseries data!")
 
     return results
 
