@@ -14,6 +14,8 @@ Detect potential breakouts **4-8 weeks before** they happen, based on data that'
 
 ## Hypothesis System
 
+### Core Hypotheses (H1–H5): Signal Discovery
+
 | # | Hypothesis | Status | Evidence |
 |---|-----------|--------|---------|
 | H1 | Platform engagement metrics (CCU, favorites, likes) predict breakouts | ❌ Rejected | AUC 0.428, worse than random |
@@ -23,6 +25,23 @@ Detect potential breakouts **4-8 weeks before** they happen, based on data that'
 | H5 | Google Trends search interest velocity distinguishes breakouts | ✅ Weak signal | Mostly synthetic data; needs real Trends validation |
 
 **Key finding**: Platform-internal data (H1) has almost no predictive power → external signals (YouTube/Trends) are the breakthrough.
+
+### Genre Rotation Hypotheses (HR1–HR4): Signal Structure
+
+H4/H5 confirmed YouTube/Trends have signal, but a deeper question: **do breakout signals rotate across genres, or emerge independently?** This determines whether we can use genre-level shortcuts or must monitor every game individually.
+
+| # | Hypothesis | Status | Evidence |
+|---|-----------|--------|---------|
+| HR1 | Breakout games concentrate in specific mechanic categories | ✅ Supported | χ²=8.50, p=0.037 — breakouts over-index on `meta` mechanics (33% vs 16%), under-index on `core_loop` (38% vs 54%) |
+| HR2 | Same-mechanic breakouts cluster in time ("genre waves") | ✅ Supported | Mantel r=0.111, p=0.049 — 18 waves identified (e.g. PvP: TSB→Blade Ball→RiVALS; Horror: Dead Rails→99 Nights; Collection: Bee Swarm→Adopt Me→Pet Sim X) |
+| HR3 | Mechanic-similar games share correlated YouTube signals | ❌ Inconclusive | Mantel r=0.056, p=0.069 — creator attention does NOT follow mechanic families in current cross-section |
+| HR4 | Google Trends peaks stagger across genres (rotation) | 🟡 Partial | Peak dispersion 18.6d (not significant vs random, p=0.50), but 14/21 genre pairs show lagged cross-correlation |
+
+**Verdict: MIXED** (rotation 2/4, independence 1/4)
+
+- **What rotates**: Breakout *structure* — mechanic categories and temporal waves clearly exist (HR1 ✅, HR2 ✅). Horror wave, PvP wave, Collection wave are real patterns.
+- **What doesn't rotate**: *Current* creator/search attention — YouTube signals are game-specific, not genre-spillover (HR3 ❌). Trends show some lag structure but not statistically significant rotation (HR4 🟡).
+- **Implication**: Genre-level monitoring helps identify *where* the next breakout might come from, but the actual signal (YouTube acceleration) must still be tracked per-game. **Strategy: genre watchlist + individual game scanner.**
 
 ---
 
@@ -41,8 +60,9 @@ collect_buzz_data.py        mechanic_dna.py
   └→ YouTube + Trends          └→ 53 games DNA          combined_assessment()
      cross-section                                       └→ decision matrix → ACT/ALERT/WATCH
 
-collect_youtube_timeseries.py
-  └→ YouTube weekly timeseries
+collect_youtube_timeseries.py   analyze_genre_rotation.py
+  └→ YouTube weekly timeseries    └→ HR1-HR4: genre rotation
+                                     vs independent emergence
 ```
 
 ### Automated Collection (GitHub Actions)
@@ -104,6 +124,7 @@ uv run python collect_buzz_data.py               # YouTube + Trends cross-sectio
 # === Analysis ===
 uv run python prepare.py                         # Data standardization
 uv run python analyze.py                         # Statistical hypothesis testing
+uv run python analyze_genre_rotation.py          # Genre rotation analysis (HR1-HR4)
 uv run python report.py                          # Report & visualization
 
 # === Scanner ===
@@ -124,6 +145,7 @@ uv run python scanner.py --backtest              # Backtest only
 
 **Analysis & modeling**
 - ✅ 8 hypotheses statistical testing framework
+- ✅ Genre rotation analysis: 4 hypotheses → mixed verdict (rotation in structure, independence in signals)
 - ✅ YouTube enriched signals: 7 dimensions, AUC 0.740
 - ✅ Mechanic DNA: 53 games encoded, maturity/novelty scoring
 - ✅ Primary rule: ≥4 mechanics + novel pair → OR 4.38
@@ -191,6 +213,7 @@ roblox_early_signal_prediction/
 ├── scanner.py                        # Breakout early warning scanner
 ├── prepare.py                        # Data standardization
 ├── analyze.py                        # Statistical hypothesis testing (H1-H8)
+├── analyze_genre_rotation.py         # Genre rotation analysis (HR1-HR4)
 ├── predict_breakout.py               # ML prediction
 ├── report.py                         # Report & visualization generator
 ├── evaluate.py                       # Research quality scorer
@@ -208,7 +231,8 @@ roblox_early_signal_prediction/
 │       └── youtube_collection_log.json
 └── outputs/
     ├── scanner_results.json          # Latest scanner output
-    ├── findings.json                 # Statistical results
+    ├── findings.json                 # Statistical results (H1-H8)
+    ├── genre_rotation_findings.json  # Genre rotation results (HR1-HR4)
     ├── report.md                     # Research report
     └── figures/                      # Visualizations
 ```

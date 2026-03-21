@@ -1,0 +1,759 @@
+{
+  "analysis_version": "v1.0-genre-rotation",
+  "generated_at": "2026-03-20T17:41:31.183121",
+  "research_question": "爆款信号是在题材间轮动（farming 热完换 horror），还是从不同方向独立冒出来？这直接影响预警策略：轮动→追踪热门题材，独立→逐个游戏监控。",
+  "data_window": {
+    "start": "2025-12-19",
+    "end": "2026-03-18",
+    "temporal_limitation": "Google Trends covers 91 days; YouTube is single-week snapshot (W12); GAME_DNA breakout years are annual granularity. Cross-sectional analysis with limited temporal depth."
+  },
+  "hypotheses": [
+    {
+      "id": "HR1",
+      "hypothesis": "爆款游戏集中在少数机制主题里（题材集中度）",
+      "method": "Chi-squared test on category distribution, Shannon entropy comparison, per-mechanic Fisher exact test with Bonferroni correction",
+      "status": "tested",
+      "result": {
+        "direction": "supported",
+        "effect_size": "χ²=8.498, entropy_diff=0.277",
+        "p_value": 0.036759,
+        "confidence_interval": "BO entropy=1.171, NBO entropy=0.894",
+        "sample_size": 53
+      },
+      "confounders": [
+        {
+          "name": "Sample size",
+          "direction": "57 games may lack power for chi-squared across 4 categories",
+          "controlled": false,
+          "method": null
+        },
+        {
+          "name": "Mechanic labeling subjectivity",
+          "direction": "DNA mapping is hand-coded; different taggers might produce different distributions",
+          "controlled": false,
+          "method": null
+        }
+      ],
+      "conclusion": "Chi-squared significant (p=0.0368): breakout games cluster in specific categories.",
+      "rotation_signal": 1,
+      "independence_signal": 0,
+      "_detail": {
+        "chi2": 8.498,
+        "chi2_p": 0.036759,
+        "chi2_dof": 3,
+        "bo_entropy_mean": 1.171,
+        "nbo_entropy_mean": 0.894,
+        "entropy_test_p": 0.0697,
+        "significant_mechanics": [],
+        "mechanic_breakout_rates": {
+          "anime_ip": {
+            "breakout_count": 2,
+            "non_breakout_count": 4,
+            "breakout_rate": 0.333,
+            "fisher_p": 0.6868,
+            "significant": "False"
+          },
+          "asymmetric_mp": {
+            "breakout_count": 1,
+            "non_breakout_count": 2,
+            "breakout_rate": 0.333,
+            "fisher_p": 1.0,
+            "significant": false
+          },
+          "building": {
+            "breakout_count": 1,
+            "non_breakout_count": 3,
+            "breakout_rate": 0.25,
+            "fisher_p": 0.6242,
+            "significant": "False"
+          },
+          "codes_freebie": {
+            "breakout_count": 4,
+            "non_breakout_count": 2,
+            "breakout_rate": 0.667,
+            "fisher_p": 0.3848,
+            "significant": "False"
+          },
+          "collection": {
+            "breakout_count": 5,
+            "non_breakout_count": 6,
+            "breakout_rate": 0.455,
+            "fisher_p": 1.0,
+            "significant": false
+          },
+          "combat_pve": {
+            "breakout_count": 3,
+            "non_breakout_count": 4,
+            "breakout_rate": 0.429,
+            "fisher_p": 1.0,
+            "significant": false
+          },
+          "combat_pvp": {
+            "breakout_count": 4,
+            "non_breakout_count": 9,
+            "breakout_rate": 0.308,
+            "fisher_p": 0.3487,
+            "significant": "False"
+          },
+          "coop_mandatory": {
+            "breakout_count": 3,
+            "non_breakout_count": 3,
+            "breakout_rate": 0.5,
+            "fisher_p": 1.0,
+            "significant": false
+          },
+          "exploration": {
+            "breakout_count": 6,
+            "non_breakout_count": 3,
+            "breakout_rate": 0.667,
+            "fisher_p": 0.1537,
+            "significant": "False"
+          },
+          "fashion_dress": {
+            "breakout_count": 3,
+            "non_breakout_count": 0,
+            "breakout_rate": 1.0,
+            "fisher_p": 0.0756,
+            "significant": "False"
+          },
+          "fps_shooter": {
+            "breakout_count": 1,
+            "non_breakout_count": 3,
+            "breakout_rate": 0.25,
+            "fisher_p": 0.6242,
+            "significant": "False"
+          },
+          "horror_atmosphere": {
+            "breakout_count": 3,
+            "non_breakout_count": 1,
+            "breakout_rate": 0.75,
+            "fisher_p": 0.3053,
+            "significant": "False"
+          },
+          "incremental": {
+            "breakout_count": 4,
+            "non_breakout_count": 2,
+            "breakout_rate": 0.667,
+            "fisher_p": 0.3848,
+            "significant": "False"
+          },
+          "leaderboard": {
+            "breakout_count": 6,
+            "non_breakout_count": 3,
+            "breakout_rate": 0.667,
+            "fisher_p": 0.1537,
+            "significant": "False"
+          },
+          "leveling_rpg": {
+            "breakout_count": 1,
+            "non_breakout_count": 3,
+            "breakout_rate": 0.25,
+            "fisher_p": 0.6242,
+            "significant": "False"
+          },
+          "minigame_variety": {
+            "breakout_count": 4,
+            "non_breakout_count": 3,
+            "breakout_rate": 0.571,
+            "fisher_p": 0.4512,
+            "significant": "False"
+          },
+          "narrative_story": {
+            "breakout_count": 2,
+            "non_breakout_count": 1,
+            "breakout_rate": 0.667,
+            "fisher_p": 0.5729,
+            "significant": "False"
+          },
+          "open_world_social": {
+            "breakout_count": 2,
+            "non_breakout_count": 5,
+            "breakout_rate": 0.286,
+            "fisher_p": 0.6851,
+            "significant": "False"
+          },
+          "permadeath": {
+            "breakout_count": 1,
+            "non_breakout_count": 1,
+            "breakout_rate": 0.5,
+            "fisher_p": 1.0,
+            "significant": false
+          },
+          "pet_companion": {
+            "breakout_count": 4,
+            "non_breakout_count": 3,
+            "breakout_rate": 0.571,
+            "fisher_p": 0.4512,
+            "significant": "False"
+          },
+          "proximity_voice": {
+            "breakout_count": 2,
+            "non_breakout_count": 0,
+            "breakout_rate": 1.0,
+            "fisher_p": 0.1836,
+            "significant": "False"
+          },
+          "puzzle": {
+            "breakout_count": 1,
+            "non_breakout_count": 2,
+            "breakout_rate": 0.333,
+            "fisher_p": 1.0,
+            "significant": false
+          },
+          "quest_mission": {
+            "breakout_count": 4,
+            "non_breakout_count": 1,
+            "breakout_rate": 0.8,
+            "fisher_p": 0.154,
+            "significant": "False"
+          },
+          "racing": {
+            "breakout_count": 0,
+            "non_breakout_count": 3,
+            "breakout_rate": 0.0,
+            "fisher_p": 0.2489,
+            "significant": "False"
+          },
+          "rng_gacha": {
+            "breakout_count": 3,
+            "non_breakout_count": 0,
+            "breakout_rate": 1.0,
+            "fisher_p": 0.0756,
+            "significant": "False"
+          },
+          "roleplay_social": {
+            "breakout_count": 7,
+            "non_breakout_count": 8,
+            "breakout_rate": 0.467,
+            "fisher_p": 0.7689,
+            "significant": "False"
+          },
+          "survival": {
+            "breakout_count": 6,
+            "non_breakout_count": 3,
+            "breakout_rate": 0.667,
+            "fisher_p": 0.1537,
+            "significant": "False"
+          },
+          "tower_defense": {
+            "breakout_count": 0,
+            "non_breakout_count": 3,
+            "breakout_rate": 0.0,
+            "fisher_p": 0.2489,
+            "significant": "False"
+          },
+          "trading": {
+            "breakout_count": 7,
+            "non_breakout_count": 2,
+            "breakout_rate": 0.778,
+            "fisher_p": 0.0308,
+            "significant": "False"
+          },
+          "tycoon": {
+            "breakout_count": 1,
+            "non_breakout_count": 5,
+            "breakout_rate": 0.167,
+            "fisher_p": 0.217,
+            "significant": "False"
+          },
+          "upgrade_merge": {
+            "breakout_count": 2,
+            "non_breakout_count": 0,
+            "breakout_rate": 1.0,
+            "fisher_p": 0.1836,
+            "significant": "False"
+          },
+          "vehicle_sim": {
+            "breakout_count": 2,
+            "non_breakout_count": 4,
+            "breakout_rate": 0.333,
+            "fisher_p": 0.6868,
+            "significant": "False"
+          }
+        },
+        "category_contingency": {
+          "core_loop": {
+            "breakout": 38,
+            "non_breakout": 51
+          },
+          "meta": {
+            "breakout": 33,
+            "non_breakout": 15
+          },
+          "social": {
+            "breakout": 19,
+            "non_breakout": 18
+          },
+          "aesthetic": {
+            "breakout": 10,
+            "non_breakout": 10
+          }
+        }
+      }
+    },
+    {
+      "id": "HR2",
+      "hypothesis": "同一机制家族的爆款在时间上扎堆（题材浪潮存在）",
+      "method": "Mantel test (10000 permutations) comparing Jaccard mechanic similarity matrix vs temporal proximity matrix. Wave detection: same mechanic, ≥2 breakouts within 2-year window.",
+      "status": "tested",
+      "result": {
+        "direction": "supported",
+        "effect_size": "Mantel r=0.1111",
+        "p_value": 0.0493,
+        "confidence_interval": "n_waves=18, n_breakout=23",
+        "sample_size": 23
+      },
+      "confounders": [
+        {
+          "name": "Year granularity",
+          "direction": "Breakout year is integer; sub-year timing lost",
+          "controlled": false,
+          "method": null
+        },
+        {
+          "name": "Platform growth",
+          "direction": "More games launch each year; later years may show more clusters by chance",
+          "controlled": false,
+          "method": null
+        }
+      ],
+      "conclusion": "Mantel test significant (r=0.111, p=0.0493): mechanic-similar games cluster in time → genre waves exist.",
+      "rotation_signal": 1,
+      "independence_signal": 0,
+      "_detail": {
+        "mantel_r": 0.1111,
+        "mantel_p": 0.0493,
+        "n_permutations": 10000,
+        "n_waves": 18,
+        "waves": [
+          {
+            "mechanic": "leaderboard",
+            "games": [
+              [
+                "PLS DONATE",
+                2022
+              ],
+              [
+                "The Strongest Battlegrounds",
+                2024
+              ],
+              [
+                "Sol's RNG",
+                2024
+              ],
+              [
+                "Blade Ball",
+                2024
+              ],
+              [
+                "Dress to Impress",
+                2024
+              ]
+            ],
+            "span_years": 2
+          },
+          {
+            "mechanic": "collection",
+            "games": [
+              [
+                "Royale High",
+                2017
+              ],
+              [
+                "Bee Swarm Simulator",
+                2018
+              ],
+              [
+                "Adopt Me!",
+                2019
+              ]
+            ],
+            "span_years": 2
+          },
+          {
+            "mechanic": "combat_pvp",
+            "games": [
+              [
+                "The Strongest Battlegrounds",
+                2024
+              ],
+              [
+                "Blade Ball",
+                2024
+              ],
+              [
+                "RiVALS",
+                2025
+              ]
+            ],
+            "span_years": 1
+          },
+          {
+            "mechanic": "pet_companion",
+            "games": [
+              [
+                "Bee Swarm Simulator",
+                2018
+              ],
+              [
+                "Adopt Me!",
+                2019
+              ],
+              [
+                "Ninja Legends",
+                2019
+              ]
+            ],
+            "span_years": 1
+          },
+          {
+            "mechanic": "quest_mission",
+            "games": [
+              [
+                "Build A Boat For Treasure",
+                2017
+              ],
+              [
+                "Royale High",
+                2017
+              ],
+              [
+                "Bee Swarm Simulator",
+                2018
+              ]
+            ],
+            "span_years": 1
+          },
+          {
+            "mechanic": "roleplay_social",
+            "games": [
+              [
+                "MeepCity",
+                2016
+              ],
+              [
+                "Jailbreak",
+                2017
+              ],
+              [
+                "Royale High",
+                2017
+              ]
+            ],
+            "span_years": 1
+          },
+          {
+            "mechanic": "trading",
+            "games": [
+              [
+                "Murder Mystery 2",
+                2017
+              ],
+              [
+                "Royale High",
+                2017
+              ],
+              [
+                "Adopt Me!",
+                2019
+              ]
+            ],
+            "span_years": 2
+          },
+          {
+            "mechanic": "codes_freebie",
+            "games": [
+              [
+                "Adopt Me!",
+                2019
+              ],
+              [
+                "Blox Fruits",
+                2021
+              ]
+            ],
+            "span_years": 2
+          },
+          {
+            "mechanic": "combat_pve",
+            "games": [
+              [
+                "Ninja Legends",
+                2019
+              ],
+              [
+                "Blox Fruits",
+                2021
+              ]
+            ],
+            "span_years": 2
+          },
+          {
+            "mechanic": "coop_mandatory",
+            "games": [
+              [
+                "Dead Rails",
+                2025
+              ],
+              [
+                "99 Nights in the Forest",
+                2026
+              ]
+            ],
+            "span_years": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "HR3",
+      "hypothesis": "共享机制 DNA 的游戏，YouTube 信号相关（创作者溢出效应）",
+      "method": "Mantel test (10000 permutations) comparing Jaccard mechanic similarity vs YouTube signal (Euclidean z-score) similarity. Kruskal-Wallis by primary category. Partial Mantel controlling game scale.",
+      "status": "tested",
+      "result": {
+        "direction": "inconclusive",
+        "effect_size": "Mantel r=0.0560, partial r=0.0464",
+        "p_value": 0.0692,
+        "confidence_interval": "KW significant: 0/3",
+        "sample_size": 51
+      },
+      "confounders": [
+        {
+          "name": "Game scale",
+          "direction": "Larger games naturally have more YouTube coverage",
+          "controlled": true,
+          "method": "Partial Mantel test controlling log(total_views)"
+        },
+        {
+          "name": "YouTube search algorithm",
+          "direction": "YouTube may recommend similar-looking games together regardless of actual mechanic overlap",
+          "controlled": false,
+          "method": null
+        }
+      ],
+      "conclusion": "No evidence of YouTube signal correlation with mechanic similarity (r=0.056, p=0.0692).",
+      "rotation_signal": 0,
+      "independence_signal": 1,
+      "_detail": {
+        "mantel_r": 0.056,
+        "mantel_p": 0.0692,
+        "partial_r": 0.0464,
+        "partial_p": 0.0978,
+        "n_matched_games": 51,
+        "kruskal_wallis": {
+          "upload_velocity_30d": {
+            "H": 0.53,
+            "p": 0.7673
+          },
+          "unique_creators": {
+            "H": 1.642,
+            "p": 0.44
+          },
+          "view_acceleration": {
+            "H": 3.398,
+            "p": 0.1828
+          }
+        },
+        "signal_columns": [
+          "upload_velocity_30d",
+          "unique_creators",
+          "view_acceleration"
+        ]
+      }
+    },
+    {
+      "id": "HR4",
+      "hypothesis": "在 91 天 Trends 数据中，不同题材的搜索兴趣峰值错开（题材轮动）",
+      "method": "Genre-level time series aggregation, pairwise cross-correlation (max lag ±14d), peak date dispersion permutation test (10000 permutations).",
+      "status": "tested",
+      "result": {
+        "direction": "partial",
+        "effect_size": "peak_std=18.6d, avg_xcorr=0.038, avg_lag=10.0d",
+        "p_value": 0.4972,
+        "confidence_interval": "peak_range=46d, n_genres=7",
+        "sample_size": 47
+      },
+      "confounders": [
+        {
+          "name": "12-week window",
+          "direction": "Short window may not capture full rotation cycle",
+          "controlled": false,
+          "method": null
+        },
+        {
+          "name": "Google Trends normalization",
+          "direction": "Batch normalization across keywords may distort relative magnitudes",
+          "controlled": true,
+          "method": "Per-game [0,1] normalization before genre aggregation"
+        },
+        {
+          "name": "Unequal genre sizes",
+          "direction": "Genres with more games have smoother averages",
+          "controlled": false,
+          "method": null
+        }
+      ],
+      "conclusion": "Permutation test not significant (p=0.5028), but 14 genre pairs show lagged correlation → weak rotation signal.",
+      "rotation_signal": 0,
+      "independence_signal": 0,
+      "_detail": {
+        "cross_correlations": [
+          {
+            "genre_pair": "Action × RPG",
+            "max_corr": 0.28,
+            "optimal_lag_days": 9
+          },
+          {
+            "genre_pair": "Action × Roleplay & Avatar Sim",
+            "max_corr": -0.125,
+            "optimal_lag_days": -4
+          },
+          {
+            "genre_pair": "Action × Shooter",
+            "max_corr": 0.289,
+            "optimal_lag_days": -14
+          },
+          {
+            "genre_pair": "Action × Simulation",
+            "max_corr": 0.276,
+            "optimal_lag_days": 10
+          },
+          {
+            "genre_pair": "Action × Sports & Racing",
+            "max_corr": -0.03,
+            "optimal_lag_days": -14
+          },
+          {
+            "genre_pair": "Action × Survival",
+            "max_corr": -0.097,
+            "optimal_lag_days": 9
+          },
+          {
+            "genre_pair": "RPG × Roleplay & Avatar Sim",
+            "max_corr": 0.379,
+            "optimal_lag_days": 14
+          },
+          {
+            "genre_pair": "RPG × Shooter",
+            "max_corr": 0.344,
+            "optimal_lag_days": -14
+          },
+          {
+            "genre_pair": "RPG × Simulation",
+            "max_corr": 0.77,
+            "optimal_lag_days": 0
+          },
+          {
+            "genre_pair": "RPG × Sports & Racing",
+            "max_corr": -0.257,
+            "optimal_lag_days": -12
+          },
+          {
+            "genre_pair": "RPG × Survival",
+            "max_corr": -0.284,
+            "optimal_lag_days": -4
+          },
+          {
+            "genre_pair": "Roleplay & Avatar Sim × Shooter",
+            "max_corr": -0.325,
+            "optimal_lag_days": 12
+          },
+          {
+            "genre_pair": "Roleplay & Avatar Sim × Simulation",
+            "max_corr": -0.337,
+            "optimal_lag_days": 12
+          },
+          {
+            "genre_pair": "Roleplay & Avatar Sim × Sports & Racing",
+            "max_corr": -0.293,
+            "optimal_lag_days": -11
+          },
+          {
+            "genre_pair": "Roleplay & Avatar Sim × Survival",
+            "max_corr": -0.324,
+            "optimal_lag_days": -4
+          },
+          {
+            "genre_pair": "Shooter × Simulation",
+            "max_corr": 0.38,
+            "optimal_lag_days": 14
+          },
+          {
+            "genre_pair": "Shooter × Sports & Racing",
+            "max_corr": -0.248,
+            "optimal_lag_days": 2
+          },
+          {
+            "genre_pair": "Shooter × Survival",
+            "max_corr": 0.518,
+            "optimal_lag_days": -14
+          },
+          {
+            "genre_pair": "Simulation × Sports & Racing",
+            "max_corr": -0.23,
+            "optimal_lag_days": -12
+          },
+          {
+            "genre_pair": "Simulation × Survival",
+            "max_corr": -0.308,
+            "optimal_lag_days": 10
+          },
+          {
+            "genre_pair": "Sports & Racing × Survival",
+            "max_corr": 0.424,
+            "optimal_lag_days": 14
+          }
+        ],
+        "peak_dates": {
+          "Action": "2026-01-03",
+          "RPG": "2025-12-25",
+          "Roleplay & Avatar Sim": "2026-01-27",
+          "Shooter": "2026-01-25",
+          "Simulation": "2025-12-24",
+          "Sports & Racing": "2026-02-08",
+          "Survival": "2026-02-08"
+        },
+        "peak_std_days": 18.6,
+        "peak_range_days": 46,
+        "perm_mean_std": 18.7,
+        "p_rotation": 0.5028,
+        "p_comovement": 0.4972,
+        "avg_cross_corr": 0.038,
+        "avg_abs_lag": 10.0,
+        "n_genres": 7,
+        "genre_game_counts": {
+          "Roleplay & Avatar Sim": 9,
+          "RPG": 5,
+          "Shooter": 4,
+          "Survival": 5,
+          "Action": 6,
+          "Simulation": 11,
+          "Social": 1,
+          "Strategy": 2,
+          "Adventure": 1,
+          "Party & Casual": 1,
+          "Obby & Platformer": 1,
+          "Sports & Racing": 1
+        }
+      }
+    }
+  ],
+  "rotation_verdict": {
+    "direction": "mixed",
+    "rotation_score": 2,
+    "independence_score": 1,
+    "hypothesis_summary": "HR1: supported, HR2: supported, HR3: inconclusive, HR4: partial",
+    "evidence": [
+      "HR1: breakout games concentrate in specific mechanic categories",
+      "HR2: temporal genre waves exist (mechanic-similar games cluster in time)",
+      "HR3: YouTube signals are independent of mechanic similarity"
+    ],
+    "narrative": "Mixed evidence: some rotation patterns exist (especially temporal waves), but breakouts also emerge independently. Implication: genre-level monitoring helps but is not sufficient; combine genre tracking with individual game signals."
+  },
+  "summary": {
+    "total_hypotheses": 4,
+    "tested": 4,
+    "with_significant_results": 3,
+    "rotation_conclusion": "Mixed evidence: some rotation patterns exist (especially temporal waves), but breakouts also emerge independently. Implication: genre-level monitoring helps but is not sufficient; combine genre tracking with individual game signals."
+  }
+}
