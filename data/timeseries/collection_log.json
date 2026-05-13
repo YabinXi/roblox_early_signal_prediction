@@ -494,5 +494,14 @@
       "Only fetched 48/49 game details"
     ],
     "duration_seconds": 42.0
+  },
+  {
+    "date": "2026-05-13",
+    "n_games": 60,
+    "n_errors": 1,
+    "errors": [
+      "Failed to resolve 14 place IDs"
+    ],
+    "duration_seconds": 72.6
   }
 ]
