@@ -550,5 +550,15 @@
       "Failed to resolve 18 place IDs"
     ],
     "duration_seconds": 39.9
+  },
+  {
+    "date": "2026-05-19",
+    "n_games": 59,
+    "n_errors": 2,
+    "errors": [
+      "Failed to resolve 14 place IDs",
+      "Only fetched 59/60 game details"
+    ],
+    "duration_seconds": 39.0
   }
 ]
