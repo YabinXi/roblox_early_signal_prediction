@@ -98,5 +98,15 @@
     "errors": [],
     "duration_seconds": 172.8,
     "status": "ok"
+  },
+  {
+    "week": "2026-W22",
+    "date": "2026-05-25",
+    "n_games": 47,
+    "n_success": 47,
+    "n_errors": 0,
+    "errors": [],
+    "duration_seconds": 162.0,
+    "status": "ok"
   }
 ]
