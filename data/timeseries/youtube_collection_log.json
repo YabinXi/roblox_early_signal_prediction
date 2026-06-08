@@ -118,5 +118,15 @@
     "errors": [],
     "duration_seconds": 173.7,
     "status": "ok"
+  },
+  {
+    "week": "2026-W24",
+    "date": "2026-06-08",
+    "n_games": 47,
+    "n_success": 47,
+    "n_errors": 0,
+    "errors": [],
+    "duration_seconds": 170.5,
+    "status": "ok"
   }
 ]
