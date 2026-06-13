@@ -765,5 +765,15 @@
       "Only fetched 59/60 game details"
     ],
     "duration_seconds": 58.8
+  },
+  {
+    "date": "2026-06-13",
+    "n_games": 57,
+    "n_errors": 2,
+    "errors": [
+      "Failed to resolve 16 place IDs",
+      "Only fetched 57/58 game details"
+    ],
+    "duration_seconds": 55.1
   }
 ]
