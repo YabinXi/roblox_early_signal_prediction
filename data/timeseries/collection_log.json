@@ -885,5 +885,14 @@
       "Failed to resolve 25 place IDs"
     ],
     "duration_seconds": 60.2
+  },
+  {
+    "date": "2026-06-26",
+    "n_games": 48,
+    "n_errors": 1,
+    "errors": [
+      "Failed to resolve 26 place IDs"
+    ],
+    "duration_seconds": 37.9
   }
 ]
