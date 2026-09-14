@@ -260,5 +260,15 @@
     ],
     "duration_seconds": 172.9,
     "status": "ok"
+  },
+  {
+    "week": "2026-W38",
+    "date": "2026-09-14",
+    "n_games": 47,
+    "n_success": 47,
+    "n_errors": 0,
+    "errors": [],
+    "duration_seconds": 177.4,
+    "status": "ok"
   }
 ]
