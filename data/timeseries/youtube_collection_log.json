@@ -270,5 +270,17 @@
     "errors": [],
     "duration_seconds": 177.4,
     "status": "ok"
+  },
+  {
+    "week": "2026-W39",
+    "date": "2026-09-21",
+    "n_games": 47,
+    "n_success": 46,
+    "n_errors": 1,
+    "errors": [
+      "RIVALS: Expecting value: line 1 column 1 (char 0)"
+    ],
+    "duration_seconds": 172.6,
+    "status": "ok"
   }
 ]
