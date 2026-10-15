@@ -1884,5 +1884,14 @@
       "Failed to resolve 14 place IDs"
     ],
     "duration_seconds": 43.4
+  },
+  {
+    "date": "2026-10-15",
+    "n_games": 60,
+    "n_errors": 1,
+    "errors": [
+      "Failed to resolve 14 place IDs"
+    ],
+    "duration_seconds": 54.0
   }
 ]
