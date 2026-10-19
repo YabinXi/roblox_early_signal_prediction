@@ -317,5 +317,18 @@
     ],
     "duration_seconds": 177.4,
     "status": "ok"
+  },
+  {
+    "week": "2026-W43",
+    "date": "2026-10-19",
+    "n_games": 47,
+    "n_success": 45,
+    "n_errors": 2,
+    "errors": [
+      "Blox Fruits: Expecting value: line 1 column 1 (char 0)",
+      "All Star Tower Defense: Expecting value: line 1 column 1 (char 0)"
+    ],
+    "duration_seconds": 173.4,
+    "status": "ok"
   }
 ]
