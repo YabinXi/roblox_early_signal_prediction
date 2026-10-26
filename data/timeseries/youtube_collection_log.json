@@ -330,5 +330,17 @@
     ],
     "duration_seconds": 173.4,
     "status": "ok"
+  },
+  {
+    "week": "2026-W44",
+    "date": "2026-10-26",
+    "n_games": 47,
+    "n_success": 46,
+    "n_errors": 1,
+    "errors": [
+      "Ninja Legends: Expecting value: line 1 column 1 (char 0)"
+    ],
+    "duration_seconds": 182.3,
+    "status": "ok"
   }
 ]
