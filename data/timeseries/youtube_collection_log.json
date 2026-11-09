@@ -352,5 +352,17 @@
     "errors": [],
     "duration_seconds": 178.1,
     "status": "ok"
+  },
+  {
+    "week": "2026-W46",
+    "date": "2026-11-09",
+    "n_games": 47,
+    "n_success": 46,
+    "n_errors": 1,
+    "errors": [
+      "My Restaurant: Expecting value: line 1 column 1 (char 0)"
+    ],
+    "duration_seconds": 209.2,
+    "status": "ok"
   }
 ]
