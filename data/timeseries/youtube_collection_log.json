@@ -376,5 +376,17 @@
     ],
     "duration_seconds": 209.2,
     "status": "ok"
+  },
+  {
+    "week": "2026-W48",
+    "date": "2026-11-23",
+    "n_games": 47,
+    "n_success": 46,
+    "n_errors": 1,
+    "errors": [
+      "Flee the Facility: Expecting value: line 1 column 1 (char 0)"
+    ],
+    "duration_seconds": 387.9,
+    "status": "ok"
   }
 ]
